@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  # Never kill a release mid-flight: the group is per-tag, so the only way to collide
+  # is a force-moved tag, and there the running publish should be allowed to finish.
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: '4.7'
+  GODOT_RELEASE: stable
+  PROJECT_NAME: GBJAM14
+  ITCH_TARGET: m4niek/gbjam14
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # Must stay first: `uses: ./.github/actions/...` resolves against the checked-out
+      # workspace, so a local action cannot be found before this step runs.
+      - uses: actions/checkout@v4
+        with:
+          # Required by the guard below: `merge-base` needs real history, and the default
+          # checkout of a tag push is a shallow tag-only clone that has none.
+          fetch-depth: 0
+
+      # Runs before `setup-godot` on purpose: a tag off `main` fails in seconds instead of
+      # after the engine download.
+      - name: Verify the tag is on main
+        run: |
+          set -euo pipefail
+          # checkout only guarantees the triggering ref, so fetch main explicitly rather
+          # than assuming origin/main exists.
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "::error::${GITHUB_REF_NAME} points at ${GITHUB_SHA}, which is not reachable from main. Merge the commit into main first, then move the tag."
+            exit 1
+          fi
+          echo "${GITHUB_REF_NAME} -> ${GITHUB_SHA} is on main."
+
+      # Stays a workflow step: it writes $GITHUB_ENV, which the `with:` blocks below read.
+      - name: Resolve version
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          echo "VERSION=${version}" >> "$GITHUB_ENV"
+          echo "Version: ${version}"
+
+      - name: Set up Godot
+        uses: ./.github/actions/setup-godot
+        with:
+          godot-version: ${{ env.GODOT_VERSION }}
+          godot-release: ${{ env.GODOT_RELEASE }}
+
+      - name: Build
+        uses: ./.github/actions/build-godot
+        with:
+          project-name: ${{ env.PROJECT_NAME }}
+
+      - name: Package
+        uses: ./.github/actions/package
+        with:
+          project-name: ${{ env.PROJECT_NAME }}
+          version: ${{ env.VERSION }}
+
+      # Stays a top-level step: a skipped composite action runs none of its own steps, so
+      # `if: always()` only survives a build failure out here.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ env.VERSION }}
+          path: dist/
+          if-no-files-found: warn
+
+      - name: Publish to itch.io
+        uses: ./.github/actions/publish-itch
+        with:
+          itch-target: ${{ env.ITCH_TARGET }}
+          project-name: ${{ env.PROJECT_NAME }}
+          version: ${{ env.VERSION }}
+          butler-api-key: ${{ secrets.BUTLER_API_KEY }}
+
+      - name: Create GitHub Release
+        uses: ./.github/actions/github-release
+        with:
+          project-name: ${{ env.PROJECT_NAME }}
+          version: ${{ env.VERSION }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,51 @@
+name: Publish to itch.io
+description: Install butler and push every platform channel to itch.io.
+
+inputs:
+  itch-target:
+    description: itch.io target, e.g. user/game
+    required: true
+  project-name:
+    description: Archive basename, e.g. GBJAM14
+    required: true
+  version:
+    description: Resolved version string
+    required: true
+  butler-api-key:
+    description: itch.io API key
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install butler
+      shell: bash
+      run: |
+        set -euo pipefail
+        curl -fL -o /tmp/butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+        unzip -q /tmp/butler.zip -d "$HOME/butler"
+        chmod +x "$HOME/butler/butler"
+        echo "$HOME/butler" >> "$GITHUB_PATH"
+        "$HOME/butler/butler" -V
+
+    - name: Push to itch.io
+      shell: bash
+      env:
+        BUTLER_API_KEY: ${{ inputs.butler-api-key }}
+        ITCH_TARGET: ${{ inputs.itch-target }}
+        PROJECT_NAME: ${{ inputs.project-name }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        # Every push is unconditional: a release must produce a build on every channel even
+        # if the bits are identical to the previous tag.
+        # itch infers only the *platform* from the channel name (win/windows, linux,
+        # mac/osx). "HTML5 / Playable in browser" is per-upload and must be enabled by
+        # hand on the itch Edit game page after the first build is pushed.
+        butler push build/windows "${ITCH_TARGET}:windows" --userversion "${VERSION}"
+        butler push build/linux   "${ITCH_TARGET}:linux"   --userversion "${VERSION}"
+        # macOS ships as Godot's own export zip, copied and never re-zipped, so the .app
+        # bundle keeps its permissions and symlinks.
+        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx" --userversion "${VERSION}"
+        butler push build/web     "${ITCH_TARGET}:html5"   --userversion "${VERSION}"
+        butler status "${ITCH_TARGET}"

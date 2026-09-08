@@ -1,0 +1,50 @@
+name: Build Godot project
+description: Import assets, export every platform preset, then verify the artifacts and the packed palettes.
+
+inputs:
+  project-name:
+    description: Export basename, e.g. GBJAM14
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Import assets
+      shell: bash
+      run: |
+        set -euo pipefail
+        # .godot/ and uid_cache.bin are not committed, and both run/main_scene and the
+        # Palette autoload are referenced by uid://, so this pass is mandatory on a
+        # clean checkout or UID resolution fails during export.
+        godot --headless --path . --import
+
+    - name: Export all platforms
+      shell: bash
+      env:
+        PROJECT_NAME: ${{ inputs.project-name }}
+      run: |
+        set -euo pipefail
+        mkdir -p build/windows build/linux build/macos build/web
+        godot --headless --path . --export-release "Windows Desktop" "build/windows/${PROJECT_NAME}.exe"
+        godot --headless --path . --export-release "Linux"           "build/linux/${PROJECT_NAME}.x86_64"
+        godot --headless --path . --export-release "macOS"           "build/macos/${PROJECT_NAME}.zip"
+        godot --headless --path . --export-release "Web"             "build/web/index.html"
+        chmod +x "build/linux/${PROJECT_NAME}.x86_64"
+        # Godot can print export errors and still exit 0, so check the artifacts instead.
+        for f in "build/windows/${PROJECT_NAME}.exe" "build/windows/${PROJECT_NAME}.pck" \
+                 "build/linux/${PROJECT_NAME}.x86_64" "build/linux/${PROJECT_NAME}.pck" \
+                 "build/macos/${PROJECT_NAME}.zip" \
+                 build/web/index.html build/web/index.wasm build/web/index.pck; do
+          [[ -s "$f" ]] || { echo "::error::missing or empty export artifact: $f"; exit 1; }
+        done
+        # The .gpl palettes must ship or the game renders unrecolored (include_filter="*.gpl").
+        # They live *inside* the .pck, not as loose files, so grep the pack itself: its file
+        # table is stored uncompressed and unencrypted, so the paths are plain text.
+        expected=$(find assets/palettes -name '*.gpl' | wc -l | tr -d ' ')
+        for pck in "build/windows/${PROJECT_NAME}.pck" "build/linux/${PROJECT_NAME}.pck" build/web/index.pck; do
+          n=$( { grep -a -o '\.gpl' "$pck" || true; } | wc -l | tr -d ' ')
+          [[ "$n" -ge "$expected" ]] || { echo "::error::palettes missing from ${pck} (found ${n}, expected ${expected})"; exit 1; }
+        done
+        # macOS ships the same pack inside the .app bundle.
+        unzip -l "build/macos/${PROJECT_NAME}.zip" | grep -q '\.pck' \
+          || { echo "::error::no .pck inside the macOS bundle"; exit 1; }

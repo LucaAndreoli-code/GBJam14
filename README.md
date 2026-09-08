@@ -58,6 +58,35 @@ Remember to write comments on hard stuff! Two lines of explanation are 10x bette
 
 Branch naming: describe shortly what you're doing, like `adjusting_inputs`. Plus, keep branches short-lived. Once you're done with a job, open a new one for the next one.
 
+## Releases
+
+**A release is a `v*` tag on `main`. That's the only thing that ships the game, and the only thing that starts
+CI at all.**
+
+```bash
+git checkout main && git pull
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+Then leave it alone. CI exports Windows, Linux, macOS and Web, pushes all four to itch.io on the `windows`,
+`linux`, `osx` and `html5` channels, and creates a GitHub Release with the four zips attached. Nothing is done
+by hand. The version drops the `v`, so `v0.1.0` ships as `0.1.0`. The zips also end up as downloadable
+artifacts on the run page, which is the easiest way to grab a Windows build if you're on macOS.
+
+Pushing a branch triggers nothing, and there's no manual button in the Actions tab either. No tag, no build.
+
+**The tag has to be on `main`.** CI checks that the tagged commit is reachable from `main` and stops the run in
+the first few seconds if it isn't — nothing gets built, nothing gets published. If that happens, merge the
+commit into `main` and move the tag; don't try to release off a branch.
+
+**Changing where it publishes** means editing the `env:` block at the top of `.github/workflows/release.yml`:
+`ITCH_TARGET` is the itch page (`user/game`, currently `m4niek/gbjam14`), `PROJECT_NAME` is the name of the
+built files, so it has to keep matching what the export presets produce. The upload also needs a
+`BUTLER_API_KEY` repository secret (Settings → Secrets and variables → Actions) belonging to an account with
+push rights on that page — it's a secret, so it never goes in the YAML, and if you rename it there you have to
+rename it in the workflow too.
+
 ### Very important!
 
 **`main.tscn` is the danger zone.** Godot scene files don't merge: two people editing the same `.tscn` means one of you loses work, and git will happily hide that from you. The workflow around it:
