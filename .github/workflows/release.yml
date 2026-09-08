@@ -3,20 +3,15 @@ name: Release
 on:
   push:
     tags: ['v*']
-    branches: ['ci/**']
-  workflow_dispatch:
-    inputs:
-      publish:
-        description: 'Push to itch.io (no GitHub Release)'
-        type: boolean
-        default: false
 
 permissions:
   contents: write
 
 concurrency:
   group: release-${{ github.ref }}
-  cancel-in-progress: true
+  # Never kill a release mid-flight: the group is per-tag, so the only way to collide
+  # is a force-moved tag, and there the running publish should be allowed to finish.
+  cancel-in-progress: false
 
 env:
   GODOT_VERSION: '4.7'
@@ -31,30 +26,32 @@ jobs:
       # Must stay first: `uses: ./.github/actions/...` resolves against the checked-out
       # workspace, so a local action cannot be found before this step runs.
       - uses: actions/checkout@v4
+        with:
+          # Required by the guard below: `merge-base` needs real history, and the default
+          # checkout of a tag push is a shallow tag-only clone that has none.
+          fetch-depth: 0
 
-      # Stays inline: the body reads `inputs.publish` from workflow_dispatch, and inside a
-      # composite action `inputs` rebinds to that action's own inputs.
+      # Runs before `setup-godot` on purpose: a tag off `main` fails in seconds instead of
+      # after the engine download.
+      - name: Verify the tag is on main
+        run: |
+          set -euo pipefail
+          # checkout only guarantees the triggering ref, so fetch main explicitly rather
+          # than assuming origin/main exists.
+          git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "::error::${GITHUB_REF_NAME} points at ${GITHUB_SHA}, which is not reachable from main. Merge the commit into main first, then move the tag."
+            exit 1
+          fi
+          echo "${GITHUB_REF_NAME} -> ${GITHUB_SHA} is on main."
+
+      # Stays a workflow step: it writes $GITHUB_ENV, which the `with:` blocks below read.
       - name: Resolve version
         run: |
           set -euo pipefail
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            version="${GITHUB_REF_NAME#v}"
-            channel_suffix=""
-            publish=true
-          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
-            # ci/** branch: publish to the -dev channels, never a GitHub Release.
-            version="0.0.0-dev.${GITHUB_SHA::7}"
-            channel_suffix="-dev"
-            publish=true
-          else
-            version="0.0.0-dev.${GITHUB_SHA::7}"
-            channel_suffix="-dev"
-            publish="${{ inputs.publish }}"
-          fi
+          version="${GITHUB_REF_NAME#v}"
           echo "VERSION=${version}" >> "$GITHUB_ENV"
-          echo "CHANNEL_SUFFIX=${channel_suffix}" >> "$GITHUB_ENV"
-          echo "PUBLISH=${publish}" >> "$GITHUB_ENV"
-          echo "Version: ${version} (publish: ${publish}, channel suffix: '${channel_suffix}')"
+          echo "Version: ${version}"
 
       - name: Set up Godot
         uses: ./.github/actions/setup-godot
@@ -82,20 +79,15 @@ jobs:
           path: dist/
           if-no-files-found: warn
 
-      # The gates stay on the workflow steps: the `env` context inside a composite action is
-      # scoped to that action, so `env.PUBLISH` would read empty there and silently skip.
       - name: Publish to itch.io
-        if: env.PUBLISH == 'true'
         uses: ./.github/actions/publish-itch
         with:
           itch-target: ${{ env.ITCH_TARGET }}
           project-name: ${{ env.PROJECT_NAME }}
           version: ${{ env.VERSION }}
-          channel-suffix: ${{ env.CHANNEL_SUFFIX }}
           butler-api-key: ${{ secrets.BUTLER_API_KEY }}
 
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: ./.github/actions/github-release
         with:
           project-name: ${{ env.PROJECT_NAME }}

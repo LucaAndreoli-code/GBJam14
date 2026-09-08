@@ -11,10 +11,6 @@ inputs:
   version:
     description: Resolved version string
     required: true
-  channel-suffix:
-    description: Channel suffix; '-dev' enables --if-changed, empty forces the push
-    required: false
-    default: ''
   butler-api-key:
     description: itch.io API key
     required: true
@@ -39,26 +35,17 @@ runs:
         ITCH_TARGET: ${{ inputs.itch-target }}
         PROJECT_NAME: ${{ inputs.project-name }}
         VERSION: ${{ inputs.version }}
-        CHANNEL_SUFFIX: ${{ inputs.channel-suffix }}
       run: |
         set -euo pipefail
-        # Dev channels get pushed on every commit; skip the upload when nothing changed.
-        # Not used for tags: a release must produce a build even if the bits are identical.
-        # Deliberately unquoted below: an empty value must expand to zero arguments.
-        if_changed=""
-        if [[ -n "${CHANNEL_SUFFIX}" ]]; then
-          if_changed="--if-changed"
-        fi
+        # Every push is unconditional: a release must produce a build on every channel even
+        # if the bits are identical to the previous tag.
         # itch infers only the *platform* from the channel name (win/windows, linux,
         # mac/osx). "HTML5 / Playable in browser" is per-upload and must be enabled by
         # hand on the itch Edit game page after the first build is pushed.
-        butler push build/windows "${ITCH_TARGET}:windows${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
-        butler push build/linux   "${ITCH_TARGET}:linux${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
-        # No --if-changed here: the source is a single .zip, and butler's diff pass lstats
-        # the container entries under the source path as if it were a directory, failing with
-        # "lstat <zip>/GBJAM14.app/Contents: not a directory" once a previous build exists.
-        # The zip is Godot's own macOS export, copied not re-zipped, so it cannot become a
-        # directory push without risking the .app bundle's permissions and symlinks.
-        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx${CHANNEL_SUFFIX}" --userversion "${VERSION}"
-        butler push build/web     "${ITCH_TARGET}:html5${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
+        butler push build/windows "${ITCH_TARGET}:windows" --userversion "${VERSION}"
+        butler push build/linux   "${ITCH_TARGET}:linux"   --userversion "${VERSION}"
+        # macOS ships as Godot's own export zip, copied and never re-zipped, so the .app
+        # bundle keeps its permissions and symlinks.
+        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx" --userversion "${VERSION}"
+        butler push build/web     "${ITCH_TARGET}:html5"   --userversion "${VERSION}"
         butler status "${ITCH_TARGET}"
