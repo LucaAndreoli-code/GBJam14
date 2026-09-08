@@ -54,6 +54,11 @@ runs:
         # hand on the itch Edit game page after the first build is pushed.
         butler push build/windows "${ITCH_TARGET}:windows${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
         butler push build/linux   "${ITCH_TARGET}:linux${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
-        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
+        # No --if-changed here: the source is a single .zip, and butler's diff pass lstats
+        # the container entries under the source path as if it were a directory, failing with
+        # "lstat <zip>/GBJAM14.app/Contents: not a directory" once a previous build exists.
+        # The zip is Godot's own macOS export, copied not re-zipped, so it cannot become a
+        # directory push without risking the .app bundle's permissions and symlinks.
+        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx${CHANNEL_SUFFIX}" --userversion "${VERSION}"
         butler push build/web     "${ITCH_TARGET}:html5${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
         butler status "${ITCH_TARGET}"
