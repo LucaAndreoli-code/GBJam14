@@ -15,3 +15,13 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+CLAUDE.md
+
+# Build output
+build/
+dist/
+out/
+
+# macOS
+.DS_Store

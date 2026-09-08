@@ -1,0 +1,187 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+    branches: ['ci/**']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Push to itch.io (no GitHub Release)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: '4.7'
+  GODOT_RELEASE: stable
+  PROJECT_NAME: GBJAM14
+  ITCH_TARGET: m4niek/gbjam14
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            version="${GITHUB_REF_NAME#v}"
+            channel_suffix=""
+            publish=true
+          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            # ci/** branch: publish to the -dev channels, never a GitHub Release.
+            version="0.0.0-dev.${GITHUB_SHA::7}"
+            channel_suffix="-dev"
+            publish=true
+          else
+            version="0.0.0-dev.${GITHUB_SHA::7}"
+            channel_suffix="-dev"
+            publish="${{ inputs.publish }}"
+          fi
+          echo "VERSION=${version}" >> "$GITHUB_ENV"
+          echo "CHANNEL_SUFFIX=${channel_suffix}" >> "$GITHUB_ENV"
+          echo "PUBLISH=${publish}" >> "$GITHUB_ENV"
+          echo "GODOT_FULL=${GODOT_VERSION}-${GODOT_RELEASE}" >> "$GITHUB_ENV"
+          echo "TEMPLATE_DIR_NAME=${GODOT_VERSION}.${GODOT_RELEASE}" >> "$GITHUB_ENV"
+          echo "Version: ${version} (publish: ${publish}, channel suffix: '${channel_suffix}')"
+
+      - name: Cache Godot and export templates
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot-bin
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-${{ env.GODOT_RELEASE }}
+
+      - name: Install Godot and export templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_FULL}"
+          mkdir -p ~/godot-bin "$HOME/.local/share/godot/export_templates"
+          curl -fL -o /tmp/godot.zip "${base}/Godot_v${GODOT_FULL}_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d /tmp/godot
+          mv "/tmp/godot/Godot_v${GODOT_FULL}_linux.x86_64" ~/godot-bin/godot
+          chmod +x ~/godot-bin/godot
+          curl -fL -o /tmp/templates.tpz "${base}/Godot_v${GODOT_FULL}_export_templates.tpz"
+          unzip -q /tmp/templates.tpz -d /tmp/tpz
+          mv /tmp/tpz/templates "$HOME/.local/share/godot/export_templates/${TEMPLATE_DIR_NAME}"
+
+      - name: Verify toolchain
+        run: |
+          set -euo pipefail
+          echo "$HOME/godot-bin" >> "$GITHUB_PATH"
+          reported="$("$HOME/godot-bin/godot" --version | tail -1 | cut -d. -f1-3)"
+          echo "godot reports: ${reported}"
+          # The export templates directory name must match the engine version exactly,
+          # otherwise every export fails with "No export template found".
+          if [[ "${reported}" != "${TEMPLATE_DIR_NAME}" ]]; then
+            echo "::error::Engine version '${reported}' does not match template dir '${TEMPLATE_DIR_NAME}'"
+            exit 1
+          fi
+          ls "$HOME/.local/share/godot/export_templates/${TEMPLATE_DIR_NAME}" | head
+
+      - name: Import assets
+        run: |
+          set -euo pipefail
+          # .godot/ and uid_cache.bin are not committed, and both run/main_scene and the
+          # Palette autoload are referenced by uid://, so this pass is mandatory on a
+          # clean checkout or UID resolution fails during export.
+          godot --headless --path . --import
+
+      - name: Export all platforms
+        run: |
+          set -euo pipefail
+          mkdir -p build/windows build/linux build/macos build/web
+          godot --headless --path . --export-release "Windows Desktop" "build/windows/${PROJECT_NAME}.exe"
+          godot --headless --path . --export-release "Linux"           "build/linux/${PROJECT_NAME}.x86_64"
+          godot --headless --path . --export-release "macOS"           "build/macos/${PROJECT_NAME}.zip"
+          godot --headless --path . --export-release "Web"             "build/web/index.html"
+          chmod +x "build/linux/${PROJECT_NAME}.x86_64"
+          # Godot can print export errors and still exit 0, so check the artifacts instead.
+          for f in "build/windows/${PROJECT_NAME}.exe" "build/windows/${PROJECT_NAME}.pck" \
+                   "build/linux/${PROJECT_NAME}.x86_64" "build/linux/${PROJECT_NAME}.pck" \
+                   "build/macos/${PROJECT_NAME}.zip" \
+                   build/web/index.html build/web/index.wasm build/web/index.pck; do
+            [[ -s "$f" ]] || { echo "::error::missing or empty export artifact: $f"; exit 1; }
+          done
+          # The .gpl palettes must ship or the game renders unrecolored (include_filter="*.gpl").
+          gpl=$(unzip -l "build/macos/${PROJECT_NAME}.zip" | grep -c '\.gpl' || true)
+          [[ "$gpl" -ge 2 ]] || { echo "::error::palettes missing from export (found ${gpl})"; exit 1; }
+
+      - name: Package
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          (cd build/windows && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-windows.zip" .)
+          (cd build/linux   && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-linux.zip" .)
+          (cd build/web     && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-web.zip" .)
+          # Already a zip containing the .app bundle; re-zipping would break its permissions.
+          cp "build/macos/${PROJECT_NAME}.zip" "dist/${PROJECT_NAME}-${VERSION}-macos.zip"
+          ls -lh dist
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ env.PROJECT_NAME }}-${{ env.VERSION }}
+          path: dist/
+          if-no-files-found: warn
+
+      - name: Install butler
+        if: env.PUBLISH == 'true'
+        run: |
+          set -euo pipefail
+          curl -fL -o /tmp/butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -q /tmp/butler.zip -d "$HOME/butler"
+          chmod +x "$HOME/butler/butler"
+          echo "$HOME/butler" >> "$GITHUB_PATH"
+          "$HOME/butler/butler" -V
+
+      - name: Push to itch.io
+        if: env.PUBLISH == 'true'
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          set -euo pipefail
+          # Dev channels get pushed on every commit; skip the upload when nothing changed.
+          # Not used for tags: a release must produce a build even if the bits are identical.
+          # Deliberately unquoted below: an empty value must expand to zero arguments.
+          if_changed=""
+          if [[ -n "${CHANNEL_SUFFIX}" ]]; then
+            if_changed="--if-changed"
+          fi
+          # itch infers only the *platform* from the channel name (win/windows, linux,
+          # mac/osx). "HTML5 / Playable in browser" is per-upload and must be enabled by
+          # hand on the itch Edit game page after the first build is pushed.
+          butler push build/windows "${ITCH_TARGET}:windows${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
+          butler push build/linux   "${ITCH_TARGET}:linux${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
+          butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
+          butler push build/web     "${ITCH_TARGET}:html5${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
+          butler status "${ITCH_TARGET}"
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          {
+            echo "Windows, Linux, macOS and Web builds of ${PROJECT_NAME} ${VERSION}."
+            echo
+            echo "The macOS build is unsigned. On first launch, run:"
+            echo
+            echo "    xattr -dr com.apple.quarantine ${PROJECT_NAME}.app"
+          } > /tmp/notes.md
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip \
+            --title "${PROJECT_NAME} ${VERSION}" \
+            --notes-file /tmp/notes.md
