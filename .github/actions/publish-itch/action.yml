@@ -1,0 +1,59 @@
+name: Publish to itch.io
+description: Install butler and push every platform channel to itch.io.
+
+inputs:
+  itch-target:
+    description: itch.io target, e.g. user/game
+    required: true
+  project-name:
+    description: Archive basename, e.g. GBJAM14
+    required: true
+  version:
+    description: Resolved version string
+    required: true
+  channel-suffix:
+    description: Channel suffix; '-dev' enables --if-changed, empty forces the push
+    required: false
+    default: ''
+  butler-api-key:
+    description: itch.io API key
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install butler
+      shell: bash
+      run: |
+        set -euo pipefail
+        curl -fL -o /tmp/butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+        unzip -q /tmp/butler.zip -d "$HOME/butler"
+        chmod +x "$HOME/butler/butler"
+        echo "$HOME/butler" >> "$GITHUB_PATH"
+        "$HOME/butler/butler" -V
+
+    - name: Push to itch.io
+      shell: bash
+      env:
+        BUTLER_API_KEY: ${{ inputs.butler-api-key }}
+        ITCH_TARGET: ${{ inputs.itch-target }}
+        PROJECT_NAME: ${{ inputs.project-name }}
+        VERSION: ${{ inputs.version }}
+        CHANNEL_SUFFIX: ${{ inputs.channel-suffix }}
+      run: |
+        set -euo pipefail
+        # Dev channels get pushed on every commit; skip the upload when nothing changed.
+        # Not used for tags: a release must produce a build even if the bits are identical.
+        # Deliberately unquoted below: an empty value must expand to zero arguments.
+        if_changed=""
+        if [[ -n "${CHANNEL_SUFFIX}" ]]; then
+          if_changed="--if-changed"
+        fi
+        # itch infers only the *platform* from the channel name (win/windows, linux,
+        # mac/osx). "HTML5 / Playable in browser" is per-upload and must be enabled by
+        # hand on the itch Edit game page after the first build is pushed.
+        butler push build/windows "${ITCH_TARGET}:windows${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
+        butler push build/linux   "${ITCH_TARGET}:linux${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
+        butler push "dist/${PROJECT_NAME}-${VERSION}-macos.zip" "${ITCH_TARGET}:osx${CHANNEL_SUFFIX}" --userversion "${VERSION}" ${if_changed}
+        butler push build/web     "${ITCH_TARGET}:html5${CHANNEL_SUFFIX}"   --userversion "${VERSION}" ${if_changed}
+        butler status "${ITCH_TARGET}"

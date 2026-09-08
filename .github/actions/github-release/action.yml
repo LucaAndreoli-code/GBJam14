@@ -1,0 +1,35 @@
+name: Create GitHub Release
+description: Publish dist/*.zip as a GitHub Release for the tag being built.
+
+inputs:
+  project-name:
+    description: Display name, e.g. GBJAM14
+    required: true
+  version:
+    description: Resolved version string
+    required: true
+  github-token:
+    description: Token with contents write permission
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Create GitHub Release
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PROJECT_NAME: ${{ inputs.project-name }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        {
+          echo "Windows, Linux, macOS and Web builds of ${PROJECT_NAME} ${VERSION}."
+          echo
+          echo "The macOS build is unsigned. On first launch, run:"
+          echo
+          echo "    xattr -dr com.apple.quarantine ${PROJECT_NAME}.app"
+        } > /tmp/notes.md
+        gh release create "${GITHUB_REF_NAME}" dist/*.zip \
+          --title "${PROJECT_NAME} ${VERSION}" \
+          --notes-file /tmp/notes.md

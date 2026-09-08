@@ -1,0 +1,28 @@
+name: Package builds
+description: Zip the per-platform build output into dist/ under versioned names.
+
+inputs:
+  project-name:
+    description: Archive basename, e.g. GBJAM14
+    required: true
+  version:
+    description: Resolved version string
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Package
+      shell: bash
+      env:
+        PROJECT_NAME: ${{ inputs.project-name }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        mkdir -p dist
+        (cd build/windows && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-windows.zip" .)
+        (cd build/linux   && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-linux.zip" .)
+        (cd build/web     && zip -qr "../../dist/${PROJECT_NAME}-${VERSION}-web.zip" .)
+        # Already a zip containing the .app bundle; re-zipping would break its permissions.
+        cp "build/macos/${PROJECT_NAME}.zip" "dist/${PROJECT_NAME}-${VERSION}-macos.zip"
+        ls -lh dist
