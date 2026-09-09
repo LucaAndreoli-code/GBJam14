@@ -1,7 +1,12 @@
 extends Node
 
-# Data that must survive a scene change.
-# Only plain variables here: no logic, no node references.
+var _paused: bool = false 
 
-# True while the game is paused.
-var paused: bool = false
+func is_paused() -> bool:
+	return _paused
+
+func set_paused(value: bool) -> void:
+	if _paused == value:
+		return
+	_paused = value
+	SignalBus.game_paused.emit(_paused)
