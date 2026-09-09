@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Palette="*uid://d11diwiqqm48i"
+SignalBus="*uid://cvx21hojw3lqe"
+GameState="*uid://dj01nk3yfpu4m"
 
 [display]
 
