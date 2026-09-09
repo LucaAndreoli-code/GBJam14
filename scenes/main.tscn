@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cjq2chcihhl64" path="res://turbosnail.png" id="2_0wfyh"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://brvk6po0pg0p7" path="res://turbosnail_gray.png" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://bw00eccmdc0n0" path="res://scripts/audio/audiomanager.gd" id="5_tbgi4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sgp6g"]
 shader = ExtResource("1_o5qli")
@@ -47,3 +48,6 @@ texture = ExtResource("2_0wfyh")
 [node name="Sprite2D2" type="Sprite2D" parent="PaletteContainer/Screen" unique_id=1096165075]
 position = Vector2(88, 66)
 texture = ExtResource("3_sugp2")
+
+[node name="AudioManager" type="Node" parent="." unique_id=1779054255]
+script = ExtResource("5_tbgi4")
