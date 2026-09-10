@@ -3,14 +3,6 @@ extends Node2D
 
 # GameBoy dialogue box: a background panel plus a GBLabel, shown one line at a
 # time. It sits hidden in a scene and waits for an interaction to open it.
-#
-# btn_a is owned here and nowhere else: the label in gb_text_box.tscn ships with
-# skip_enabled = false, so a press can never both skip the typewriter and
-# advance the line — advance() routes it to exactly one of the two.
-#
-# The children are Controls under a Node2D, so anchors resolve against a zero
-# rect and do nothing. They are sized by offsets alone: applying a Layout preset
-# in the editor collapses the box to 0x0.
 
 # Fired when the box closes, whether the last line was advanced past or the
 # dialogue was cancelled. Whoever opened the box listens here to take control back.

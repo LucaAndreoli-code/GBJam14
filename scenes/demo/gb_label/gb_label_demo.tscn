@@ -12,6 +12,7 @@ shader_parameter/col_lightest = Color(0.608, 0.737, 0.059, 1)
 shader_parameter/col_light = Color(0.545, 0.675, 0.059, 1)
 shader_parameter/col_dark = Color(0.188, 0.384, 0.188, 1)
 shader_parameter/col_darkest = Color(0.059, 0.22, 0.059, 1)
+shader_parameter/fade_step = 0
 
 [node name="Demo" type="Control" unique_id=862283955]
 layout_mode = 3
@@ -53,10 +54,9 @@ offset_left = 7.0
 offset_top = 96.0
 offset_right = 153.0
 offset_bottom = 137.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("4_01hnj")
 theme_override_font_sizes/font_size = 8
 text = "HELLO FROM GB JAM 14! PRESS A TO SKIP, B TO REPLAY."
 autowrap_mode = 3
 script = ExtResource("5_nxcpb")
-characters_per_second = 10.0

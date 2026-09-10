@@ -24,6 +24,7 @@ var light := Color.from_rgba8(139, 172, 15)
 var dark := Color.from_rgba8(48, 98, 48)
 var darkest := Color.from_rgba8(15, 56, 15)
 
+#TODO we should consider this palette as default
 #var lightest := Color.from_rgba8(224, 248, 208)
 #var light := Color.from_rgba8(136, 192, 112)
 #var dark := Color.from_rgba8(52, 104, 86)
