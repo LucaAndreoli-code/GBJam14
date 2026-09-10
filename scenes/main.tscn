@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://bcejwhxxa5d62"]
 
 [ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="1_o5qli"]
-[ext_resource type="Texture2D" uid="uid://cjq2chcihhl64" path="res://turbosnail.png" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
-[ext_resource type="Texture2D" uid="uid://brvk6po0pg0p7" path="res://turbosnail_gray.png" id="3_sugp2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sgp6g"]
 shader = ExtResource("1_o5qli")
@@ -11,6 +10,7 @@ shader_parameter/col_lightest = Color(0.608, 0.737, 0.059, 1)
 shader_parameter/col_light = Color(0.545, 0.675, 0.059, 1)
 shader_parameter/col_dark = Color(0.188, 0.384, 0.188, 1)
 shader_parameter/col_darkest = Color(0.059, 0.22, 0.059, 1)
+shader_parameter/fade_step = 0
 
 [node name="Main" type="Control" unique_id=309915900]
 layout_mode = 3
@@ -19,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_tbgi4")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1
@@ -38,12 +39,3 @@ snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(160, 144)
 render_target_update_mode = 4
-
-[node name="Sprite2D" type="Sprite2D" parent="PaletteContainer/Screen" unique_id=1505064101]
-visible = false
-position = Vector2(88, 66)
-texture = ExtResource("2_0wfyh")
-
-[node name="Sprite2D2" type="Sprite2D" parent="PaletteContainer/Screen" unique_id=1096165075]
-position = Vector2(88, 66)
-texture = ExtResource("3_sugp2")
