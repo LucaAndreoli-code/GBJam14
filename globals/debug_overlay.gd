@@ -9,6 +9,8 @@ extends Node
 # the overlay counts itself over the limit. That is the blink.
 # Above MAX_COLORS the label turns red, plus one push_warning per regression.
 
+const GAMEBOY_FONT := preload("res://assets/fonts/gameboysoft.ttf")
+
 const MAX_COLORS := 4
 const SCAN_INTERVAL := 0.5
 const TOGGLE_ACTION := "debug_overlay_toggle"
@@ -72,9 +74,10 @@ func _build_ui() -> void:
 
 func _make_label() -> Label:
 	var label := Label.new()
+	label.add_theme_font_override("font", GAMEBOY_FONT)
 	label.add_theme_font_size_override("font_size", 8)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 2)
+	label.add_theme_constant_override("outline_size", 1)
 	return label
 
 # Captures the whole visible frame and counts its unique colors.
