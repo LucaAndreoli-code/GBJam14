@@ -22,6 +22,7 @@ Palette="*uid://d11diwiqqm48i"
 SignalBus="*uid://cvx21hojw3lqe"
 GameState="*uid://dj01nk3yfpu4m"
 DebugOverlay="*uid://q3a61ow46ucd"
+SceneManager="*uid://dd0xvqg4prhfg"
 
 [display]
 

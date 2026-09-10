@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bsgvb3lekjy8i"]
+
+[node name="SceneManager2" type="Node2D" unique_id=1500717705]
+
+[node name="Label" type="Label" parent="." unique_id=1288782486]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "I'm scene 2!"

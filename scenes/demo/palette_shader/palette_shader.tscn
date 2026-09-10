@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dtdd04wpfrcdv"]
+
+[ext_resource type="Texture2D" uid="uid://brvk6po0pg0p7" path="res://assets/sprites/demo/turbosnail_gray.png" id="1_nym42"]
+
+[node name="PaletteShader" type="Node2D" unique_id=1457654169]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=477228944]
+texture = ExtResource("1_nym42")
+centered = false

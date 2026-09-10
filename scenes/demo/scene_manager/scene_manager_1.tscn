@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d1oqs3mjugg5w"]
+
+[ext_resource type="Script" uid="uid://cfdwfpaq4jrbm" path="res://scenes/demo/scene_manager/scene_manager_1.gd" id="1_x1yes"]
+
+[node name="SceneManager1" type="Node2D" unique_id=1040537817]
+script = ExtResource("1_x1yes")
+
+[node name="Label" type="Label" parent="." unique_id=1884403460]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "I'm scene 1!"
