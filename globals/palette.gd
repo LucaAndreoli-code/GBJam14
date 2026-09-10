@@ -1,5 +1,6 @@
 extends Node
 
+## Emits everytime the active palette is changed
 signal palette_changed(colors: Array[Color])
 
 # Source colors, DON'T CHANGE!
@@ -19,30 +20,22 @@ var darkest := Color.from_rgba8(15, 56, 15)
 # Currently loaded .gpl files
 var _loaded: Dictionary = {}
 
+# On ready it sets the clear color and load palettes from folder
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(SRC_DARKEST)
-	load_gpl_files_from_folder("res://assets/palettes")
-	switch_to_palette("test_palette")
+	_load_gpl_files_from_folder("res://assets/palettes")
 
+## Returns the active palette colors as an indexed array.
+## The order is from lightest to darkest
 func get_active_palette() -> Array[Color]:
 	return [lightest, light, dark, darkest]
 
-func get_active_palette_names() -> Array[String]:
+## Returns all the loaded palettes' names
+func get_all_palette_names() -> Array[String]:
 	return _loaded.keys()
 
-func load_gpl_files_from_folder(dir_path: String) -> void:
-	_loaded.clear()
-	var dir := DirAccess.open(dir_path)
-	if dir == null:
-		push_error("Unable to find provided palettes' folder at path: %s" % dir_path)
-		return
-	for filename in dir.get_files():
-		if filename.get_extension().to_lower() != "gpl":
-			continue
-		var colors := _parse_gpl_file(dir_path.path_join(filename))
-		if colors.size() == 4:
-			_loaded[filename.get_basename()] = colors
-
+## Switches to a loaded palette, using it's name.
+## The name must be the filename of a palette under the palettes' folder (without ".gpl")
 func switch_to_palette(palette_name: String) -> bool:
 	if not _loaded.has(palette_name):
 		push_error("Trying to switch to an unloaded palette: %s" % palette_name)
@@ -54,6 +47,19 @@ func switch_to_palette(palette_name: String) -> bool:
 	darkest = palette[3]
 	palette_changed.emit(get_active_palette())
 	return true
+
+func _load_gpl_files_from_folder(dir_path: String) -> void:
+	_loaded.clear()
+	var dir := DirAccess.open(dir_path)
+	if dir == null:
+		push_error("Unable to find provided palettes' folder at path: %s" % dir_path)
+		return
+	for filename in dir.get_files():
+		if filename.get_extension().to_lower() != "gpl":
+			continue
+		var colors := _parse_gpl_file(dir_path.path_join(filename))
+		if colors.size() == 4:
+			_loaded[filename.get_basename()] = colors
 
 func _parse_gpl_file(file_path: String) -> Array[Color]:
 	var out: Array[Color] = []
