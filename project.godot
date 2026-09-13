@@ -33,6 +33,10 @@ window/size/window_height_override=576
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
 
+[global_group]
+
+light_sources="A light source which is considered by the visibility shader"
+
 [input]
 
 dpad_up={
