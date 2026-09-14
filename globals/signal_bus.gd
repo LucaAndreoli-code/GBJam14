@@ -9,3 +9,6 @@ signal game_paused(is_paused: bool)
 
 # Fired when the torch's timer ticks.
 signal torch_tick(remaining: int, light_value: float)
+
+# Fired when the torch's ends
+signal torch_ended(is_ended: bool)

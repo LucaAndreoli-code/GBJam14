@@ -22,6 +22,9 @@ func tick(delta: float) -> void:
 	if _tick >= 1.0:
 		_do_tick()
 
+func refill(target_p: float = 1.0) -> void:
+	_timer = round(_duration * target_p)
+
 func _do_tick() -> void:
 	_tick -= 1.0
 	if _timer > 0:
