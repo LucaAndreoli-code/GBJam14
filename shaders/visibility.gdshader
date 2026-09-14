@@ -9,7 +9,7 @@ shader_type canvas_item;
 // 3 => Lightest color
 // The rows represents the distance from the light point
 const int RAMP[16] = {
-	0, 2, 2, 3, 	// Values near the torch (lightest)
+	0, 1, 2, 3, 	// Values near the torch (lightest)
 	0, 1, 1, 2,
 	0, 0, 0, 1,
 	0, 0, 0, 0		// Values far from the torch (darkest)
