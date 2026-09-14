@@ -1,9 +1,7 @@
 [gd_scene format=4 uid="uid://8g2kqqw3l7yp"]
 
 [ext_resource type="Texture2D" uid="uid://bxtcrthh2vobe" path="res://assets/tilesets/demo/dungeon_tileset.png" id="1_hskl6"]
-[ext_resource type="Script" uid="uid://dg14dg2mbg8n7" path="res://scenes/demo/test_room/player_temp_controller.gd" id="2_xq2r0"]
-[ext_resource type="Texture2D" uid="uid://0ykypjmmgjq6" path="res://assets/sprites/demo/temp_player.png" id="3_xq2r0"]
-[ext_resource type="Texture2D" uid="uid://cxo15djkm4hxy" path="res://assets/sprites/demo/temp_player_light.png" id="4_2w3gs"]
+[ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/player_dungeon/player.tscn" id="2_xq2r0"]
 [ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/torch/torch_interactable.tscn" id="4_l5dg3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e4vl8"]
@@ -33,18 +31,10 @@ sources/0 = SubResource("TileSetAtlasSource_e4vl8")
 tile_map_data = PackedByteArray("AAAJAAEAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAcAAAAAAAEAAAAJAAcAAAABAAEAAAABAAEAAAABAAIAAAACAAEAAAABAAIAAAADAAEAAAABAAIAAAAEAAEAAAABAAIAAAAFAAEAAAABAAIAAAAGAAEAAAABAAIAAAAHAAEAAAABAAIAAAAIAAEAAAABAAIAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAADAAIAAAAEAAcAAAADAAIAAAAFAAcAAAADAAIAAAAGAAcAAAADAAIAAAAHAAcAAAADAAIAAAAIAAcAAAADAAIAAAAJAAYAAAACAAIAAAAJAAUAAAACAAIAAAAJAAQAAAACAAIAAAAJAAMAAAACAAIAAAAJAAIAAAACAAIAAAAAAAYAAAAAAAIAAAAAAAUAAAAAAAIAAAAAAAQAAAAAAAIAAAAAAAMAAAAAAAIAAAAAAAIAAAAAAAIAAAACAAUAAAACAAMAAAACAAYAAAACAAMAAAABAAYAAAACAAMAAAABAAUAAAACAAMAAAABAAQAAAACAAMAAAABAAMAAAACAAMAAAACAAMAAAACAAMAAAACAAIAAAACAAMAAAABAAIAAAACAAMAAAACAAQAAAACAAMAAAADAAMAAAACAAMAAAADAAIAAAACAAMAAAAEAAIAAAACAAMAAAAFAAIAAAACAAMAAAAGAAIAAAACAAMAAAAHAAIAAAACAAMAAAAIAAIAAAACAAMAAAAIAAMAAAACAAMAAAAIAAQAAAACAAMAAAAIAAUAAAACAAMAAAAIAAYAAAACAAMAAAAHAAYAAAACAAMAAAAGAAYAAAACAAMAAAAFAAYAAAACAAMAAAAEAAYAAAACAAMAAAADAAYAAAACAAMAAAADAAUAAAACAAMAAAADAAQAAAACAAMAAAAEAAQAAAACAAMAAAAEAAMAAAACAAMAAAAFAAMAAAACAAMAAAAFAAQAAAACAAMAAAAFAAUAAAACAAMAAAAGAAUAAAACAAMAAAAGAAQAAAACAAMAAAAHAAQAAAACAAMAAAAHAAMAAAACAAMAAAAGAAMAAAACAAMAAAAEAAUAAAACAAMAAAAHAAUAAAACAAMAAAA=")
 tile_set = SubResource("TileSet_0mymv")
 
-[node name="FakePlayer" type="CharacterBody2D" parent="." unique_id=2085378037 groups=["light_sources"]]
-position = Vector2(80, 72)
-script = ExtResource("2_xq2r0")
+[node name="Player" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("2_xq2r0")]
+position = Vector2(86, 75)
+torch_duration_seconds = 60
 torch_light_radius = 20.0
-
-[node name="LightSprite" type="Sprite2D" parent="FakePlayer" unique_id=780955968]
-texture = ExtResource("4_2w3gs")
-
-[node name="PlayerSprite" type="Sprite2D" parent="FakePlayer" unique_id=718595948]
-z_index = 1
-position = Vector2(1, 0)
-texture = ExtResource("3_xq2r0")
 
 [node name="TorchInteractable" parent="." unique_id=555735461 groups=["light_sources"] instance=ExtResource("4_l5dg3")]
 position = Vector2(48, 80)

@@ -6,7 +6,7 @@ const SPEED = 32.0
 @export var torch_light_radius: float = 40.0
 @export var player_light_max_diameter: float = 20.0
 
-@onready var _player_light: Sprite2D = $LightSprite
+@onready var _player_light: Sprite2D = $InnerLightSprite
 
 var _torch: TorchManager
 
@@ -26,7 +26,8 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func get_light_radius() -> float:
-	return torch_light_radius * _torch.get_light_value()
+	var light_value := _torch.get_light_value()
+	return torch_light_radius * clamp(light_value, 0.25, 1.0)
 
 func _scale_player_light() -> void:
 	var d: int = int(round(player_light_max_diameter * _torch.get_light_value()))

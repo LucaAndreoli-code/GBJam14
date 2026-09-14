@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bh82ko1slmy55"]
+
+[ext_resource type="Script" uid="uid://d2qdjcdrj8f8n" path="res://entities/player_dungeon/player_controller.gd" id="1_symyc"]
+[ext_resource type="Texture2D" uid="uid://cxo15djkm4hxy" path="res://assets/sprites/demo/temp_player_light.png" id="2_sglur"]
+[ext_resource type="Texture2D" uid="uid://0ykypjmmgjq6" path="res://assets/sprites/demo/temp_player.png" id="3_bls4j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0mymv"]
+
+[node name="Player" type="CharacterBody2D" unique_id=39549468]
+script = ExtResource("1_symyc")
+
+[node name="InnerLightSprite" type="Sprite2D" parent="." unique_id=603036724]
+texture = ExtResource("2_sglur")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1406297878]
+texture = ExtResource("3_bls4j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=856247225]
+shape = SubResource("RectangleShape2D_0mymv")
