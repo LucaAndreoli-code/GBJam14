@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://1iu4fbt4dyl2"]
+
+[ext_resource type="Script" uid="uid://di1o56guh7t51" path="res://scripts/ui/gb_text_box.gd" id="1_box"]
+[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="2_label"]
+[ext_resource type="FontFile" uid="uid://xy3utj368w3d" path="res://assets/fonts/gameboysoft.ttf" id="3_font"]
+
+[node name="GBTextBox" type="Node2D" unique_id=868091926]
+script = ExtResource("1_box")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1931660434]
+offset_right = 152.0
+offset_bottom = 48.0
+mouse_filter = 2
+
+[node name="GBLabel" type="Label" parent="." unique_id=1910742563]
+custom_maximum_size = Vector2(144, 64)
+offset_left = 3.0
+offset_top = 4.0
+offset_right = 149.0
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 3
+clip_text = true
+script = ExtResource("2_label")
+auto_start = false
+skip_enabled = false
