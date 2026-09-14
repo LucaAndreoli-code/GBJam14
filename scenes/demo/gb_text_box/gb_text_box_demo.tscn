@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dosral12q2tn1"]
+
+[ext_resource type="Script" uid="uid://di87sfbpd6s3k" path="res://scenes/demo/gb_text_box/gb_text_box_demo.gd" id="1_demo"]
+[ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="2_shader"]
+[ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="3_manager"]
+[ext_resource type="PackedScene" uid="uid://1iu4fbt4dyl2" path="res://scenes/ui/gb_text_box.tscn" id="4_box"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_demo"]
+shader = ExtResource("2_shader")
+shader_parameter/col_lightest = Color(0.608, 0.737, 0.059, 1)
+shader_parameter/col_light = Color(0.545, 0.675, 0.059, 1)
+shader_parameter/col_dark = Color(0.188, 0.384, 0.188, 1)
+shader_parameter/col_darkest = Color(0.059, 0.22, 0.059, 1)
+shader_parameter/fade_step = 0
+
+[node name="Demo" type="Control" unique_id=1508224698]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_demo")
+
+[node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=318799445]
+texture_filter = 1
+material = SubResource("ShaderMaterial_demo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("3_manager")
+
+[node name="Screen" type="SubViewport" parent="PaletteContainer" unique_id=1025195935]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(160, 144)
+render_target_update_mode = 4
+
+[node name="GBTextBox" parent="PaletteContainer/Screen" unique_id=138832711 instance=ExtResource("4_box")]
+position = Vector2(4, 92)
