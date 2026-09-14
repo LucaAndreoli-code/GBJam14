@@ -40,7 +40,6 @@ tile_set = SubResource("TileSet_0mymv")
 
 [node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("2_xq2r0")]
 position = Vector2(86, 75)
-torch_duration_seconds = 60
 torch_light_radius = 20.0
 player_light_max_diameter = 20.0
 torch_light_min_value = 0.25
