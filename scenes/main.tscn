@@ -39,3 +39,27 @@ snap_2d_transforms_to_pixel = true
 snap_2d_vertices_to_pixel = true
 size = Vector2i(160, 144)
 render_target_update_mode = 4
+
+[node name="VisibilityContainer" type="SubViewportContainer" parent="PaletteContainer/Screen" unique_id=307108821]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="GameWorld" type="SubViewport" parent="PaletteContainer/Screen/VisibilityContainer" unique_id=952034894]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+size = Vector2i(160, 144)
+render_target_update_mode = 4
+
+[node name="UI" type="Control" parent="PaletteContainer/Screen" unique_id=246248463]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

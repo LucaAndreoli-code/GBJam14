@@ -2,7 +2,7 @@ extends Control
 
 @export var initial_scene: PackedScene
 
-@onready var _game_viewport: SubViewport = $PaletteContainer/Screen
+@onready var _game_viewport: SubViewport = $PaletteContainer/Screen/VisibilityContainer/GameWorld
 
 func _ready() -> void:
 	SceneManager.register_viewport(_game_viewport)
