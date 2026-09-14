@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bxtcrthh2vobe" path="res://assets/tilesets/demo/dungeon_tileset.png" id="1_hskl6"]
 [ext_resource type="Script" uid="uid://dv4mka4odeeqs" path="res://scripts/game/dungeon_manager.gd" id="1_l5dg3"]
-[ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/player_dungeon/player_dungeon.tscn" id="2_xq2r0"]
+[ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/dungeon/player/player_dungeon.tscn" id="2_xq2r0"]
 [ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/torch/torch_interactable.tscn" id="4_l5dg3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e4vl8"]
