@@ -6,3 +6,6 @@ extends Node
 
 # Fired when the game is paused or unpaused.
 signal game_paused(is_paused: bool)
+
+# Fired when the torch's timer ticks.
+signal torch_tick(remaining: int, light_value: float)
