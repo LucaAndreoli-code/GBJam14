@@ -6,6 +6,9 @@ extends Node
 
 @warning_ignore_start("unused_signal")
 
+## Fired when the visibility shader is toggled.
+signal visibility_shader_toggled(is_enabled: bool)
+
 ## Fired when the game is paused or unpaused.
 signal game_paused(is_paused: bool)
 
