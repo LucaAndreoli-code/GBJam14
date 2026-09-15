@@ -16,6 +16,16 @@ const SIZES := {
 	Kind.BIG: Vector2i(2, 2),
 }
 
+## Artwork available for each kind. More than one entry means a variant is rolled on spawn.
+const TEXTURES := {
+	Kind.SMALL: [preload("res://assets/sprites/demo/treasures/moneta.png")],
+	Kind.MEDIUM: [
+		preload("res://assets/sprites/demo/treasures/calice.png"),
+		preload("res://assets/sprites/demo/treasures/statua.png"),
+	],
+	Kind.BIG: [preload("res://assets/sprites/demo/treasures/forziere.png")],
+}
+
 ## Seconds each kind adds to the run timer. Unused until the timer lands.
 const TIME_BONUS := {
 	Kind.SMALL: 1.0,
@@ -27,7 +37,7 @@ const TIME_BONUS := {
 const FLASH_STEP := 0.2
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
-@onready var _placeholder: ColorRect = $Placeholder
+@onready var _sprite: Sprite2D = $Sprite
 
 var _kind: Kind = Kind.SMALL
 var _cells: Array[Vector2i] = []
@@ -41,7 +51,8 @@ func _ready() -> void:
 
 ## Places the treasure over the given cells and buries it.
 ## `origin` is the top-left corner of the footprint, in this node's parent space.
-func setup(kind: Kind, cells: Array[Vector2i], origin: Vector2, cell_size: Vector2i) -> void:
+## `rng` is the run's seeded generator: the variant roll has to stay reproducible.
+func setup(kind: Kind, cells: Array[Vector2i], origin: Vector2, cell_size: Vector2i, rng: RandomNumberGenerator) -> void:
 	_kind = kind
 	_cells = cells
 	var pixel_size := Vector2(_footprint(kind) * cell_size)
@@ -49,8 +60,11 @@ func setup(kind: Kind, cells: Array[Vector2i], origin: Vector2, cell_size: Vecto
 	var rect := RectangleShape2D.new()
 	rect.size = pixel_size
 	_shape.shape = rect
-	_placeholder.position = -pixel_size * 0.5
-	_placeholder.size = pixel_size
+	var variants: Array = TEXTURES[kind]
+	_sprite.texture = variants[rng.randi() % variants.size()]
+	# A rotated footprint is the one case where the kind does not tell you the on screen
+	# orientation, see footprint_for(): the upright art has to lie down to cover the cells.
+	_sprite.rotation = PI * 0.5 if _footprint(kind) != SIZES[kind] else 0.0
 	_bury()
 
 ## Footprint in cells, with the 1x2 medium randomly laid on its side so horizontal and

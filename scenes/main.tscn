@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://diblsjuea0qel" path="res://scenes/minigames/digging/digging_minigame.tscn" id="3_startscene"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sgp6g"]
 shader = ExtResource("1_o5qli")
@@ -20,6 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tbgi4")
+initial_scene = ExtResource("3_startscene")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1

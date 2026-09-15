@@ -11,8 +11,4 @@ script = ExtResource("1_treasure")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
-[node name="Placeholder" type="ColorRect" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
-mouse_filter = 2
-color = Color(1, 1, 1, 1)
+[node name="Sprite" type="Sprite2D" parent="."]

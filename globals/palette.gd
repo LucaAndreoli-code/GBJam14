@@ -19,10 +19,10 @@ const FADING_FRAMES_PER_STEP := 8
 
 # Active palette colors
 # They're loaded at runtime using .gpl files
-var lightest := Color.from_rgba8(155, 188, 15)
-var light := Color.from_rgba8(139, 172, 15)
-var dark := Color.from_rgba8(48, 98, 48)
-var darkest := Color.from_rgba8(15, 56, 15)
+var lightest := Color.from_rgba8(224, 248, 207)
+var light := Color.from_rgba8(222, 155, 79)
+var dark := Color.from_rgba8(48, 69, 92)
+var darkest := Color.from_rgba8(7, 24, 33)
 
 #TODO we should consider this palette as default
 #var lightest := Color.from_rgba8(224, 248, 208)

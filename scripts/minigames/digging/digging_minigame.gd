@@ -197,7 +197,7 @@ func _place_treasure(kind: Treasure.Kind, origin_cell: Vector2i, footprint: Vect
 	# Added before setup(): setup() touches @onready children
 	_treasures_root.add_child(treasure)
 	var world_origin := _field.to_global(_field.cell_to_local_origin(origin_cell))
-	treasure.setup(kind, cells, _treasures_root.to_local(world_origin), _field.tile_set.tile_size)
+	treasure.setup(kind, cells, _treasures_root.to_local(world_origin), _field.tile_set.tile_size, _rng)
 	treasure.collected.connect(_on_treasure_collected)
 	_buried.append(treasure)
 
