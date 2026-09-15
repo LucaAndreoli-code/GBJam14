@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://b5xjkag1yxbtb" path="res://assets/tilesets/demo/dig_dug_tileset.tres" id="3_tileset"]
 [ext_resource type="Script" uid="uid://dpgbrqd7adexg" path="res://scripts/minigames/digging/dig_field.gd" id="4_field"]
 [ext_resource type="PackedScene" path="res://scenes/minigames/digging/dig_player.tscn" id="5_player"]
+[ext_resource type="Script" uid="uid://d2uw6tdbw6mv2" path="res://scripts/minigames/digging/sonar_ring.gd" id="6_sonar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(64, 30)
@@ -14,6 +15,7 @@ size = Vector2(80, 30)
 
 [node name="DiggingMinigame" type="Node2D" unique_id=1655693609]
 script = ExtResource("1_root")
+treasure_count = 3
 
 [node name="Surface" type="Sprite2D" parent="." unique_id=30023449]
 position = Vector2(80, 16)
@@ -22,6 +24,7 @@ texture = ExtResource("2_surface")
 [node name="DigField" type="TileMapLayer" parent="." unique_id=1462086664]
 tile_set = ExtResource("3_tileset")
 script = ExtResource("4_field")
+field_rect = Rect2i(0, 4, 20, 12)
 
 [node name="Treasures" type="Node2D" parent="." unique_id=1480143177]
 
@@ -30,7 +33,7 @@ position = Vector2(72, 24)
 field_path = NodePath("../DigField")
 
 [node name="Bounding" type="StaticBody2D" parent="." unique_id=1949647877]
-collision_layer = 1
+visible = false
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding" unique_id=273781272]
@@ -38,7 +41,7 @@ position = Vector2(32, 17)
 shape = SubResource("RectangleShape2D_4h42e")
 
 [node name="Bounding2" type="StaticBody2D" parent="." unique_id=751340506]
-collision_layer = 1
+visible = false
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding2" unique_id=1728546571]
@@ -46,9 +49,13 @@ position = Vector2(120, 17)
 shape = SubResource("RectangleShape2D_right")
 
 [node name="Bounding3" type="StaticBody2D" parent="." unique_id=1364408459]
-collision_layer = 1
+visible = false
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding3" unique_id=85849230]
 position = Vector2(72, 1)
 shape = SubResource("RectangleShape2D_4h42e")
+
+[node name="SonarRing" type="Node2D" parent="." unique_id=1180182209]
+z_index = 10
+script = ExtResource("6_sonar")

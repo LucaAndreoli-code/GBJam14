@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsn7qsdoneu2j"
-path="res://.godot/imported/statua.png-3615fe3c842ef7d05c1d1db0a9232ade.ctex"
+uid="uid://c1oywu3ypts8v"
+path="res://.godot/imported/forziere.png-bffdaf0e39d7050992e29467c97e239e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/demo/statua.png"
-dest_files=["res://.godot/imported/statua.png-3615fe3c842ef7d05c1d1db0a9232ade.ctex"]
+source_file="res://assets/sprites/demo/treasures/forziere.png"
+dest_files=["res://.godot/imported/forziere.png-bffdaf0e39d7050992e29467c97e239e.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jjf80qtpwxv"
-path="res://.godot/imported/vasca.png-a4bc7208e4bc4fbe1cd41f521634f78d.ctex"
+path="res://.godot/imported/vasca.png-b092ba6c955d8ea16d5b591f1bf14a8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/demo/vasca.png"
-dest_files=["res://.godot/imported/vasca.png-a4bc7208e4bc4fbe1cd41f521634f78d.ctex"]
+source_file="res://assets/sprites/demo/treasures/vasca.png"
+dest_files=["res://.godot/imported/vasca.png-b092ba6c955d8ea16d5b591f1bf14a8a.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b83yw6377ibvx"
-path="res://.godot/imported/calice.png-2c526e80c981c7b26ddb987bd79f7bf9.ctex"
+path="res://.godot/imported/calice.png-3c579d6148093a26e5d141ac9031613a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/demo/calice.png"
-dest_files=["res://.godot/imported/calice.png-2c526e80c981c7b26ddb987bd79f7bf9.ctex"]
+source_file="res://assets/sprites/demo/treasures/calice.png"
+dest_files=["res://.godot/imported/calice.png-3c579d6148093a26e5d141ac9031613a.ctex"]
 
 [params]
 

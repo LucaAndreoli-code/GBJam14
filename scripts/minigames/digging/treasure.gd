@@ -23,15 +23,21 @@ const TIME_BONUS := {
 	Kind.BIG: 3.0,
 }
 
+## Seconds of one on or off step of a sonar blink
+const FLASH_STEP := 0.2
+
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 @onready var _placeholder: ColorRect = $Placeholder
 
 var _kind: Kind = Kind.SMALL
 var _cells: Array[Vector2i] = []
 var _revealed: bool = false
+var _flash_left: float = 0.0
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	# Only the sonar blink needs a frame tick, so stay idle until it asks for one
+	set_process(false)
 
 ## Places the treasure over the given cells and buries it.
 ## `origin` is the top-left corner of the footprint, in this node's parent space.
@@ -74,6 +80,29 @@ func reveal() -> void:
 	_revealed = true
 	visible = true
 	monitoring = true
+
+## Blinks the treasure for `duration` seconds so the sonar can point at it.
+## Deliberately leaves `monitoring` alone: the scan shows where a treasure is, it does not
+## let the player pick it up through terrain that is still solid.
+func flash(duration: float) -> void:
+	if _revealed:
+		return
+	_flash_left = duration
+	set_process(true)
+
+func _process(delta: float) -> void:
+	_flash_left -= delta
+	# _revealed can flip mid blink, when the player digs the treasure out while it shows
+	if _flash_left <= 0.0 or _revealed:
+		_end_flash()
+		return
+	visible = int(_flash_left / FLASH_STEP) % 2 == 0
+
+func _end_flash() -> void:
+	_flash_left = 0.0
+	set_process(false)
+	# A treasure uncovered during the blink stays up; one still buried goes back to hidden
+	visible = _revealed
 
 func _bury() -> void:
 	_revealed = false

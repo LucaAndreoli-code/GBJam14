@@ -8,11 +8,16 @@ extends Node2D
 signal treasure_collected(total: int, target: int)
 ## Emits when the last treasure is picked up
 signal all_treasures_collected()
+## Emits when the sonar fires, carrying the seconds until it is usable again
+signal sonar_pinged(cooldown: float)
 
 const TREASURE_SCENE := preload("res://scenes/minigames/digging/treasure.tscn")
 
 # Attempts per region before giving up on placing that treasure
 const PLACEMENT_ATTEMPTS := 24
+
+# Input action that fires the sonar
+const SONAR_ACTION := "btn_a"
 
 ## How many treasures to bury
 @export var treasure_count: int = 4
@@ -26,15 +31,25 @@ const PLACEMENT_ATTEMPTS := 24
 @export var min_gap: int = 1
 ## Cells around the player's starting position that stay treasure free
 @export var start_pocket_radius: int = 2
+## How far the sonar reaches, in px. Roughly 5 cells at the default 8px tile.
+@export var sonar_radius: float = 40.0
+## Seconds between two usable scans
+@export var sonar_cooldown: float = 4.0
+## How long a treasure keeps blinking once the wave reaches it, in seconds
+@export var sonar_flash_time: float = 1.5
 
 @onready var _field: DigField = $DigField
 @onready var _player: DigPlayer = $DigPlayer
 @onready var _treasures_root: Node2D = $Treasures
+@onready var _sonar_ring: SonarRing = $SonarRing
 
 var _rng := RandomNumberGenerator.new()
 var _buried: Array[Treasure] = []
 var _reserved: Array[Rect2i] = []
 var _collected: int = 0
+var _sonar_left: float = 0.0
+var _sonar_origin: Vector2 = Vector2.ZERO
+var _sonar_pending: Array[Treasure] = []
 
 func _ready() -> void:
 	# DigField.fill() already ran: children are readied before their parent
@@ -43,6 +58,14 @@ func _ready() -> void:
 	_open_start_pocket()
 	_reserve_start_pocket()
 	_spawn_treasures()
+	# One place to balance the reach: the ring only needs it to pace its sweep
+	_sonar_ring.radius = sonar_radius
+
+func _process(delta: float) -> void:
+	_sonar_left = maxf(_sonar_left - delta, 0.0)
+	if _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
+		_fire_sonar()
+	_advance_sonar_wave()
 
 ## Called by SceneManager when this scene is entered, see scene_manager.gd
 func on_scene_entered(payload: Dictionary) -> void:
@@ -53,6 +76,52 @@ func on_scene_entered(payload: Dictionary) -> void:
 ## Returns how many treasures the player has picked up so far
 func get_collected_count() -> int:
 	return _collected
+
+## Returns true when the sonar can be fired again
+func is_sonar_ready() -> bool:
+	return _sonar_left <= 0.0
+
+## 0 right when the sonar comes back up, 1 right after a ping. For a cooldown gauge.
+func get_sonar_cooldown_ratio() -> float:
+	if sonar_cooldown <= 0.0:
+		return 0.0
+	return _sonar_left / sonar_cooldown
+
+# Sends the wave out from where the player stands right now. The origin is captured once
+# and never follows the player: the ring is drawn from it and the treasure distances are
+# measured against it, so walking away mid sweep cannot desync the two.
+func _fire_sonar() -> void:
+	_sonar_left = sonar_cooldown
+	_sonar_origin = _player.global_position
+	_sonar_ring.global_position = _sonar_origin
+	_sonar_ring.ping()
+	# Buried only: a revealed treasure is already on screen and a collected one is gone
+	_sonar_pending.clear()
+	for treasure in _buried:
+		if treasure.global_position.distance_to(_sonar_origin) <= sonar_radius:
+			_sonar_pending.append(treasure)
+	sonar_pinged.emit(sonar_cooldown)
+
+# Starts a treasure blinking on the frame the ring passes over it, rather than lighting
+# every one of them at once, so the sweep reads as actually finding them.
+func _advance_sonar_wave() -> void:
+	if _sonar_pending.is_empty():
+		return
+	# -1 means the sweep is over: everything left is inside the radius by construction,
+	# so flash it now instead of dropping it on a rounding error.
+	var front := _sonar_ring.get_wave_radius()
+	if front < 0.0:
+		front = sonar_radius
+	var still_waiting: Array[Treasure] = []
+	for treasure in _sonar_pending:
+		# A treasure revealed mid sweep can be collected and freed before the wave lands
+		if not is_instance_valid(treasure):
+			continue
+		if treasure.global_position.distance_to(_sonar_origin) > front:
+			still_waiting.append(treasure)
+		else:
+			treasure.flash(sonar_flash_time)
+	_sonar_pending = still_waiting
 
 # The player spawns inside the dirt, so clear the cells under its body first or
 # move_and_slide() would spend the first frames shoving it out of solid tiles.
@@ -166,3 +235,4 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	treasure_collected.emit(_collected, treasure_count)
 	if _collected >= treasure_count:
 		all_treasures_collected.emit()
+		push_warning("All treasure collected")
