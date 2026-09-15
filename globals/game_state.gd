@@ -1,7 +1,6 @@
 extends Node
 
 var _seed: int = 0
-var _torch_ended: bool = false
 var _paused: bool = false
 
 func get_seed() -> int:
@@ -13,15 +12,6 @@ func get_seed() -> int:
 func set_seed(value: int) -> void:
 	_seed = value
 	seed(_seed)
-
-func is_torch_ended() -> bool:
-	return _torch_ended
-
-func set_torch_ended(value: bool) -> void:
-	if _torch_ended == value:
-		return
-	_torch_ended = value
-	SignalBus.torch_ended.emit(_torch_ended)
 
 func is_paused() -> bool:
 	return _paused
