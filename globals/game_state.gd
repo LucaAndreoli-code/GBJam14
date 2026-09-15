@@ -2,6 +2,7 @@ extends Node
 
 var _seed: int = 0
 var _paused: bool = false
+var _input_enabled: bool = true
 
 func get_seed() -> int:
 	if _seed == 0:
@@ -21,3 +22,12 @@ func set_paused(value: bool) -> void:
 		return
 	_paused = value
 	SignalBus.game_paused.emit(_paused)
+
+func is_input_enabled() -> bool:
+	return _input_enabled
+
+func set_input_enabled(value: bool) -> void:
+	if _input_enabled == value:
+		return
+	_input_enabled = value
+	SignalBus.input_enabled.emit(_input_enabled)

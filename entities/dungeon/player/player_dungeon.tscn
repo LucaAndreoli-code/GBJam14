@@ -1,21 +1,18 @@
 [gd_scene format=3 uid="uid://bh82ko1slmy55"]
 
-[ext_resource type="Script" uid="uid://d2qdjcdrj8f8n" path="res://entities/player_dungeon/player_dungeon_controller.gd" id="1_symyc"]
+[ext_resource type="Script" uid="uid://d2qdjcdrj8f8n" path="res://entities/dungeon/player/player_dungeon_controller.gd" id="1_symyc"]
 [ext_resource type="Texture2D" uid="uid://cxo15djkm4hxy" path="res://assets/sprites/demo/temp_player_light.png" id="2_sglur"]
 [ext_resource type="Texture2D" uid="uid://0ykypjmmgjq6" path="res://assets/sprites/demo/temp_player.png" id="3_bls4j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0mymv"]
-size = Vector2(7, 8)
+size = Vector2(7, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nni1u"]
 size = Vector2(14.5, 16)
 
 [node name="PlayerDungeon" type="CharacterBody2D" unique_id=39549468]
+motion_mode = 1
 script = ExtResource("1_symyc")
-torch_duration_seconds = null
-torch_light_radius = null
-player_light_max_diameter = null
-torch_light_min_value = null
 
 [node name="InnerLightSprite" type="Sprite2D" parent="." unique_id=603036724]
 texture = ExtResource("2_sglur")
@@ -24,7 +21,7 @@ texture = ExtResource("2_sglur")
 texture = ExtResource("3_bls4j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=856247225]
-position = Vector2(-1.5, 4)
+position = Vector2(-1.5, 3.5)
 shape = SubResource("RectangleShape2D_0mymv")
 
 [node name="InteractArea" type="Area2D" parent="." unique_id=155513970]

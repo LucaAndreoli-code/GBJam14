@@ -1,5 +1,5 @@
 @abstract
-class_name Interactable
+class_name DungeonInteractable
 extends Area2D
 
 @abstract func interact(player: PlayerDungeonController) -> void

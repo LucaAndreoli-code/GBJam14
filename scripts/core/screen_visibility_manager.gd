@@ -6,7 +6,7 @@ extends SubViewportContainer
 const LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE = "get_light_radius"
 
 func _process(_delta: float) -> void:
-	var light_sources := get_tree().get_nodes_in_group("light_sources")
+	var light_sources := get_tree().get_nodes_in_group(Groups.LIGHT_SOURCES)
 	var lights: Array[Vector3] = []
 	for source in light_sources:
 		if source is not Node2D:
@@ -17,7 +17,8 @@ func _process(_delta: float) -> void:
 			[LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE, source.name])
 			continue
 		var source_node := source as Node2D
-		var source_pos : Vector2 = round(source_node.global_position)
+		var canvas_xform := source.get_viewport().get_canvas_transform()
+		var source_pos : Vector2 = (canvas_xform * source_node.global_position).round()
 		var source_radius: float = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
 		var source_radius_offset := float(source.get_instance_id() % 100 / 10.0)
 		var source_radius_flickered := _calc_flickering(source_radius, source_radius_offset)

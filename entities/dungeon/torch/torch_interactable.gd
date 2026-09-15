@@ -1,4 +1,4 @@
-extends Interactable
+extends DungeonInteractable
 
 @export var light_radius: float = 10.0
 
