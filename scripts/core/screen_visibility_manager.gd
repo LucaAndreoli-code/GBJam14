@@ -6,7 +6,7 @@ extends SubViewportContainer
 const LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE = "get_light_radius"
 
 func _process(_delta: float) -> void:
-	var light_sources := get_tree().get_nodes_in_group("light_sources")
+	var light_sources := get_tree().get_nodes_in_group(Groups.LIGHT_SOURCES)
 	var lights: Array[Vector3] = []
 	for source in light_sources:
 		if source is not Node2D:

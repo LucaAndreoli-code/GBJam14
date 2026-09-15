@@ -4,6 +4,8 @@ extends Node
 # Scenes emit here, other scenes listen here, so they never need to know each other.
 # Add new signals below as the game grows.
 
+@warning_ignore_start("unused_signal")
+
 ## Fired when the game is paused or unpaused.
 signal game_paused(is_paused: bool)
 
@@ -21,3 +23,5 @@ signal torch_tick(remaining: int, light_value: float)
 
 ## Fired when a torch refill is requested.
 signal torch_refill(source: Node2D)
+
+@warning_ignore_restore("unused_signal")

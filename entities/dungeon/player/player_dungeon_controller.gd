@@ -97,13 +97,13 @@ func _scale_player_light() -> void:
 	var s := d / float(_player_light.texture.get_width())
 	_player_light.scale = Vector2(s, s)
 
-func _get_closest_interactable_object() -> Interactable:
-	var best: Interactable = null
+func _get_closest_interactable_object() -> DungeonInteractable:
+	var best: DungeonInteractable = null
 	var best_d := INF
 	for a in _interact_area.get_overlapping_areas():
-		if a is not Interactable:
+		if a is not DungeonInteractable:
 			continue
-		if not (a as Interactable).can_interact(self):
+		if not (a as DungeonInteractable).can_interact(self):
 			continue
 		var d := global_position.distance_squared_to(a.global_position)
 		if d < best_d:
