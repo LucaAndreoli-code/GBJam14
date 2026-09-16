@@ -52,20 +52,35 @@ var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
 var _hud: DigHUD
+var _started: bool = false
 
 func _ready() -> void:
-	# DigField.fill() already ran: children are readied before their parent
-	_rng.seed = GameState.get_seed()
 	# Read once as well as listening: the signal only fires on a change
 	_is_input_enabled = GameState.is_input_enabled()
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	_field.cells_carved.connect(_on_cells_carved)
+	# DigField.fill() already ran: children are readied before their parent.
+	# The pocket is carved here rather than with the layout below because it owes nothing
+	# to the seed, and leaving it a frame late would let the player be shoved out of the
+	# dirt it spawns in.
 	_open_start_pocket()
-	_reserve_start_pocket()
-	_spawn_treasures()
 	# One place to balance the reach: the ring only needs it to pace its sweep
 	_sonar_ring.radius = sonar_radius
 	_mount_hud()
+	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
+	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
+	# about to replace. Whichever path runs first wins, the other is a no-op.
+	_start_run.call_deferred()
+
+# Builds the layout the seed describes. Guarded because both _ready() and
+# on_scene_entered() ask for it and only the first one may run.
+func _start_run() -> void:
+	if _started:
+		return
+	_started = true
+	_rng.seed = GameState.get_seed()
+	_reserve_start_pocket()
+	_spawn_treasures()
 
 # The strip lives in main.tscn, outside this scene, so it is found by group rather
 # than by path. Running the minigame on its own leaves the group empty, which is why
@@ -94,6 +109,7 @@ func on_scene_entered(payload: Dictionary) -> void:
 	var incoming_seed: int = payload.get("seed", 0)
 	if incoming_seed != 0:
 		GameState.set_seed(incoming_seed)
+	_start_run()
 
 ## Returns how many treasures the player has picked up so far
 func get_collected_count() -> int:
