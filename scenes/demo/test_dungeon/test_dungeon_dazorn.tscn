@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dv4mka4odeeqs" path="res://scripts/game/dungeon_manager.gd" id="1_7tgtp"]
 [ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/dungeon/player/player_dungeon.tscn" id="2_8irmh"]
+[ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="2_fj2dp"]
 [ext_resource type="Texture2D" uid="uid://h60ewbsi3dtf" path="res://assets/sprites/demo/temp_inventory_cell.png" id="3_2qoyv"]
 [ext_resource type="Script" uid="uid://brslu3yjsif13" path="res://entities/dungeon/camera/camera_dungeon.gd" id="3_rj1lc"]
 [ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/dungeon/torch/torch_interactable.tscn" id="5_deviu"]
@@ -98,6 +99,10 @@ sources/1 = SubResource("TileSetAtlasSource_fj2dp")
 
 [node name="TestDungeonDazorn" type="Node2D" unique_id=536535527]
 script = ExtResource("1_7tgtp")
+
+[node name="GameTime" type="Node2D" parent="." unique_id=1219174099]
+script = ExtResource("2_fj2dp")
+metadata/_custom_type_script = "uid://gv83vdj3ao7v"
 
 [node name="InventoryLayer" type="CanvasLayer" parent="." unique_id=1029212738]
 visible = false
