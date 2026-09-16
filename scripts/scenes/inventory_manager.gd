@@ -10,15 +10,18 @@ const QUESTION_MARK: Rect2i = Rect2i(52, 4, 16, 16)
 @export var grid_size: Vector2i = Vector2i(4, 3)
 @export var cell_textures: Texture2D
 
+var _parent_payload: Dictionary
 var _cell_selected: int = 0
 
 func _ready() -> void:
+	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	if _grid:
 		_init_grid()
 		_refresh_grid()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not get_parent().visible:
+	if event.is_action_pressed("btn_b"):
+		_exit()
 		return
 	var dx := 0
 	var dy := 0
@@ -34,6 +37,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	get_viewport().set_input_as_handled()
 	_move_grid_selection(dx, dy)
+
+func on_scene_entered(payload: Dictionary) -> void:
+	_parent_payload = payload
 
 func _init_grid() -> void:
 	_grid.columns = grid_size.x
@@ -79,3 +85,6 @@ func _refresh_grid() -> void:
 	for i in _grid.get_child_count():
 		var cell := _grid.get_child(i) as TextureRect
 		(cell.texture as AtlasTexture).region = FRAME_SELECTED if _cell_selected == i else FRAME_NOT_SELECTED
+
+func _exit() -> void:
+	SceneManager.go_to(_parent_payload.get("scene_path"), _parent_payload)

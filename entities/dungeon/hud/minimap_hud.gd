@@ -6,13 +6,6 @@ enum DoorSize {
 	DOWN = 2
 }
 
-enum Link { 
-	DOOR_RIGHT = 1 << 0, 
-	DOOR_DOWN = 1 << 1, 
-	OPEN_RIGHT = 1 << 2, 
-	OPEN_DOWN = 1 << 3 
-}
-
 const SIZE: Vector2 = Vector2(32.0, 16.0)
 const POSITION: Vector2 = Vector2(128.0, 128.0)
 const ROOM_ORIGIN: Vector2i = Vector2i(0, 1)
@@ -44,6 +37,14 @@ func _ready() -> void:
 	position = POSITION
 	_build_data_layer()
 
+func get_data_layer() -> Dictionary:
+	return {
+		"data": _data,
+		"visited": _visited,
+		"torches": _torches,
+		"room": _current_room
+	}
+
 func _build_data_layer() -> void:
 	var right_count := {}
 	var down_count := {}
@@ -65,18 +66,19 @@ func _build_data_layer() -> void:
 	for room in _data:
 		var r: int = right_count.get(room, 0)
 		var d: int = down_count.get(room, 0)
-		if r > ROOM_TILES.y / 2.0: _data[room] |= Link.OPEN_RIGHT
-		elif r > 0: _data[room] |= Link.DOOR_RIGHT
-		if d > ROOM_TILES.x / 2.0: _data[room] |= Link.OPEN_DOWN
-		elif d > 0: _data[room] |= Link.DOOR_DOWN
+		if r > ROOM_TILES.y / 2.0: _data[room] |= MinimapUtils.Link.OPEN_RIGHT
+		elif r > 0: _data[room] |= MinimapUtils.Link.DOOR_RIGHT
+		if d > ROOM_TILES.x / 2.0: _data[room] |= MinimapUtils.Link.OPEN_DOWN
+		elif d > 0: _data[room] |= MinimapUtils.Link.DOOR_DOWN
 	for torch in get_tree().get_nodes_in_group(Groups.LEVEL_TORCHES):
-		_torches[_room_of(torch.global_position)] = true
+		var rr := MinimapUtils.get_room_of(_level, torch.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
+		_torches[rr] = true
 	_compute_offset()
 
 func _process(_delta: float) -> void:
 	if _is_disabled:
 		return
-	var current_room := _room_of(_player.global_position)
+	var current_room := MinimapUtils.get_room_of(_level, _player.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
 	if current_room != _current_room:
 		_current_room = current_room
 		_visited[current_room] = true
@@ -85,20 +87,20 @@ func _process(_delta: float) -> void:
 func _draw() -> void:
 	var inner := CELL_SIZE - Vector2i.ONE
 	for cell in _visited:
-		if not _is_drawn(cell):
+		if not MinimapUtils.is_drawn(_data, _visited, _current_room, cell, _radius, CELL_SIZE, SIZE):
 			continue
-		var pos := _cell_pos(cell)
+		var pos := MinimapUtils.get_cell_pos(_current_room, cell, CELL_SIZE, SIZE)
 		draw_rect(Rect2(pos, inner), COLOR_ROOM)
 		var links: int = _data[cell]
-		if _is_drawn(cell + Vector2i.RIGHT):
-			if links & Link.OPEN_RIGHT:
+		if MinimapUtils.is_drawn(_data, _visited, _current_room, cell + Vector2i.RIGHT, _radius, CELL_SIZE, SIZE):
+			if links & MinimapUtils.Link.OPEN_RIGHT:
 				draw_rect(Rect2(pos + Vector2i(inner.x, 0), Vector2i(1, inner.y)), COLOR_ROOM)
-			elif links & Link.DOOR_RIGHT:
+			elif links & MinimapUtils.Link.DOOR_RIGHT:
 				draw_rect(Rect2(pos + Vector2i(inner.x, 1), Vector2i(1, 1)), COLOR_ROOM)
-		if _is_drawn(cell + Vector2i.DOWN):
-			if links & Link.OPEN_DOWN:
+		if MinimapUtils.is_drawn(_data, _visited, _current_room, cell + Vector2i.DOWN, _radius, CELL_SIZE, SIZE):
+			if links & MinimapUtils.Link.OPEN_DOWN:
 				draw_rect(Rect2(pos + Vector2i(0, inner.y), Vector2i(inner.x, 1)), COLOR_ROOM)
-			elif links & Link.DOOR_DOWN:
+			elif links & MinimapUtils.Link.DOOR_DOWN:
 				draw_rect(Rect2(pos + Vector2i(1, inner.y), Vector2i(1, 1)), COLOR_ROOM)
 		if cell == _current_room:
 			draw_rect(Rect2(pos + Vector2i(1, 1), Vector2i(1, 1)), COLOR_PLAYER)
@@ -118,21 +120,3 @@ func _compute_offset() -> void:
 		max_room = max_room.max(r)
 	var map_size := (max_room - min_room + Vector2i.ONE) * CELL_SIZE - Vector2i.ONE
 	_offset = (Vector2i(SIZE) - map_size) / 2 - min_room * CELL_SIZE
-
-func _cell_pos(cell: Vector2i) -> Vector2i:
-	var inner := CELL_SIZE - Vector2i.ONE
-	return (Vector2i(SIZE) - inner) / 2 + (cell - _current_room) * CELL_SIZE
-
-func _is_drawn(cell: Vector2i) -> bool:
-	if not (_visited.has(cell) and _data.has(cell)):
-		return false
-	var d := (cell - _current_room).abs()
-	if d.x > _radius.x or d.y > _radius.y:
-		return false
-	return Rect2(Vector2.ZERO, SIZE).encloses(Rect2(_cell_pos(cell), CELL_SIZE - Vector2i.ONE))
-
-func _room_of(global_pos: Vector2) -> Vector2i:
-	var tile_size := _level.tile_set.tile_size
-	var p := _level.to_local(global_pos) - Vector2(ROOM_ORIGIN * tile_size)
-	p += Vector2(GAP_TILES * tile_size) / 2.0
-	return Vector2i((p / Vector2(ROOM_PERIOD * tile_size)).floor())

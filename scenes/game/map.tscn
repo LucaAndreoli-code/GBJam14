@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://br5hrfq5761d3"]
+
+[ext_resource type="Script" uid="uid://d0sjnjamt4ac3" path="res://scripts/scenes/map_manager.gd" id="1_043wi"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="1_fodlk"]
+[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="2_043wi"]
+
+[node name="Map" type="Control" unique_id=856458967]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_043wi")
+
+[node name="Container" type="Control" parent="." unique_id=1895323090]
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 144.0
+
+[node name="Label" type="Label" parent="Container" unique_id=838601897]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("1_fodlk")
+theme_override_font_sizes/font_size = 8
+text = "Dungeon map"
+vertical_alignment = 1
+script = ExtResource("2_043wi")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
