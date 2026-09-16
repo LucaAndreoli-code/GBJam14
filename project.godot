@@ -23,6 +23,7 @@ SignalBus="*uid://cvx21hojw3lqe"
 GameState="*uid://dj01nk3yfpu4m"
 DebugOverlay="*uid://q3a61ow46ucd"
 SceneManager="*uid://dd0xvqg4prhfg"
+Groups="*uid://kp8q0p2plwq3"
 
 [display]
 
@@ -32,6 +33,13 @@ window/size/window_width_override=640
 window/size/window_height_override=576
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"
+
+[global_group]
+
+light_sources="A light source which is considered by the visibility shader"
+ui_container="The main UI container"
+hud_container="The main HUD container"
+level_torches="An interactable torch in the dungeon level"
 
 [input]
 

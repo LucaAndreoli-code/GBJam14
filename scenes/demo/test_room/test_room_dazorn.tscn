@@ -1,6 +1,9 @@
 [gd_scene format=4 uid="uid://8g2kqqw3l7yp"]
 
 [ext_resource type="Texture2D" uid="uid://bxtcrthh2vobe" path="res://assets/tilesets/demo/dungeon_tileset.png" id="1_hskl6"]
+[ext_resource type="Script" uid="uid://dv4mka4odeeqs" path="res://scripts/game/dungeon_manager.gd" id="1_l5dg3"]
+[ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/dungeon/player/player_dungeon.tscn" id="2_xq2r0"]
+[ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/dungeon/torch/torch_interactable.tscn" id="4_l5dg3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e4vl8"]
 texture = ExtResource("1_hskl6")
@@ -13,18 +16,36 @@ texture = ExtResource("1_hskl6")
 2:1/0 = 0
 3:1/0 = 0
 0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
 1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
 2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
 3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
 0:3/0 = 0
 1:3/0 = 0
 2:3/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_0mymv"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_e4vl8")
 
 [node name="TestRoom" type="Node2D" unique_id=2009148218]
+script = ExtResource("1_l5dg3")
 
 [node name="TerrainTilemap" type="TileMapLayer" parent="." unique_id=390300253]
 tile_map_data = PackedByteArray("AAAJAAEAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAcAAAAAAAEAAAAJAAcAAAABAAEAAAABAAEAAAABAAIAAAACAAEAAAABAAIAAAADAAEAAAABAAIAAAAEAAEAAAABAAIAAAAFAAEAAAABAAIAAAAGAAEAAAABAAIAAAAHAAEAAAABAAIAAAAIAAEAAAABAAIAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAADAAIAAAAEAAcAAAADAAIAAAAFAAcAAAADAAIAAAAGAAcAAAADAAIAAAAHAAcAAAADAAIAAAAIAAcAAAADAAIAAAAJAAYAAAACAAIAAAAJAAUAAAACAAIAAAAJAAQAAAACAAIAAAAJAAMAAAACAAIAAAAJAAIAAAACAAIAAAAAAAYAAAAAAAIAAAAAAAUAAAAAAAIAAAAAAAQAAAAAAAIAAAAAAAMAAAAAAAIAAAAAAAIAAAAAAAIAAAACAAUAAAACAAMAAAACAAYAAAACAAMAAAABAAYAAAACAAMAAAABAAUAAAACAAMAAAABAAQAAAACAAMAAAABAAMAAAACAAMAAAACAAMAAAACAAMAAAACAAIAAAACAAMAAAABAAIAAAACAAMAAAACAAQAAAACAAMAAAADAAMAAAACAAMAAAADAAIAAAACAAMAAAAEAAIAAAACAAMAAAAFAAIAAAACAAMAAAAGAAIAAAACAAMAAAAHAAIAAAACAAMAAAAIAAIAAAACAAMAAAAIAAMAAAACAAMAAAAIAAQAAAACAAMAAAAIAAUAAAACAAMAAAAIAAYAAAACAAMAAAAHAAYAAAACAAMAAAAGAAYAAAACAAMAAAAFAAYAAAACAAMAAAAEAAYAAAACAAMAAAADAAYAAAACAAMAAAADAAUAAAACAAMAAAADAAQAAAACAAMAAAAEAAQAAAACAAMAAAAEAAMAAAACAAMAAAAFAAMAAAACAAMAAAAFAAQAAAACAAMAAAAFAAUAAAACAAMAAAAGAAUAAAACAAMAAAAGAAQAAAACAAMAAAAHAAQAAAACAAMAAAAHAAMAAAACAAMAAAAGAAMAAAACAAMAAAAEAAUAAAACAAMAAAAHAAUAAAACAAMAAAA=")
 tile_set = SubResource("TileSet_0mymv")
+
+[node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("2_xq2r0")]
+position = Vector2(86, 75)
+torch_light_radius = 20.0
+player_light_max_diameter = 20.0
+torch_light_min_value = 0.25
+
+[node name="TorchInteractable" parent="." unique_id=555735461 groups=["light_sources"] instance=ExtResource("4_l5dg3")]
+position = Vector2(48, 80)
+
+[node name="TorchInteractable2" parent="." unique_id=117931280 instance=ExtResource("4_l5dg3")]
+position = Vector2(122, 49)

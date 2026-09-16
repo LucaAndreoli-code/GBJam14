@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bapyqpwaah2kx"]
+
+[ext_resource type="Script" uid="uid://857b7qn1214l" path="res://entities/dungeon/torch/torch_interactable.gd" id="1_6o5mq"]
+[ext_resource type="Texture2D" uid="uid://021ef34f8urq" path="res://assets/sprites/demo/temp_torch.png" id="1_jec7u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o5mq"]
+size = Vector2(8, 8)
+
+[node name="TorchInteractable" type="Area2D" unique_id=2015663561 groups=["level_torches"]]
+script = ExtResource("1_6o5mq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=187871334]
+texture = ExtResource("1_jec7u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2100582308]
+shape = SubResource("RectangleShape2D_6o5mq")
