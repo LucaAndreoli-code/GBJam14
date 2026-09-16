@@ -1,16 +1,41 @@
 [gd_scene format=3 uid="uid://bapyqpwaah2kx"]
 
 [ext_resource type="Script" uid="uid://857b7qn1214l" path="res://entities/dungeon/torch/torch_interactable.gd" id="1_6o5mq"]
-[ext_resource type="Texture2D" uid="uid://021ef34f8urq" path="res://assets/sprites/demo/temp_torch.png" id="1_jec7u"]
+[ext_resource type="Texture2D" uid="uid://ds5rry4aac6gp" path="res://assets/sprites/sheets/torch_interactable_sheet.png" id="3_m6m7u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6o5mq"]
-size = Vector2(8, 8)
+size = Vector2(10, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbsek"]
+atlas = ExtResource("3_m6m7u")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbkor"]
+atlas = ExtResource("3_m6m7u")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m6m7u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbsek")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbkor")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 7.5
+}]
 
 [node name="TorchInteractable" type="Area2D" unique_id=2015663561 groups=["level_torches"]]
 script = ExtResource("1_6o5mq")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=187871334]
-texture = ExtResource("1_jec7u")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2100582308]
 shape = SubResource("RectangleShape2D_6o5mq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1497770282]
+position = Vector2(0, -2)
+sprite_frames = SubResource("SpriteFrames_m6m7u")
+animation = &"idle"
+autoplay = "idle"

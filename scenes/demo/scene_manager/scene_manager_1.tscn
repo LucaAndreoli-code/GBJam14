@@ -5,6 +5,11 @@
 [node name="SceneManager1" type="Node2D" unique_id=1040537817]
 script = ExtResource("1_x1yes")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=784583169]
+offset_right = 160.0
+offset_bottom = 144.0
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
 [node name="Label" type="Label" parent="." unique_id=1884403460]
 offset_right = 40.0
 offset_bottom = 23.0

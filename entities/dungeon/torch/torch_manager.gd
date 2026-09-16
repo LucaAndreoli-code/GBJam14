@@ -13,6 +13,9 @@ func _init(duration: int) -> void:
 	SignalBus.game_second_tick.connect(_on_game_second_tick)
 	SignalBus.torch_refill.connect(_on_refill)
 
+func get_remaining_duration() -> int:
+	return _countdown_timer
+
 func get_light_value() -> float:
 	return clamp(float(_countdown_timer) / float(_duration), 0.0, 1.0)
 

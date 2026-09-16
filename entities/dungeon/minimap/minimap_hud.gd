@@ -18,6 +18,8 @@ const POSITION: Vector2 = Vector2(128.0, 128.0)
 const ROOM_ORIGIN: Vector2i = Vector2i(0, 1)
 const ROOM_TILES: Vector2i = Vector2i(10, 7)
 const CELL_SIZE: Vector2i = Vector2i(4, 4)
+const GAP_TILES: Vector2i = Vector2i(2, 2)
+const ROOM_PERIOD: Vector2i = ROOM_TILES + GAP_TILES
 const COLOR_ROOM: Color = Palette.SRC_DARKEST
 const COLOR_TORCH: Color = Palette.SRC_LIGHT
 const COLOR_PLAYER: Color = Palette.SRC_LIGHTEST
@@ -30,13 +32,14 @@ var _torches := {}
 var _current_room := Vector2i(-999, -999)
 var _offset := Vector2i.ZERO
 var _radius := Vector2i(1, 1) # How many rooms to show adjacent the current
+var _is_disabled: bool = false
 
 func _init(level: TileMapLayer, player: PlayerDungeonController) -> void:
 	_level = level
 	_player = player
 
 func _ready() -> void:
-	name = "Minimap"
+	name = "MinimapHUD"
 	size = SIZE
 	position = POSITION
 	_build_data_layer()
@@ -46,8 +49,10 @@ func _build_data_layer() -> void:
 	var down_count := {}
 	for cell in _level.get_used_cells():
 		var c: Vector2i = cell - ROOM_ORIGIN
-		var room_pos := Vector2i((Vector2(c) / Vector2(ROOM_TILES)).floor())
-		var local: Vector2i = c - room_pos * ROOM_TILES
+		var room_pos := Vector2i((Vector2(c) / Vector2(ROOM_PERIOD)).floor())
+		var local: Vector2i = c - room_pos * ROOM_PERIOD
+		if local.x >= ROOM_TILES.x or local.y >= ROOM_TILES.y:
+			continue
 		var tile_data := _level.get_cell_tile_data(cell)
 		if not (tile_data and tile_data.get_custom_data("walkable")):
 			continue
@@ -69,6 +74,8 @@ func _build_data_layer() -> void:
 	_compute_offset()
 
 func _process(_delta: float) -> void:
+	if _is_disabled:
+		return
 	var current_room := _room_of(_player.global_position)
 	if current_room != _current_room:
 		_current_room = current_room
@@ -123,4 +130,5 @@ func _is_drawn(cell: Vector2i) -> bool:
 func _room_of(global_pos: Vector2) -> Vector2i:
 	var tile_size := _level.tile_set.tile_size
 	var p := _level.to_local(global_pos) - Vector2(ROOM_ORIGIN * tile_size)
-	return Vector2i((p / Vector2(ROOM_TILES * tile_size)).floor())
+	p += Vector2(GAP_TILES * tile_size) / 2.0
+	return Vector2i((p / Vector2(ROOM_PERIOD * tile_size)).floor())

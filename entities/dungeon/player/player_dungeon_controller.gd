@@ -3,7 +3,7 @@ extends CharacterBody2D
 
 enum Axis { NONE, X, Y }
 
-const CORNER_CORRECTION := 3.0
+const CORNER_CORRECTION := 8.0
 
 @export var movement_speed: float = 30.0
 @export var torch_light_radius: float = 40.0
@@ -14,6 +14,7 @@ const CORNER_CORRECTION := 3.0
 @onready var _interact_area: Area2D = $InteractArea
 
 var _torch_light_value: float = 1.0
+var _subpixel_accumulator: Vector2 = Vector2.ZERO
 var _last_axis: Axis = Axis.NONE
 var _can_move: bool = true
 var _is_input_enabled: bool = true
@@ -30,14 +31,23 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
-	var input := _get_directional_input().normalized()
+	var input := _get_directional_input()
+	var steps_to_move := Vector2.ZERO
 	if input == Vector2.ZERO:
 		velocity = Vector2.ZERO
+		_subpixel_accumulator = Vector2.ZERO
 	else:
-		velocity = input * movement_speed
+		var step := input * movement_speed * delta
+		_subpixel_accumulator += step
+		steps_to_move = Vector2(int(_subpixel_accumulator.x), int(_subpixel_accumulator.y))
+		_subpixel_accumulator -= steps_to_move
+		velocity = steps_to_move / delta
 	if _is_blocked(input, delta):
-		_try_corner_correction(input, delta)
+		var has_slid: bool = _try_corner_correction(input, delta, steps_to_move)
+		if has_slid:
+			velocity = Vector2.ZERO
 	move_and_slide()
+	global_position = global_position.round()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("dpad_left") or event.is_action_pressed("dpad_right"):
@@ -81,15 +91,20 @@ func _get_directional_input() -> Vector2:
 func _is_blocked(direction: Vector2, delta: float) -> bool:
 	return test_move(global_transform, direction * movement_speed * delta)
 
-func _try_corner_correction(direction: Vector2, delta: float) -> void:
+func _try_corner_correction(direction: Vector2, delta: float, steps_to_move: Vector2) -> bool:
 	var perpendicular := Vector2(direction.y, direction.x).abs()
 	var step := direction * movement_speed * delta
+	var slide_amount := steps_to_move.length()
+	if slide_amount == 0:
+		return false
 	for offset in [1.0, -1.0]:
 		for amount in range(1, int(CORNER_CORRECTION) + 1):
 			var nudge: Vector2 = perpendicular * offset * amount
 			if not test_move(global_transform.translated(nudge), step):
-				global_position += nudge
-				return
+				var proportioned_nudge: Vector2 = perpendicular * offset * slide_amount
+				global_position += proportioned_nudge
+				return true
+	return false
 
 func _scale_player_light() -> void:
 	var d: int = int(round(player_light_max_diameter * _torch_light_value))

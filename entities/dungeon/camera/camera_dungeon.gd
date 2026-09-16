@@ -10,6 +10,7 @@ enum MovementDirection {
 const SCREEN_SIZE: Vector2 = Vector2(160.0, 144.0)
 const ROOM_SIZE: Vector2 = Vector2(160.0, 112.0)
 const ROOM_OFFSET: Vector2 = Vector2(0.0, 16.0)
+const ROOMS_GAP: Vector2 = Vector2(32.0, 32.0)
 const PLAYER_SIZE: float = 16.0
 const PLAYER_AUTOMOVE: float = 4.0
 const PLAYER_STEP: Dictionary[MovementDirection, Vector2] = {
@@ -44,28 +45,17 @@ func _move(direction: MovementDirection) -> void:
 	_is_traslating = true
 	_last_direction = direction
 	GameState.set_input_enabled(false)
-	var target_pos := _get_camera_next_position(direction, _get_camera_rect())
-	target_pos -= ROOM_OFFSET
-	var tween := create_tween()
+	var step := PLAYER_STEP[direction]
+	var target_pos := global_position + step * (ROOM_SIZE + ROOMS_GAP)
+	var player_target := player.global_position + step * (ROOMS_GAP + Vector2.ONE * PLAYER_AUTOMOVE)
+	var tween := create_tween().set_parallel()
 	tween.tween_property(self, "global_position", target_pos, movement_duration)
+	tween.tween_property(player, "global_position", player_target, movement_duration)
 	tween.finished.connect(_on_move_end)
 
 func _on_move_end() -> void:
-	player.global_position += PLAYER_STEP[_last_direction] * PLAYER_AUTOMOVE
 	_is_traslating = false
 	GameState.set_input_enabled(true)
-
-func _get_camera_next_position(direction: MovementDirection, camera_rect: Rect2) -> Vector2:
-	match direction:
-		MovementDirection.TOP:
-			return Vector2(camera_rect.position.x, camera_rect.position.y - camera_rect.size.y)
-		MovementDirection.BOTTOM:
-			return Vector2(camera_rect.position.x, camera_rect.end.y)
-		MovementDirection.LEFT:
-			return Vector2(camera_rect.position.x - camera_rect.size.x, camera_rect.position.y)
-		MovementDirection.RIGHT:
-			return Vector2(camera_rect.end.x, camera_rect.position.y)
-	return Vector2.ZERO
 
 func _get_camera_rect() -> Rect2:
 	return Rect2(global_position + ROOM_OFFSET, ROOM_SIZE)

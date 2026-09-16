@@ -67,6 +67,7 @@ func _do_swap(path: String, payload: Dictionary) -> void:
 	_current_path = path
 	if _current_scene.has_method(NEW_SCENE_PAYLOAD_METHOD_SIGNATURE):
 		_current_scene.call(NEW_SCENE_PAYLOAD_METHOD_SIGNATURE, payload)
+	await get_tree().process_frame
 	await Palette.fade_in()
 	get_tree().paused = GameState.is_paused()
 	_is_swapping = false
