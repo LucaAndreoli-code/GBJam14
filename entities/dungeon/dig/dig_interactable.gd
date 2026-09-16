@@ -13,6 +13,9 @@ func _ready() -> void:
 		push_warning("Tilemap not set on interactable %s" % name)
 	if not scene_root:
 		push_warning("Scene root node not set on interactable %s" % name)
+	if GameState.is_interactable_dug(_get_tilemap_cell()):
+		_update_tile()
+		queue_free()
 
 func interact(_player: PlayerDungeonController) -> void:
 	if not tilemap or not scene_root:
@@ -20,8 +23,12 @@ func interact(_player: PlayerDungeonController) -> void:
 	if _is_busy:
 		return
 	_is_busy = true
+	GameState.add_dug_interactable(_get_tilemap_cell())
 	scene_root.start_digging_minigame()
 
 func _update_tile() -> void:
-	var cell := tilemap.local_to_map(tilemap.to_local(global_position))
+	var cell := _get_tilemap_cell()
 	tilemap.set_cell(cell, TILESET_SOURCE_ID, TILESET_ATLAS_COORDS)
+
+func _get_tilemap_cell() -> Vector2i:
+	return tilemap.local_to_map(tilemap.to_local(global_position))
