@@ -8,10 +8,10 @@
 [ext_resource type="Script" uid="uid://d2uw6tdbw6mv2" path="res://scripts/minigames/digging/sonar_ring.gd" id="6_sonar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
-size = Vector2(64, 30)
+size = Vector2(160, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
-size = Vector2(80, 30)
+size = Vector2(136, 30)
 
 [node name="DiggingMinigame" type="Node2D" unique_id=1655693609]
 script = ExtResource("1_root")
@@ -41,7 +41,7 @@ visible = false
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding" unique_id=273781272]
-position = Vector2(32, 17)
+position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_4h42e")
 
 [node name="Bounding2" type="StaticBody2D" parent="." unique_id=751340506]
@@ -49,7 +49,7 @@ visible = false
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding2" unique_id=1728546571]
-position = Vector2(120, 17)
+position = Vector2(148, 17)
 shape = SubResource("RectangleShape2D_right")
 
 [node name="Bounding3" type="StaticBody2D" parent="." unique_id=1364408459]
@@ -58,4 +58,12 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding3" unique_id=85849230]
 position = Vector2(72, 1)
+shape = SubResource("RectangleShape2D_4h42e")
+
+[node name="Bounding4" type="StaticBody2D" parent="." unique_id=1076719433]
+visible = false
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding4" unique_id=1102299832]
+position = Vector2(80, 142)
 shape = SubResource("RectangleShape2D_4h42e")
