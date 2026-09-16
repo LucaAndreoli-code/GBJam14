@@ -12,3 +12,6 @@ script = ExtResource("1_treasure")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
 [node name="Sprite" type="Sprite2D" parent="."]
+
+[node name="Silhouette" type="Sprite2D" parent="."]
+visible = false

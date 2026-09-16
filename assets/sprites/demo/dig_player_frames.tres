@@ -24,13 +24,18 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dig_a")
+}],
+"loop": 1,
+"name": &"dig_left",
+"speed": 8.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dig_b")
 }],
 "loop": 1,
-"name": &"dig",
-"speed": 8.0
+"name": &"dig_right",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,

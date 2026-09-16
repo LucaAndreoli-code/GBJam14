@@ -1,24 +1,23 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://csyn3wdu62lvu"]
 
-[ext_resource type="Script" path="res://entities/digging/player/dig_player.gd" id="1_player"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/demo/dig_player_frames.tres" id="2_frames"]
+[ext_resource type="Script" uid="uid://cvdlvevaq10x7" path="res://entities/digging/player/dig_player.gd" id="1_player"]
+[ext_resource type="SpriteFrames" uid="uid://cyoaa7hlufe1s" path="res://assets/sprites/demo/dig_player_frames.tres" id="2_frames"]
 [ext_resource type="PackedScene" path="res://entities/digging/debris/dig_debris.tscn" id="3_debris"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(14, 14)
 
-[node name="DigPlayer" type="CharacterBody2D"]
-motion_mode = 1
+[node name="DigPlayer" type="CharacterBody2D" unique_id=1454360314]
 collision_layer = 2
-collision_mask = 1
+motion_mode = 1
 script = ExtResource("1_player")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1447537713]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1582943451]
 sprite_frames = ExtResource("2_frames")
-animation = &"idle"
+animation = &"dig_right"
 autoplay = "idle"
 
-[node name="Debris" parent="." instance=ExtResource("3_debris")]
+[node name="Debris" parent="." unique_id=1845057571 instance=ExtResource("3_debris")]

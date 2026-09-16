@@ -2,7 +2,9 @@ class_name Treasure
 extends Area2D
 
 ## A golden treasure buried under the terrain.
-## Buried treasures are invisible and not collectible; digging their cells reveals them.
+## A buried treasure is drawn under the field, so the dirt still covering it hides it:
+## digging uncovers it a slice at a time, and it only becomes collectible once every cell
+## of its footprint is gone.
 
 ## Emits when the player walks into a revealed treasure, right before it frees itself
 signal collected(treasure: Treasure)
@@ -34,10 +36,20 @@ const TIME_BONUS := {
 }
 
 ## Seconds of one on or off step of a sonar blink
-const FLASH_STEP := 0.2
+const FLASH_STEP := 0.15
+
+## The artwork sits under DigField, which is at z 0: every dirt tile in the set is fully
+## opaque, so the terrain masks it by itself. No per pixel mask, no region, just draw order.
+const BURIED_Z: int = -1
+## The silhouette sits above the field instead: the sonar has to read through dirt, or the
+## scan would point at nothing. Two nodes and not one, because the artwork has to keep
+## showing through the holes already dug while the silhouette blinks over the rest.
+const FLASH_Z: int = 1
+const SILHOUETTE_SHADER: Shader = preload("res://shaders/treasure_silhouette.gdshader")
 
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 @onready var _sprite: Sprite2D = $Sprite
+@onready var _silhouette: Sprite2D = $Silhouette
 
 var _kind: Kind = Kind.SMALL
 var _cells: Array[Vector2i] = []
@@ -46,6 +58,14 @@ var _flash_left: float = 0.0
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	# The two layers straddle the field: artwork below, silhouette above. Set up once
+	# here, so a blink only has to toggle a visibility flag.
+	_sprite.z_index = BURIED_Z
+	var silhouette_material := ShaderMaterial.new()
+	silhouette_material.shader = SILHOUETTE_SHADER
+	_silhouette.material = silhouette_material
+	_silhouette.z_index = FLASH_Z
+	_silhouette.visible = false
 	# Only the sonar blink needs a frame tick, so stay idle until it asks for one
 	set_process(false)
 
@@ -65,6 +85,8 @@ func setup(kind: Kind, cells: Array[Vector2i], origin: Vector2, cell_size: Vecto
 	# A rotated footprint is the one case where the kind does not tell you the on screen
 	# orientation, see footprint_for(): the upright art has to lie down to cover the cells.
 	_sprite.rotation = PI * 0.5 if _footprint(kind) != SIZES[kind] else 0.0
+	_silhouette.texture = _sprite.texture
+	_silhouette.rotation = _sprite.rotation
 	_bury()
 
 ## Footprint in cells, with the 1x2 medium randomly laid on its side so horizontal and
@@ -87,12 +109,13 @@ func get_time_bonus() -> float:
 func is_revealed() -> bool:
 	return _revealed
 
-## Brings the treasure into view and makes it collectible
+## Makes the treasure collectible, now that the last cell over it has been dug out.
+## Nothing to do about visibility: the sprite has been drawn all along, the dirt was
+## simply covering it.
 func reveal() -> void:
 	if _revealed:
 		return
 	_revealed = true
-	visible = true
 	monitoring = true
 
 ## Blinks the treasure for `duration` seconds so the sonar can point at it.
@@ -110,17 +133,21 @@ func _process(delta: float) -> void:
 	if _flash_left <= 0.0 or _revealed:
 		_end_flash()
 		return
-	visible = int(_flash_left / FLASH_STEP) % 2 == 0
+	_silhouette.visible = int(_flash_left / FLASH_STEP) % 2 == 0
 
 func _end_flash() -> void:
 	_flash_left = 0.0
 	set_process(false)
-	# A treasure uncovered during the blink stays up; one still buried goes back to hidden
-	visible = _revealed
+	# Only the extra layer goes away. Whatever had been dug out stays uncovered
+	# underneath, exactly as it was before the ping.
+	_silhouette.visible = false
 
 func _bury() -> void:
 	_revealed = false
-	visible = false
+	# Visible from the start: the dirt above is the mask. Carving a single cell uncovers
+	# that slice of the sprite and nothing more, instead of popping the whole chest up.
+	visible = true
+	_silhouette.visible = false
 	# The one that matters: without it the player would collect treasures by walking
 	# over terrain that has not been dug out yet.
 	monitoring = false

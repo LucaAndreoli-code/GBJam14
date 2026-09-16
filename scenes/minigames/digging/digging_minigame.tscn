@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dtnvm6oopdqxh" path="res://scripts/game/digging_minigame.gd" id="1_root"]
 [ext_resource type="Texture2D" uid="uid://dnmdjapkdgekl" path="res://assets/tilesets/demo/dig_dug_entrance.png" id="2_surface"]
 [ext_resource type="PackedScene" path="res://entities/digging/field/dig_field.tscn" id="3_field"]
-[ext_resource type="PackedScene" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
+[ext_resource type="PackedScene" uid="uid://csyn3wdu62lvu" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
 [ext_resource type="PackedScene" uid="uid://pwssx6o3ihgr" path="res://entities/digging/sonar/sonar_ring.tscn" id="6_sonar"]
 [ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="6_wm07t"]
 

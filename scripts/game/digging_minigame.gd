@@ -74,6 +74,10 @@ func _ready() -> void:
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
 	# about to replace. Whichever path runs first wins, the other is a no-op.
 	_start_run.call_deferred()
+	
+func _exit_tree() -> void:
+	if _hud:
+		_hud.queue_free()
 
 # Builds the layout the seed describes. Guarded because both _ready() and
 # on_scene_entered() ask for it and only the first one may run.
@@ -84,7 +88,7 @@ func _start_run() -> void:
 	_rng.seed = GameState.get_seed()
 	_reserve_start_pocket()
 	_spawn_treasures()
-
+	
 # The strip lives in main.tscn, outside this scene, so it is found by group rather
 # than by path. Running the minigame on its own leaves the group empty, which is why
 # every later call has to tolerate a null HUD.
@@ -256,20 +260,25 @@ func _pick_kind() -> Treasure.Kind:
 			return kind
 	return Treasure.Kind.SMALL
 
-func _on_cells_carved(cells: Array[Vector2i]) -> void:
+# Every carve rechecks the treasures still buried - there are at most a handful of them,
+# and the set of cells just removed is no longer enough on its own: what decides a reveal
+# is whether the whole footprint is clear, not whether this carve touched it.
+func _on_cells_carved(_cells: Array[Vector2i]) -> void:
 	var still_buried: Array[Treasure] = []
 	for treasure in _buried:
-		if _shares_cell(treasure.get_cells(), cells):
+		if _is_dug_out(treasure):
 			treasure.reveal()
 		else:
 			still_buried.append(treasure)
 	_buried = still_buried
 
-func _shares_cell(a: Array[Vector2i], b: Array[Vector2i]) -> bool:
-	for cell in a:
-		if cell in b:
-			return true
-	return false
+## A treasure only counts as dug out once every cell of its footprint is gone: a chest
+## poking out of the dirt is a hint, not yet something to pick up.
+func _is_dug_out(treasure: Treasure) -> bool:
+	for cell in treasure.get_cells():
+		if _field.is_solid(cell):
+			return false
+	return true
 
 func _on_treasure_collected(treasure: Treasure) -> void:
 	_buried.erase(treasure)
