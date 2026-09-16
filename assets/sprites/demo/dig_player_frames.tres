@@ -1,0 +1,50 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cyoaa7hlufe1s"]
+
+[ext_resource type="Texture2D" uid="uid://cc6n65kmgkuit" path="res://assets/tilesets/demo/dig_dug_tileset.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dig_a"]
+atlas = ExtResource("1_sheet")
+region = Rect2(16, 40, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dig_b"]
+atlas = ExtResource("1_sheet")
+region = Rect2(32, 40, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_front"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 40, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_back"]
+atlas = ExtResource("1_sheet")
+region = Rect2(48, 40, 16, 16)
+
+[resource]
+resource_name = "DigPlayerFrames"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dig_a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dig_b")
+}],
+"loop": 1,
+"name": &"dig",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_front")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_back")
+}],
+"loop": 1,
+"name": &"up",
+"speed": 5.0
+}]
