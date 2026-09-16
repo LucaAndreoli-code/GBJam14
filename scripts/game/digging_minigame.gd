@@ -51,6 +51,7 @@ var _sonar_left: float = 0.0
 var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
+var _hud: DigHUD
 
 func _ready() -> void:
 	# DigField.fill() already ran: children are readied before their parent
@@ -64,12 +65,26 @@ func _ready() -> void:
 	_spawn_treasures()
 	# One place to balance the reach: the ring only needs it to pace its sweep
 	_sonar_ring.radius = sonar_radius
+	_mount_hud()
+
+# The strip lives in main.tscn, outside this scene, so it is found by group rather
+# than by path. Running the minigame on its own leaves the group empty, which is why
+# every later call has to tolerate a null HUD.
+func _mount_hud() -> void:
+	var container := get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
+	if container == null:
+		return
+	_hud = DigHUD.new()
+	container.add_child(_hud)
+	_hud.set_progress(_collected, treasure_count)
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
 	if _is_input_enabled and _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
 		_fire_sonar()
 	_advance_sonar_wave()
+	if _hud != null:
+		_hud.set_cooldown_ratio(get_sonar_cooldown_ratio())
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
@@ -239,6 +254,8 @@ func _shares_cell(a: Array[Vector2i], b: Array[Vector2i]) -> bool:
 func _on_treasure_collected(treasure: Treasure) -> void:
 	_buried.erase(treasure)
 	_collected += 1
+	if _hud != null:
+		_hud.set_progress(_collected, treasure_count)
 	treasure_collected.emit(_collected, treasure_count)
 	if _collected >= treasure_count:
 		all_treasures_collected.emit()
