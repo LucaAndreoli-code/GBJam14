@@ -54,7 +54,7 @@ var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
 var _hud: DigHUD
 var _started: bool = false
-var _torch: TorchManager
+var _torch: TorchTimer
 var _dungeon_payload: Dictionary
 
 func _ready() -> void:
@@ -112,12 +112,6 @@ func on_scene_entered(payload: Dictionary) -> void:
 	var incoming_seed: int = payload.get("seed", 0)
 	if incoming_seed != 0:
 		GameState.set_seed(incoming_seed)
-	var incoming_game_time: float = payload.get("game_time", 0.0)
-	if incoming_game_time != 0.0:
-		_game_time.set_game_time(incoming_game_time)
-	var incoming_torch_duration: int = payload.get("torch_timer", 0)
-	if incoming_torch_duration != 0:
-		_torch = TorchManager.new(incoming_torch_duration)
 	_dungeon_payload = payload
 	_start_run()
 
@@ -292,8 +286,6 @@ func _swap_back_to_dungeon() -> void:
 	var scene_path: String = _dungeon_payload.get("scene_path", null)
 	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
 	var payload := {
-		"game_time": _game_time.get_game_time(),
-		"torch_timer": _torch.get_remaining_duration(),
 		"player_position": player_pos
 	}
 	SceneManager.go_to(scene_path, payload)

@@ -1,11 +1,23 @@
 class_name GameTime
 extends Node2D
 
+class Data:
+	var time: float = 0.0
+	var seconds: int = 0
+	var last_tick: float = 0.0
+	
 const TICK_INTERVAL := 1.0
 
 var _game_time: float = 0.0
 var _game_seconds: int = 0
 var _last_tick_time: float = 0.0
+
+func _ready() -> void:
+	var game_time := GameState.get_time()
+	if game_time:
+		_game_time = game_time.time
+		_game_seconds = game_time.seconds
+		_last_tick_time = game_time.last_tick
 
 func _process(delta: float) -> void:
 	if GameState.is_paused():
@@ -18,12 +30,8 @@ func _process(delta: float) -> void:
 		_last_tick_time = _game_time - (local_delta - TICK_INTERVAL)
 		print("Game update: %d seconds elapsed" % _game_seconds)
 		SignalBus.game_second_tick.emit(_game_seconds)
-
-func get_game_time() -> float:
-	return _game_time
-
-func set_game_time(value: float) -> void:
-	if _game_time != value:
-		_game_seconds = int(value)
-		_game_time = value
-		_last_tick_time = value
+	var time_data := Data.new()
+	time_data.time = _game_time
+	time_data.seconds = _game_seconds
+	time_data.last_tick = _last_tick_time
+	GameState.set_time(time_data)

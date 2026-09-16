@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://co7sy2a0ulud0"]
+
+[ext_resource type="Script" uid="uid://dh0o3dqg7j560" path="res://scripts/scenes/inventory_manager.gd" id="1_yq6yy"]
+[ext_resource type="Texture2D" uid="uid://h60ewbsi3dtf" path="res://assets/sprites/demo/temp_inventory_cell.png" id="2_tw7bo"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_nq4mu"]
+[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_tw7bo"]
+[ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_tw7bo"]
+
+[node name="Inventory" type="Node2D" unique_id=1238025634]
+script = ExtResource("1_yq6yy")
+cell_textures = ExtResource("2_tw7bo")
+
+[node name="Container" type="Control" parent="." unique_id=261638991]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 144.0
+
+[node name="Label" type="Label" parent="Container" unique_id=580621407]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 74.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("3_nq4mu")
+theme_override_font_sizes/font_size = 8
+text = "Inventory"
+vertical_alignment = 1
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
+
+[node name="CenterGrid" type="CenterContainer" parent="Container" unique_id=321823840]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 160.0
+offset_bottom = 96.0
+
+[node name="Grid" type="GridContainer" parent="Container/CenterGrid" unique_id=1054726173]
+layout_mode = 2
+
+[node name="Info" type="Control" parent="Container" unique_id=1231511940]
+anchors_preset = 0
+offset_top = 96.0
+offset_right = 160.0
+offset_bottom = 144.0
+
+[node name="ColorRect" type="ColorRect" parent="Container/Info" unique_id=717359344]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="GBLabel" type="Label" parent="Container/Info" unique_id=627400532]
+custom_maximum_size = Vector2(156, 44)
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 158.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("5_tw7bo")
+theme_override_font_sizes/font_size = 16
+text = "A small coin from a long forgotten empire. A regal looking man is depicted on one of the faces."
+autowrap_mode = 2
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
