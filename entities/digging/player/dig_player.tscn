@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://scripts/minigames/digging/dig_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://entities/digging/player/dig_player.gd" id="1_player"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/demo/dig_player_frames.tres" id="2_frames"]
-[ext_resource type="PackedScene" path="res://scenes/minigames/digging/dig_debris.tscn" id="3_debris"]
+[ext_resource type="PackedScene" path="res://entities/digging/debris/dig_debris.tscn" id="3_debris"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(14, 14)

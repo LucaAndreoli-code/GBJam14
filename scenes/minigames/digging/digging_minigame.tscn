@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://diblsjuea0qel"]
 
-[ext_resource type="Script" uid="uid://dtnvm6oopdqxh" path="res://scripts/minigames/digging/digging_minigame.gd" id="1_root"]
+[ext_resource type="Script" uid="uid://dtnvm6oopdqxh" path="res://scripts/game/digging_minigame.gd" id="1_root"]
 [ext_resource type="Texture2D" uid="uid://dnmdjapkdgekl" path="res://assets/tilesets/demo/dig_dug_entrance.png" id="2_surface"]
 [ext_resource type="TileSet" uid="uid://b5xjkag1yxbtb" path="res://assets/tilesets/demo/dig_dug_tileset.tres" id="3_tileset"]
-[ext_resource type="Script" uid="uid://dpgbrqd7adexg" path="res://scripts/minigames/digging/dig_field.gd" id="4_field"]
-[ext_resource type="PackedScene" path="res://scenes/minigames/digging/dig_player.tscn" id="5_player"]
-[ext_resource type="Script" uid="uid://d2uw6tdbw6mv2" path="res://scripts/minigames/digging/sonar_ring.gd" id="6_sonar"]
+[ext_resource type="Script" uid="uid://dpgbrqd7adexg" path="res://entities/digging/field/dig_field.gd" id="4_field"]
+[ext_resource type="PackedScene" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
+[ext_resource type="Script" uid="uid://d2uw6tdbw6mv2" path="res://entities/digging/sonar/sonar_ring.gd" id="6_sonar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(160, 30)

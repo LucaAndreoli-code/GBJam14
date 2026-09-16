@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/minigames/digging/treasure.gd" id="1_treasure"]
+[ext_resource type="Script" path="res://entities/digging/treasure/treasure.gd" id="1_treasure"]
 
 [node name="Treasure" type="Area2D"]
 collision_layer = 4

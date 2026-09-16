@@ -11,7 +11,7 @@ signal all_treasures_collected()
 ## Emits when the sonar fires, carrying the seconds until it is usable again
 signal sonar_pinged(cooldown: float)
 
-const TREASURE_SCENE := preload("res://scenes/minigames/digging/treasure.tscn")
+const TREASURE_SCENE := preload("res://entities/digging/treasure/treasure.tscn")
 
 # Attempts per region before giving up on placing that treasure
 const PLACEMENT_ATTEMPTS := 24
