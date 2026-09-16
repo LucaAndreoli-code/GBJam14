@@ -144,10 +144,12 @@ func _update_animation(dir: Vector2i) -> void:
 		_sprite.play("up")
 	elif dir == Vector2i.ZERO:
 		_sprite.play("idle")
-	else:
-		_sprite.play("dig")
-	if dir.x != 0:
-		_sprite.flip_h = dir.x < 0
+	elif dir.x < 0:
+		_sprite.play("dig_left")
+	elif dir.x > 0:
+		_sprite.play("dig_right")
+	#if dir.x != 0:
+		#_sprite.flip_h = dir.x < 0
 
 # Holds the player inside the screen. Both margins are multiples of the lane grid, so
 # a clamped player stays aligned and keeps digging 2 cell wide tunnels along the edge.
