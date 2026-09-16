@@ -38,6 +38,7 @@ const SONAR_ACTION := "btn_a"
 ## How long a treasure keeps blinking once the wave reaches it, in seconds
 @export var sonar_flash_time: float = 1.5
 
+@onready var _game_time: GameTime = $GameTime
 @onready var _field: DigField = $DigField
 @onready var _player: DigPlayer = $DigPlayer
 @onready var _treasures_root: Node2D = $Treasures
@@ -53,6 +54,8 @@ var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
 var _hud: DigHUD
 var _started: bool = false
+var _torch: TorchManager
+var _dungeon_payload: Dictionary
 
 func _ready() -> void:
 	# Read once as well as listening: the signal only fires on a change
@@ -109,6 +112,13 @@ func on_scene_entered(payload: Dictionary) -> void:
 	var incoming_seed: int = payload.get("seed", 0)
 	if incoming_seed != 0:
 		GameState.set_seed(incoming_seed)
+	var incoming_game_time: float = payload.get("game_time", 0.0)
+	if incoming_game_time != 0.0:
+		_game_time.set_game_time(incoming_game_time)
+	var incoming_torch_duration: int = payload.get("torch_timer", 0)
+	if incoming_torch_duration != 0:
+		_torch = TorchManager.new(incoming_torch_duration)
+	_dungeon_payload = payload
 	_start_run()
 
 ## Returns how many treasures the player has picked up so far
@@ -276,3 +286,14 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	if _collected >= treasure_count:
 		all_treasures_collected.emit()
 		push_warning("All treasure collected")
+		_swap_back_to_dungeon()
+
+func _swap_back_to_dungeon() -> void:
+	var scene_path: String = _dungeon_payload.get("scene_path", null)
+	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
+	var payload := {
+		"game_time": _game_time.get_game_time(),
+		"torch_timer": _torch.get_remaining_duration(),
+		"player_position": player_pos
+	}
+	SceneManager.go_to(scene_path, payload)

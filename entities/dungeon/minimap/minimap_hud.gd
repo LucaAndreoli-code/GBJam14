@@ -105,6 +105,10 @@ func _draw() -> void:
 		elif _torches.has(cell):
 			draw_rect(Rect2(pos + Vector2i(1, 1), Vector2i(1, 1)), COLOR_TORCH)
 
+func set_disabled(value: bool) -> void:
+	if _is_disabled != value:
+		_is_disabled = value
+
 func _compute_offset() -> void:
 	var keys := _data.keys()
 	var min_room: Vector2i = keys[0]

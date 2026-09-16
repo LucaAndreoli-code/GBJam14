@@ -4,7 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://dnmdjapkdgekl" path="res://assets/tilesets/demo/dig_dug_entrance.png" id="2_surface"]
 [ext_resource type="PackedScene" path="res://entities/digging/field/dig_field.tscn" id="3_field"]
 [ext_resource type="PackedScene" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
-[ext_resource type="PackedScene" path="res://entities/digging/sonar/sonar_ring.tscn" id="6_sonar"]
+[ext_resource type="PackedScene" uid="uid://pwssx6o3ihgr" path="res://entities/digging/sonar/sonar_ring.tscn" id="6_sonar"]
+[ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="6_wm07t"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(160, 30)
@@ -16,6 +17,10 @@ size = Vector2(136, 30)
 script = ExtResource("1_root")
 treasure_count = 3
 
+[node name="GameTime" type="Node2D" parent="." unique_id=1651738592]
+script = ExtResource("6_wm07t")
+metadata/_custom_type_script = "uid://gv83vdj3ao7v"
+
 [node name="Surface" type="Sprite2D" parent="." unique_id=30023449]
 position = Vector2(80, 16)
 texture = ExtResource("2_surface")
@@ -24,7 +29,7 @@ texture = ExtResource("2_surface")
 
 [node name="Treasures" type="Node2D" parent="." unique_id=1480143177]
 
-[node name="DigPlayer" parent="." node_paths=PackedStringArray("field") unique_id=710786053 instance=ExtResource("5_player")]
+[node name="DigPlayer" parent="." unique_id=710786053 node_paths=PackedStringArray("field") instance=ExtResource("5_player")]
 position = Vector2(72, 24)
 field = NodePath("../DigField")
 
