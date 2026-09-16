@@ -1,15 +1,13 @@
-[gd_scene format=3 uid="uid://bcejwhxxa5d62"]
+[gd_scene format=3 uid="uid://ba1qiviu2vd38"]
 
-[ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
-[ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://cfivtqcri64l4" path="res://scenes/demo/test_dungeon/test_dungeon_dazorn.tscn" id="2_tefeu"]
-[ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/LevelTheme_NoTail.mp3" id="3_o6xl0"]
-[ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_tbgi4"]
-[ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bkct8soin3ig7" path="res://scripts/audio/levelLoop.gd" id="1_d0wfh"]
+[ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="3_3g2y6"]
+[ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="4_lpqkh"]
+[ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_lymfh"]
+[ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_p5uep"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sgp6g"]
-shader = ExtResource("1_o5qli")
+shader = ExtResource("3_3g2y6")
 shader_parameter/col_lightest = Color(0.608, 0.737, 0.059, 1)
 shader_parameter/col_light = Color(0.545, 0.675, 0.059, 1)
 shader_parameter/col_dark = Color(0.188, 0.384, 0.188, 1)
@@ -17,7 +15,7 @@ shader_parameter/col_darkest = Color(0.059, 0.22, 0.059, 1)
 shader_parameter/fade_step = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sugp2"]
-shader = ExtResource("5_tbgi4")
+shader = ExtResource("5_lymfh")
 shader_parameter/viewport_size = Vector2(160, 144)
 shader_parameter/lights = PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/lights_count = 0
@@ -29,8 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_tbgi4")
-initial_scene = ExtResource("2_tefeu")
+script = ExtResource("1_d0wfh")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1
@@ -42,7 +39,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-script = ExtResource("2_jyhfs")
+script = ExtResource("4_lpqkh")
 
 [node name="Screen" type="SubViewport" parent="PaletteContainer" unique_id=108347194]
 handle_input_locally = false
@@ -60,7 +57,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-script = ExtResource("6_tefeu")
+script = ExtResource("6_p5uep")
 flicker_speed = 5.5
 flicker_amplitude = 0.6
 
@@ -91,11 +88,3 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Music" type="Node" parent="." unique_id=113485293]
-
-[node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
-stream = ExtResource("3_o6xl0")
-autoplay = true
-
-[node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]
