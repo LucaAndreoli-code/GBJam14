@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cfivtqcri64l4" path="res://scenes/demo/test_dungeon/test_dungeon_dazorn.tscn" id="2_tefeu"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_tipki"]
+[ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="4_85g3d"]
 [ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_tefeu"]
 
@@ -30,6 +32,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tbgi4")
 initial_scene = ExtResource("2_tefeu")
+title_font = ExtResource("3_tipki")
+text_font = ExtResource("4_85g3d")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1
@@ -70,21 +74,28 @@ snap_2d_vertices_to_pixel = true
 size = Vector2i(160, 144)
 render_target_update_mode = 4
 
-[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen" unique_id=291082804]
+[node name="BottomBar" type="Control" parent="PaletteContainer/Screen" unique_id=607222497]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen/BottomBar" unique_id=291082804]
+layout_mode = 0
 offset_top = 128.0
 offset_right = 160.0
 offset_bottom = 144.0
 
-[node name="HUD" type="Control" parent="PaletteContainer/Screen" unique_id=246248463 groups=["hud_container"]]
-layout_mode = 3
+[node name="HUD" type="Control" parent="PaletteContainer/Screen/BottomBar" unique_id=246248463 groups=["hud_container"]]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UI" type="Control" parent="PaletteContainer/Screen" unique_id=1998031457 groups=["ui_container"]]
-layout_mode = 3
+[node name="UI" type="Control" parent="PaletteContainer/Screen/BottomBar" unique_id=1998031457 groups=["ui_container"]]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

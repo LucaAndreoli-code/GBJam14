@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" format=3 uid="uid://cgiqwq2c4epwb"]
+
+[ext_resource type="FontFile" uid="uid://nd0vat8y77dn" path="res://assets/fonts/supersoft.ttf" id="1_qtors"]
+
+[resource]
+base_font = ExtResource("1_qtors")
+spacing_top = -1

@@ -7,6 +7,7 @@ signal scene_changed(scene: Node)
 
 const NEW_SCENE_PAYLOAD_METHOD_SIGNATURE = "on_scene_entered"
 
+var _main_scene: MainScene
 var _current_viewport: SubViewport
 var _current_path: String
 var _current_scene: Node
@@ -14,6 +15,9 @@ var _is_swapping: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+func get_main_scene() -> MainScene:
+	return _main_scene
 
 ## Returns the current main viewport
 func get_current_viewport() -> SubViewport:
@@ -24,7 +28,8 @@ func get_current_scene() -> Node:
 	return _current_scene
 
 ## Registers a viewport as the main viewport
-func register_viewport(viewport: SubViewport) -> void:
+func register_viewport(main_scene: MainScene, viewport: SubViewport) -> void:
+	_main_scene = main_scene
 	if _current_viewport != null:
 		push_warning("Registering a new viewport \"%s\" even if there's already one \"%s\"" % [viewport.get_path(), _current_viewport.get_path()])
 		return

@@ -1,10 +1,23 @@
 extends Node
 
+var _title_font: Font
+var _text_font: Font
+
 var _seed: int = 0
 var _paused: bool = false
 var _input_enabled: bool = true
 
 var _dug_interactables: Dictionary[Vector2i, bool] = {}
+
+func get_title_font() -> Font:
+	return _title_font
+
+func get_text_font() -> Font:
+	return _text_font
+
+func set_fonts(title_font: Font, text_font: Font) -> void:
+	_title_font = title_font
+	_text_font = text_font
 
 func get_seed() -> int:
 	if _seed == 0:
