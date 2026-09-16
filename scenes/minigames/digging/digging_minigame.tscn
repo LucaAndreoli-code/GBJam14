@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dtnvm6oopdqxh" path="res://scripts/game/digging_minigame.gd" id="1_root"]
 [ext_resource type="Texture2D" uid="uid://dnmdjapkdgekl" path="res://assets/tilesets/demo/dig_dug_entrance.png" id="2_surface"]
-[ext_resource type="TileSet" uid="uid://b5xjkag1yxbtb" path="res://assets/tilesets/demo/dig_dug_tileset.tres" id="3_tileset"]
-[ext_resource type="Script" uid="uid://dpgbrqd7adexg" path="res://entities/digging/field/dig_field.gd" id="4_field"]
+[ext_resource type="PackedScene" path="res://entities/digging/field/dig_field.tscn" id="3_field"]
 [ext_resource type="PackedScene" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
-[ext_resource type="Script" uid="uid://d2uw6tdbw6mv2" path="res://entities/digging/sonar/sonar_ring.gd" id="6_sonar"]
+[ext_resource type="PackedScene" path="res://entities/digging/sonar/sonar_ring.tscn" id="6_sonar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(160, 30)
@@ -21,10 +20,7 @@ treasure_count = 3
 position = Vector2(80, 16)
 texture = ExtResource("2_surface")
 
-[node name="DigField" type="TileMapLayer" parent="." unique_id=1462086664]
-tile_set = ExtResource("3_tileset")
-script = ExtResource("4_field")
-field_rect = Rect2i(0, 4, 20, 12)
+[node name="DigField" parent="." unique_id=1462086664 instance=ExtResource("3_field")]
 
 [node name="Treasures" type="Node2D" parent="." unique_id=1480143177]
 
@@ -32,9 +28,7 @@ field_rect = Rect2i(0, 4, 20, 12)
 position = Vector2(72, 24)
 field_path = NodePath("../DigField")
 
-[node name="SonarRing" type="Node2D" parent="." unique_id=1180182209]
-z_index = 10
-script = ExtResource("6_sonar")
+[node name="SonarRing" parent="." unique_id=1180182209 instance=ExtResource("6_sonar")]
 
 [node name="Bounding" type="StaticBody2D" parent="." unique_id=1949647877]
 visible = false

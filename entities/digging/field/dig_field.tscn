@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="TileSet" uid="uid://b5xjkag1yxbtb" path="res://assets/tilesets/demo/dig_dug_tileset.tres" id="1_tileset"]
+[ext_resource type="Script" uid="uid://dpgbrqd7adexg" path="res://entities/digging/field/dig_field.gd" id="2_field"]
+
+[node name="DigField" type="TileMapLayer"]
+tile_set = ExtResource("1_tileset")
+script = ExtResource("2_field")
+field_rect = Rect2i(0, 4, 20, 12)
