@@ -9,6 +9,7 @@ const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_mini
 @onready var _game_time: GameTime = $GameTime
 @onready var _level_tilemap: TileMapLayer = $DungeonTilemap
 @onready var _player: PlayerDungeonController = $PlayerDungeon
+@onready var _camera: CameraDungeon = $Camera2D
 @onready var _inventory: CanvasLayer = $InventoryLayer
 
 var _hud_container: Control
@@ -59,6 +60,7 @@ func on_scene_entered(payload: Dictionary) -> void:
 		_torch = TorchManager.new(incoming_torch_duration)
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
+		_camera.snap_to_player()
 	SignalBus.visibility_shader_toggled.emit(true)
 
 func start_digging_minigame() -> void:

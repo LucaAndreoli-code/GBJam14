@@ -1,3 +1,4 @@
+class_name CameraDungeon
 extends Camera2D
 
 enum MovementDirection {
@@ -23,11 +24,14 @@ const PLAYER_STEP: Dictionary[MovementDirection, Vector2] = {
 @export var player: PlayerDungeonController
 @export var movement_duration: float = 0.5
 
+var _origin: Vector2
 var _is_traslating: bool = false
 var _last_direction: MovementDirection
 
 func _ready() -> void:
 	assert(player != null, "Camera is missing the player reference!")
+	_origin = global_position
+	snap_to_player()
 
 func _process(_delta: float) -> void:
 	var camera_rect := _get_camera_rect()
@@ -40,6 +44,13 @@ func _process(_delta: float) -> void:
 			_move(MovementDirection.LEFT)
 		elif player.global_position.x >= camera_rect.end.x:
 			_move(MovementDirection.RIGHT)
+
+func snap_to_player() -> void:
+	var room_step := ROOM_SIZE + ROOMS_GAP
+	var rel: Vector2 = player.global_position - (_origin + ROOM_OFFSET)
+	var room := (rel / room_step).floor()
+	global_position = _origin + room * room_step
+	reset_smoothing()
 
 func _move(direction: MovementDirection) -> void:
 	_is_traslating = true
