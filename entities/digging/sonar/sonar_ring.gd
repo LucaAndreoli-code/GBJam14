@@ -6,10 +6,8 @@ extends Node2D
 ## get_wave_radius() to decide when the wave has reached a treasure, so the blink and the
 ## ring can never drift apart.
 
-const PaletteScript := preload("res://globals/palette.gd")
-
 ## Source shade, not a display color: the palette shader indexes on the red channel.
-const RING_COLOR := PaletteScript.SRC_LIGHTEST
+const RING_COLOR := Palette.SRC_LIGHTEST
 
 ## Segments per circle. 24 is plenty at this radius and keeps the polyline cheap.
 const SEGMENTS := 24

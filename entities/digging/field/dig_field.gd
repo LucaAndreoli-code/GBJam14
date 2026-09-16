@@ -115,6 +115,18 @@ func carve(local_rect: Rect2) -> Array[Vector2i]:
 func cell_to_local_origin(cell: Vector2i) -> Vector2:
 	return Vector2(cell * tile_set.tile_size)
 
+## Converts a cell to the position of its top-left corner, in global space
+func cell_to_global_origin(cell: Vector2i) -> Vector2:
+	return to_global(cell_to_local_origin(cell))
+
+## Converts a global position to the cell holding it
+func global_to_cell(global_pos: Vector2) -> Vector2i:
+	return local_to_map(to_local(global_pos))
+
+## Size of one cell, in px. Nothing outside has to reach into the tile set for it.
+func get_cell_size() -> Vector2i:
+	return tile_set.tile_size
+
 # Outside the field counts as wall, so the dirt reads as continuing past the screen
 # instead of framing the playable area with a border.
 func _is_wall(cell: Vector2i) -> bool:

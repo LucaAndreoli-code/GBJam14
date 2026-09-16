@@ -24,9 +24,9 @@ texture = ExtResource("2_surface")
 
 [node name="Treasures" type="Node2D" parent="." unique_id=1480143177]
 
-[node name="DigPlayer" parent="." unique_id=710786053 instance=ExtResource("5_player")]
+[node name="DigPlayer" parent="." node_paths=PackedStringArray("field") unique_id=710786053 instance=ExtResource("5_player")]
 position = Vector2(72, 24)
-field_path = NodePath("../DigField")
+field = NodePath("../DigField")
 
 [node name="SonarRing" parent="." unique_id=1180182209 instance=ExtResource("6_sonar")]
 

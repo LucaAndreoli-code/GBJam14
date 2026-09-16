@@ -126,11 +126,11 @@ func _advance_sonar_wave() -> void:
 # The player spawns inside the dirt, so clear the cells under its body first or
 # move_and_slide() would spend the first frames shoving it out of solid tiles.
 func _open_start_pocket() -> void:
-	var center := _field.to_local(_player.global_position)
-	_field.carve(Rect2(center - _player.body_size * 0.5, _player.body_size))
+	var body := _player.get_body_rect()
+	_field.carve(Rect2(_field.to_local(body.position), body.size))
 
 func _reserve_start_pocket() -> void:
-	var start_cell := _field.local_to_map(_field.to_local(_player.global_position))
+	var start_cell := _field.global_to_cell(_player.global_position)
 	_reserved.append(Rect2i(start_cell, Vector2i.ONE).grow(start_pocket_radius))
 
 # Splits the diggable area into a grid of regions, one per treasure, and drops a treasure
@@ -196,8 +196,8 @@ func _place_treasure(kind: Treasure.Kind, origin_cell: Vector2i, footprint: Vect
 	var treasure: Treasure = TREASURE_SCENE.instantiate()
 	# Added before setup(): setup() touches @onready children
 	_treasures_root.add_child(treasure)
-	var world_origin := _field.to_global(_field.cell_to_local_origin(origin_cell))
-	treasure.setup(kind, cells, _treasures_root.to_local(world_origin), _field.tile_set.tile_size, _rng)
+	var world_origin := _field.cell_to_global_origin(origin_cell)
+	treasure.setup(kind, cells, _treasures_root.to_local(world_origin), _field.get_cell_size(), _rng)
 	treasure.collected.connect(_on_treasure_collected)
 	_buried.append(treasure)
 

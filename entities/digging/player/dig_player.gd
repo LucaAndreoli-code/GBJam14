@@ -12,7 +12,7 @@ enum Axis { X, Y }
 const LANE := 8.0
 
 ## The DigField this player digs through
-@export var field_path: NodePath
+@export var field: DigField
 ## Movement speed inside an already dug tunnel, in px/s
 @export var speed_free: float = 40.0
 ## Movement speed while breaking new terrain, in px/s
@@ -36,26 +36,28 @@ const LANE := 8.0
 @onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _debris: CPUParticles2D = $Debris
 
-var _field: DigField
 var _last_axis: Axis = Axis.X
 var _is_digging: bool = false
 
 func _ready() -> void:
-	_field = get_node_or_null(field_path) as DigField
-	if _field == null:
-		push_error("DigPlayer has no DigField at \"%s\"" % field_path)
+	if field == null:
+		push_error("DigPlayer has no DigField assigned")
 		set_physics_process(false)
 
 ## Returns true while the player is breaking new terrain rather than walking a tunnel
 func is_digging() -> bool:
 	return _is_digging
 
+## The rect the collision body covers right now, in global space
+func get_body_rect() -> Rect2:
+	return Rect2(global_position - body_size * 0.5, body_size)
+
 func _physics_process(delta: float) -> void:
 	var dir := _read_direction()
 	_is_digging = false
 	if dir != Vector2i.ZERO:
-		_is_digging = _field.has_solid_in(_probe_rect(dir, dig_look_ahead))
-		if not _field.carve(_probe_rect(dir, dig_reach)).is_empty():
+		_is_digging = field.has_solid_in(_probe_rect(dir, dig_look_ahead))
+		if not field.carve(_probe_rect(dir, dig_reach)).is_empty():
 			_burst_debris(dir)
 		_apply_lane_snap(dir, delta)
 	velocity = Vector2(dir) * (speed_dig if _is_digging else speed_free)
@@ -89,7 +91,7 @@ func _read_direction() -> Vector2i:
 # the live position: the body may still be sliding onto its lane, and probing from the
 # unsnapped position would eat a third row of cells and widen the tunnel.
 func _probe_rect(dir: Vector2i, reach: float) -> Rect2:
-	var center := _field.to_local(global_position)
+	var center := field.to_local(global_position)
 	if dir.x != 0:
 		center.y = snappedf(center.y, LANE)
 	else:
@@ -110,12 +112,12 @@ func _probe_rect(dir: Vector2i, reach: float) -> Rect2:
 # Slides the body back onto the lane grid along the axis it is not moving on
 func _apply_lane_snap(dir: Vector2i, delta: float) -> void:
 	var step := snap_speed * delta
-	var local := _field.to_local(global_position)
+	var local := field.to_local(global_position)
 	if dir.x != 0:
 		local.y = move_toward(local.y, snappedf(local.y, LANE), step)
 	else:
 		local.x = move_toward(local.x, snappedf(local.x, LANE), step)
-	global_position = _field.to_global(local)
+	global_position = field.to_global(local)
 
 # Throws a puff of dirt out of the hole that was just broken. Driven by carve()
 # actually removing a cell rather than by a timer, so it fires once per broken cell
