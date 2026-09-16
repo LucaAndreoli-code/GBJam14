@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://xy3utj368w3d"
-path="res://.godot/imported/gameboysoft.ttf-38a1bc9a325de68bdcdc3f5c8553409b.fontdata"
+uid="uid://np02bhb3m38q"
+path="res://.godot/imported/notjammono.ttf-b727c02b53f61be575a4b7d447df5bae.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/gameboysoft.ttf"
-dest_files=["res://.godot/imported/gameboysoft.ttf-38a1bc9a325de68bdcdc3f5c8553409b.fontdata"]
+source_file="res://assets/fonts/notjammono.ttf"
+dest_files=["res://.godot/imported/notjammono.ttf-b727c02b53f61be575a4b7d447df5bae.fontdata"]
 
 [params]
 

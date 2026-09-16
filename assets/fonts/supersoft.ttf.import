@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://xy3utj368w3d"
-path="res://.godot/imported/gameboysoft.ttf-38a1bc9a325de68bdcdc3f5c8553409b.fontdata"
+uid="uid://nd0vat8y77dn"
+path="res://.godot/imported/supersoft.ttf-3dfe1ac7e22d1dad00cb384f30eec18b.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/gameboysoft.ttf"
-dest_files=["res://.godot/imported/gameboysoft.ttf-38a1bc9a325de68bdcdc3f5c8553409b.fontdata"]
+source_file="res://assets/fonts/supersoft.ttf"
+dest_files=["res://.godot/imported/supersoft.ttf-3dfe1ac7e22d1dad00cb384f30eec18b.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
