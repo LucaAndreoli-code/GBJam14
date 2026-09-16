@@ -78,6 +78,26 @@ func _on_game_second_tick(_game_seconds: int) -> void:
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not _is_input_enabled:
+		return
+	if event.is_action_pressed("btn_b"):
+		if _is_inventory_opened:
+			SignalBus.visibility_shader_toggled.emit(true)
+			_inventory.visible = false
+			_minimap_hud.visible = true
+			GameState.set_paused(false)
+			_is_inventory_opened = false
+	if event.is_action_pressed("btn_select"):
+		SignalBus.visibility_shader_toggled.emit(false)
+		_minimap_hud.visible = false
+		_inventory.visible = true
+		GameState.set_paused(true)
+		_is_inventory_opened = true
+
+func _on_input_enabled(is_enabled: bool) -> void:
+	_is_input_enabled = is_enabled
+
 func _on_torch_refill(_source: Node2D) -> void:
 	if _is_gameover_mode:
 		_is_gameover_mode = false
