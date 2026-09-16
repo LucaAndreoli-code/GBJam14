@@ -30,6 +30,7 @@ var _torches := {}
 var _current_room := Vector2i(-999, -999)
 var _offset := Vector2i.ZERO
 var _radius := Vector2i(1, 1) # How many rooms to show adjacent the current
+var _is_disabled: bool = false
 
 func _init(level: TileMapLayer, player: PlayerDungeonController) -> void:
 	_level = level
@@ -69,6 +70,8 @@ func _build_data_layer() -> void:
 	_compute_offset()
 
 func _process(_delta: float) -> void:
+	if _is_disabled:
+		return
 	var current_room := _room_of(_player.global_position)
 	if current_room != _current_room:
 		_current_room = current_room
