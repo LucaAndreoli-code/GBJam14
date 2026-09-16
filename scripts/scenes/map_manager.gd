@@ -12,7 +12,7 @@ const COLOR_PLAYER: Color = Palette.SRC_LIGHTEST
 
 var _map_container: Control
 var _parent_payload: Dictionary
-var _map_data: Dictionary = {}
+var _map_data: MinimapUtils.Data = MinimapUtils.Data.new()
 var _radius := Vector2i(999, 999)
 
 func _ready() -> void:
@@ -29,23 +29,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 func _draw() -> void:
-	var data: Dictionary = _map_data.get("data")
-	var visited: Dictionary = _map_data.get("visited")
-	var torches: Dictionary = _map_data.get("torches")
-	var current_room: Vector2i = _map_data.get("room")
+	var minimap_data := GameState.get_minimap()
+	var rooms = minimap_data.rooms
+	var visited = minimap_data.visited
+	var torches = minimap_data.torches
+	var current_room = minimap_data.current_room
 	var inner := CELL_SIZE - Vector2i.ONE
 	for cell in visited:
-		if not MinimapUtils.is_drawn(data, visited, current_room, cell, _radius, CELL_SIZE, SIZE):
+		if not MinimapUtils.is_drawn(rooms, visited, current_room, cell, _radius, CELL_SIZE, SIZE):
 			continue
 		var pos := MinimapUtils.get_cell_pos(current_room, cell, CELL_SIZE, SIZE)
 		draw_rect(Rect2(pos, inner), COLOR_ROOM)
-		var links: int = data[cell]
-		if MinimapUtils.is_drawn(data, visited, current_room, cell + Vector2i.RIGHT, _radius, CELL_SIZE, SIZE):
+		var links: int = rooms[cell]
+		if MinimapUtils.is_drawn(rooms, visited, current_room, cell + Vector2i.RIGHT, _radius, CELL_SIZE, SIZE):
 			if links & MinimapUtils.Link.OPEN_RIGHT:
 				draw_rect(Rect2(pos + Vector2i(inner.x, 0), Vector2i(1, inner.y)), COLOR_ROOM)
 			elif links & MinimapUtils.Link.DOOR_RIGHT:
 				draw_rect(Rect2(pos + Vector2i(inner.x, 1), Vector2i(1, 1)), COLOR_ROOM)
-		if MinimapUtils.is_drawn(data, visited, current_room, cell + Vector2i.DOWN, _radius, CELL_SIZE, SIZE):
+		if MinimapUtils.is_drawn(rooms, visited, current_room, cell + Vector2i.DOWN, _radius, CELL_SIZE, SIZE):
 			if links & MinimapUtils.Link.OPEN_DOWN:
 				draw_rect(Rect2(pos + Vector2i(0, inner.y), Vector2i(inner.x, 1)), COLOR_ROOM)
 			elif links & MinimapUtils.Link.DOOR_DOWN:
@@ -57,7 +58,6 @@ func _draw() -> void:
 
 func on_scene_entered(payload: Dictionary) -> void:
 	_parent_payload = payload
-	_map_data = payload.get("map_data")
 
 func _exit() -> void:
 	SceneManager.go_to(_parent_payload.get("scene_path"), _parent_payload)

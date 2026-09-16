@@ -7,6 +7,13 @@ enum Link {
 	OPEN_DOWN = 1 << 3 
 }
 
+class Data:
+	var empty: bool = true
+	var rooms: Dictionary = {}
+	var visited: Dictionary = {}
+	var torches: Dictionary = {}
+	var current_room: Vector2i = Vector2i(-999, -999)
+
 static func get_cell_pos(
 	current_room: Vector2i, \
 	cell: Vector2i, \

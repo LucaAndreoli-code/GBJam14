@@ -8,13 +8,12 @@ const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause.tscn"
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
 
-@onready var _game_time: GameTime = $GameTime
 @onready var _level_tilemap: TileMapLayer = $DungeonTilemap
 @onready var _player: PlayerDungeonController = $PlayerDungeon
 @onready var _camera: CameraDungeon = $Camera2D
 
 var _hud_container: Control
-var _torch: TorchManager
+var _torch: TorchTimer
 
 var _minimap_hud: MinimapHUD
 var _torch_hud: TorchHUD
@@ -24,10 +23,11 @@ var _gameover_timer: int = 0
 var _is_input_enabled: bool = true
 
 func _ready() -> void:
+	_setup_torch()
 	_hud_container = get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
 	_minimap_hud = MinimapHUD.new(_level_tilemap, _player)
 	_torch_hud = TorchHUD.new()
-	_torch = TorchManager.new(torch_duration_seconds)
+	_torch = TorchTimer.new()
 	_torch.torch_ended.connect(_on_torch_ended)
 	SignalBus.game_second_tick.connect(_on_game_second_tick)
 	SignalBus.input_enabled.connect(_on_input_enabled)
@@ -42,13 +42,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("btn_start"):
 		_open_pause_menu()
 
+func _exit_tree() -> void:
+	if is_instance_valid(_minimap_hud):
+		_minimap_hud.queue_free()
+	if is_instance_valid(_torch_hud):
+		_torch_hud.queue_free()
+
 func on_scene_entered(payload: Dictionary) -> void:
-	var incoming_game_time: float = payload.get("game_time", 0.0)
-	if incoming_game_time != 0.0:
-		_game_time.set_game_time(incoming_game_time)
-	var incoming_torch_duration: int = payload.get("torch_timer", 0)
-	if incoming_torch_duration != 0:
-		_torch = TorchManager.new(incoming_torch_duration)
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
@@ -60,8 +60,6 @@ func start_digging_minigame() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	_minimap_hud.set_disabled(true)
 	var payload := {
-		"game_time": _game_time.get_game_time(),
-		"torch_timer": _torch.get_remaining_duration(),
 		"scene_path": scene_file_path,
 		"player_position": _player.global_position
 	}
@@ -81,6 +79,14 @@ func _on_torch_ended() -> void:
 	_gameover_timer = gameover_duration_seconds
 	_is_gameover_mode = true
 
+func _setup_torch() -> void:
+	var game_torch := GameState.get_torch()
+	if game_torch.duration == 0:
+		var torch_data := TorchTimer.Data.new()
+		torch_data.duration = torch_duration_seconds
+		torch_data.countdown = torch_duration_seconds
+		GameState.set_torch(torch_data)
+
 func _init_hud() -> void:
 	if _hud_container:
 		_hud_container.add_child(_torch_hud)
@@ -97,11 +103,8 @@ func _open_map() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	_minimap_hud.set_disabled(true)
 	var payload := {
-		"game_time": _game_time.get_game_time(),
-		"torch_timer": _torch.get_remaining_duration(),
 		"scene_path": scene_file_path,
-		"player_position": _player.global_position,
-		"map_data": _minimap_hud.get_data_layer()
+		"player_position": _player.global_position
 	}
 	SceneManager.go_to(MAP_SCENE_PATH, payload)
 
@@ -109,8 +112,6 @@ func _open_pause_menu() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	_minimap_hud.set_disabled(true)
 	var payload := {
-		"game_time": _game_time.get_game_time(),
-		"torch_timer": _torch.get_remaining_duration(),
 		"scene_path": scene_file_path,
 		"player_position": _player.global_position
 	}
