@@ -50,10 +50,14 @@ var _collected: int = 0
 var _sonar_left: float = 0.0
 var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
+var _is_input_enabled: bool = true
 
 func _ready() -> void:
 	# DigField.fill() already ran: children are readied before their parent
 	_rng.seed = GameState.get_seed()
+	# Read once as well as listening: the signal only fires on a change
+	_is_input_enabled = GameState.is_input_enabled()
+	SignalBus.input_enabled.connect(_on_input_enabled)
 	_field.cells_carved.connect(_on_cells_carved)
 	_open_start_pocket()
 	_reserve_start_pocket()
@@ -63,9 +67,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
-	if _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
+	if _is_input_enabled and _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
 		_fire_sonar()
 	_advance_sonar_wave()
+
+func _on_input_enabled(is_enabled: bool) -> void:
+	_is_input_enabled = is_enabled
 
 ## Called by SceneManager when this scene is entered, see scene_manager.gd
 func on_scene_entered(payload: Dictionary) -> void:

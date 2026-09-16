@@ -38,11 +38,17 @@ const LANE := 8.0
 
 var _last_axis: Axis = Axis.X
 var _is_digging: bool = false
+var _is_input_enabled: bool = true
 
 func _ready() -> void:
 	if field == null:
 		push_error("DigPlayer has no DigField assigned")
 		set_physics_process(false)
+		return
+	# Read once as well as listening: the signal only fires on a change, so a player
+	# spawned while input is already off would never hear about it.
+	_is_input_enabled = GameState.is_input_enabled()
+	SignalBus.input_enabled.connect(_on_input_enabled)
 
 ## Returns true while the player is breaking new terrain rather than walking a tunnel
 func is_digging() -> bool:
@@ -53,7 +59,7 @@ func get_body_rect() -> Rect2:
 	return Rect2(global_position - body_size * 0.5, body_size)
 
 func _physics_process(delta: float) -> void:
-	var dir := _read_direction()
+	var dir := _read_direction() if _is_input_enabled else Vector2i.ZERO
 	_is_digging = false
 	if dir != Vector2i.ZERO:
 		_is_digging = field.has_solid_in(_probe_rect(dir, dig_look_ahead))
@@ -64,6 +70,9 @@ func _physics_process(delta: float) -> void:
 	_update_animation(dir)
 	move_and_slide()
 	_clamp_to_viewport()
+
+func _on_input_enabled(is_enabled: bool) -> void:
+	_is_input_enabled = is_enabled
 
 # Reads the dpad and collapses it to a single axis.
 # When both axes are held the one pressed most recently wins, so turning a corner
