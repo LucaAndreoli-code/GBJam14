@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/demo/dig_debris.png" id="1_debris"]
+
+[node name="DigDebris" type="CPUParticles2D"]
+emitting = false
+amount = 5
+texture = ExtResource("1_debris")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+spread = 45.0
+gravity = Vector2(0, 80)
+initial_velocity_min = 18.0
+initial_velocity_max = 45.0
