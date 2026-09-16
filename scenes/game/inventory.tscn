@@ -1,14 +1,30 @@
 [gd_scene format=3 uid="uid://co7sy2a0ulud0"]
 
 [ext_resource type="Script" uid="uid://dh0o3dqg7j560" path="res://scripts/scenes/inventory_manager.gd" id="1_yq6yy"]
-[ext_resource type="Texture2D" uid="uid://h60ewbsi3dtf" path="res://assets/sprites/demo/temp_inventory_cell.png" id="2_tw7bo"]
+[ext_resource type="Texture2D" uid="uid://h60ewbsi3dtf" path="res://assets/sprites/sheets/inventory_cell_sheet.png" id="2_tw7bo"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_nq4mu"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="3_sdb1p"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_tw7bo"]
+[ext_resource type="Resource" uid="uid://cegd36fetqbhp" path="res://entities/treasures/small/coin.tres" id="4_w2gpr"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_tw7bo"]
+[ext_resource type="Resource" uid="uid://cd50ddvh0rx4n" path="res://entities/treasures/small/broach.tres" id="5_w2gpr"]
+[ext_resource type="Resource" uid="uid://bvjjfdqx7lypu" path="res://entities/treasures/small/ring.tres" id="6_h80qc"]
+[ext_resource type="Resource" uid="uid://d0o8euefw4jf1" path="res://entities/treasures/small/pipe.tres" id="7_5ph2v"]
+[ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="8_t3p57"]
+[ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="9_00iqq"]
+[ext_resource type="Resource" uid="uid://b7i1qbasb3ypo" path="res://entities/treasures/medium/necklace.tres" id="10_y4cs5"]
+[ext_resource type="Resource" uid="uid://ckkkhrqm6p1sp" path="res://entities/treasures/medium/statuette.tres" id="11_m5lgi"]
+[ext_resource type="Resource" uid="uid://b6sub528mq6a1" path="res://entities/treasures/large/mirror.tres" id="12_64dcj"]
+[ext_resource type="Resource" uid="uid://bija40k4ua1ac" path="res://entities/treasures/large/reliquary.tres" id="13_mdkkr"]
+[ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="14_jyvce"]
+[ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="15_5ybx7"]
+[ext_resource type="Texture2D" uid="uid://ddahhwo82734k" path="res://assets/sprites/ui/inventory_info_title_bar.png" id="18_mdkkr"]
 
 [node name="Inventory" type="Node2D" unique_id=1238025634]
 script = ExtResource("1_yq6yy")
+grid_size = Vector2i(6, 2)
 cell_textures = ExtResource("2_tw7bo")
+treasures = Array[ExtResource("3_sdb1p")]([ExtResource("4_w2gpr"), ExtResource("5_w2gpr"), ExtResource("6_h80qc"), ExtResource("7_5ph2v"), ExtResource("8_t3p57"), ExtResource("9_00iqq"), ExtResource("10_y4cs5"), ExtResource("11_m5lgi"), ExtResource("12_64dcj"), ExtResource("13_mdkkr"), ExtResource("14_jyvce"), ExtResource("15_5ybx7")])
 
 [node name="Container" type="Control" parent="." unique_id=261638991]
 layout_mode = 3
@@ -30,14 +46,39 @@ vertical_alignment = 1
 script = ExtResource("3_tw7bo")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
 
-[node name="CenterGrid" type="CenterContainer" parent="Container" unique_id=321823840]
+[node name="GridContainer" type="PanelContainer" parent="Container" unique_id=669261983]
 layout_mode = 0
-offset_top = 12.0
+offset_left = 2.0
+offset_top = 16.0
+offset_right = 158.0
+offset_bottom = 78.0
+
+[node name="Grid" type="GridContainer" parent="Container/GridContainer" unique_id=1054726173]
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+
+[node name="InfoTitleBar" type="TextureRect" parent="Container" unique_id=1517074296]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 80.0
 offset_right = 160.0
 offset_bottom = 96.0
+texture = ExtResource("18_mdkkr")
 
-[node name="Grid" type="GridContainer" parent="Container/CenterGrid" unique_id=1054726173]
-layout_mode = 2
+[node name="TreasureTitle" type="Label" parent="Container/InfoTitleBar" unique_id=1231100977]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 3.0
+offset_right = 99.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("5_tw7bo")
+theme_override_font_sizes/font_size = 16
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="Info" type="Control" parent="Container" unique_id=1231511940]
 anchors_preset = 0
@@ -54,7 +95,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.33333334, 0.33333334, 0.33333334, 1)
 
-[node name="GBLabel" type="Label" parent="Container/Info" unique_id=627400532]
+[node name="TreasureDesc" type="Label" parent="Container/Info" unique_id=627400532]
 custom_maximum_size = Vector2(156, 44)
 layout_mode = 0
 offset_left = 2.0
@@ -65,7 +106,6 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("5_tw7bo")
 theme_override_font_sizes/font_size = 16
-text = "A small coin from a long forgotten empire. A regal looking man is depicted on one of the faces."
 autowrap_mode = 2
 script = ExtResource("3_tw7bo")
 metadata/_custom_type_script = "uid://cidt6x11067q0"

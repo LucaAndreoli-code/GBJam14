@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://cuuqikjqlxu1u"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_0uod4"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="2_1qs6t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_0uod4")
+region = Rect2(120, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_0uod4")
+region = Rect2(24, 0, 8, 16)
+
+[resource]
+script = ExtResource("2_1qs6t")
+order = 6
+name = "Book"
+description = "A plain looking book with an apple green cover. Touching the cover causes the skin to itch."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

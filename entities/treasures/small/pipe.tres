@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://d0o8euefw4jf1"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_jtuv2"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="2_fss2i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0xl4"]
+atlas = ExtResource("1_jtuv2")
+region = Rect2(72, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpep5"]
+atlas = ExtResource("1_jtuv2")
+region = Rect2(0, 8, 8, 8)
+
+[resource]
+script = ExtResource("2_fss2i")
+order = 4
+name = "Pipe"
+description = "An old fashioned pipe for smoking. The ornate patterns on the wood make it look expensive."
+minigame_texture = SubResource("AtlasTexture_rpep5")
+inventory_texture = SubResource("AtlasTexture_n0xl4")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

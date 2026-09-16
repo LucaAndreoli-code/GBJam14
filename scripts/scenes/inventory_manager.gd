@@ -2,22 +2,34 @@ extends Node2D
 
 const FRAME_NOT_SELECTED: Rect2i = Rect2i(0, 0, 24, 24)
 const FRAME_SELECTED: Rect2i = Rect2i(24, 0, 24, 24)
-const QUESTION_MARK: Rect2i = Rect2i(52, 4, 16, 16)
 
-@onready var _grid: GridContainer = $Container/CenterGrid/Grid
-@onready var _info_control: Control = $Container/Info
+@onready var _grid: GridContainer = $Container/GridContainer/Grid
+@onready var _info_title: GBLabel = $Container/InfoTitleBar/TreasureTitle
+@onready var _info_label: GBLabel = $Container/Info/TreasureDesc
 
 @export var grid_size: Vector2i = Vector2i(4, 3)
 @export var cell_textures: Texture2D
+@export var treasures: Array[Treasure]
 
 var _parent_payload: Dictionary
 var _cell_selected: int = 0
+var _treasures_count: Dictionary[int, int] = {
+	1: 1,
+	4: 1,
+	5: 1,
+	9: 2,
+	10: 1,
+	12: 1,
+}
 
 func _ready() -> void:
+	Palette.switch_to_palette("brown_shades")
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	if _grid:
 		_init_grid()
 		_refresh_grid()
+		_cell_selected = 0
+		_update_info()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("btn_b"):
@@ -46,9 +58,17 @@ func _init_grid() -> void:
 	for child in _grid.get_children():
 		child.queue_free()
 	for i in grid_size.x * grid_size.y:
-		_grid.add_child(_make_grid_cell())
+		var treasure := _get_treasure_by_order(_order_by_index(i))
+		if treasure:
+			_grid.add_child(_make_grid_cell(treasure))
 
-func _make_grid_cell() -> Control:
+func _get_treasure_by_order(order: int) -> Treasure:
+	var filtered := treasures.filter(func(t): return t.order == order)
+	if filtered.size() == 1:
+		return filtered[0]
+	return null
+
+func _make_grid_cell(treasure: Treasure) -> Control:
 	var cell := TextureRect.new()
 	var cell_atlas := AtlasTexture.new()
 	cell_atlas.atlas = cell_textures
@@ -57,11 +77,8 @@ func _make_grid_cell() -> Control:
 	cell.stretch_mode = TextureRect.STRETCH_KEEP
 	cell.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var sub_cell := TextureRect.new()
-	var sub_cell_atlas := AtlasTexture.new()
-	sub_cell_atlas.atlas = cell_textures
-	sub_cell_atlas.region = QUESTION_MARK
-	sub_cell.position = Vector2(4.0, 4.0)
-	sub_cell.texture = sub_cell_atlas
+	sub_cell.position = Vector2.ZERO
+	sub_cell.texture = treasure.inventory_texture
 	sub_cell.stretch_mode = TextureRect.STRETCH_KEEP
 	sub_cell.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	cell.add_child(sub_cell)
@@ -80,11 +97,29 @@ func _move_grid_selection(dx: int, dy: int) -> void:
 		return
 	_cell_selected = index
 	_refresh_grid()
+	_update_info()
 
 func _refresh_grid() -> void:
 	for i in _grid.get_child_count():
 		var cell := _grid.get_child(i) as TextureRect
 		(cell.texture as AtlasTexture).region = FRAME_SELECTED if _cell_selected == i else FRAME_NOT_SELECTED
+		if not _treasures_count.has(_order_by_index(i)):
+			var subcell := cell.get_child(0) as TextureRect
+			subcell.self_modulate = Color.from_rgba8(85, 85, 85)
+
+func _update_info() -> void:
+	var treasure_order := _order_by_index(_cell_selected)
+	if not _treasures_count.has(treasure_order):
+		_info_title.print_text("???")
+		_info_label.print_text("???")
+	else:
+		var treasure := _get_treasure_by_order(treasure_order)
+		if treasure:
+			_info_title.print_text("%s (x%d)" % [treasure.name, _treasures_count[treasure_order]])
+			_info_label.print_text(treasure.description)
+
+func _order_by_index(index: int) -> int:
+	return index + 1
 
 func _exit() -> void:
 	SceneManager.go_to(_parent_payload.get("scene_path"), _parent_payload)

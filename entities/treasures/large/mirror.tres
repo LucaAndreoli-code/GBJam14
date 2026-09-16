@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://b6sub528mq6a1"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_2sd00"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="2_8hych"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_2sd00")
+region = Rect2(48, 40, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_2sd00")
+region = Rect2(48, 0, 16, 16)
+
+[resource]
+script = ExtResource("2_8hych")
+order = 10
+name = "Mirror"
+description = "A fancy looking standing mirror with lots of embellishments. Upon closer inspection, the mirror appears to be made of silver."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

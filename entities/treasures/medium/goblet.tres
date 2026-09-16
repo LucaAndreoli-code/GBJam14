@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://d3i87b4xvfbfk"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_tgvfa"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="2_grakj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_tgvfa")
+region = Rect2(96, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_tgvfa")
+region = Rect2(16, 0, 8, 16)
+
+[resource]
+script = ExtResource("2_grakj")
+order = 5
+name = "Goblet"
+description = "A magical goblet that supposedly never ran out of wine. It has long since run dry."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

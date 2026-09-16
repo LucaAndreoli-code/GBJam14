@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://cd50ddvh0rx4n"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_12i8h"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="1_fsw7c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_12i8h")
+region = Rect2(24, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_12i8h")
+region = Rect2(8, 0, 8, 8)
+
+[resource]
+script = ExtResource("1_fsw7c")
+order = 2
+name = "Broach"
+description = "An ornament in the shape of a butterfly. Its wings shine despite being long lost."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

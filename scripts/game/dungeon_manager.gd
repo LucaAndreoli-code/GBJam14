@@ -3,7 +3,7 @@ extends Node2D
 
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
 const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
-const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause.tscn"
+const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause_menu.tscn"
 
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
@@ -23,6 +23,7 @@ var _gameover_timer: int = 0
 var _is_input_enabled: bool = true
 
 func _ready() -> void:
+	Palette.switch_to_palette("main")
 	_setup_torch()
 	_hud_container = get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
 	_minimap_hud = MinimapHUD.new(_level_tilemap, _player)
