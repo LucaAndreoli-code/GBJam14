@@ -7,7 +7,8 @@ enum DoorSize {
 }
 
 const SIZE: Vector2 = Vector2(32.0, 16.0)
-const POSITION: Vector2 = Vector2(128.0, 128.0)
+const POSITION: Vector2 = Vector2(126.0, 128.0)
+const FRAME: Rect2 = Rect2(0, 1.0, 31.0, 15.0)
 const ROOM_ORIGIN: Vector2i = Vector2i(0, 1)
 const ROOM_TILES: Vector2i = Vector2i(10, 7)
 const CELL_SIZE: Vector2i = Vector2i(4, 4)
@@ -16,6 +17,7 @@ const ROOM_PERIOD: Vector2i = ROOM_TILES + GAP_TILES
 const COLOR_ROOM: Color = Palette.SRC_DARKEST
 const COLOR_TORCH: Color = Palette.SRC_LIGHT
 const COLOR_PLAYER: Color = Palette.SRC_LIGHTEST
+const COLOR_BG: Color = Palette.SRC_DARK
 
 var _level: TileMapLayer
 var _player: PlayerDungeonController
@@ -79,11 +81,12 @@ func _process(_delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
+	_draw_frame(FRAME, COLOR_ROOM)
 	var inner := CELL_SIZE - Vector2i.ONE
 	for cell in _data.visited:
 		if not MinimapUtils.is_drawn(_data.rooms, _data.visited, _data.current_room, cell, _radius, CELL_SIZE, SIZE):
 			continue
-		var pos := MinimapUtils.get_cell_pos(_data.current_room, cell, CELL_SIZE, SIZE)
+		var pos := MinimapUtils.get_cell_pos(_data.current_room, cell, CELL_SIZE, SIZE) + Vector2i(0, 1)
 		draw_rect(Rect2(pos, inner), COLOR_ROOM)
 		var links: int = _data.rooms[cell]
 		if MinimapUtils.is_drawn(_data.rooms, _data.visited, _data.current_room, cell + Vector2i.RIGHT, _radius, CELL_SIZE, SIZE):
@@ -104,6 +107,12 @@ func _draw() -> void:
 func set_disabled(value: bool) -> void:
 	if _is_disabled != value:
 		_is_disabled = value
+
+func _draw_frame(r: Rect2, color: Color) -> void:
+	draw_rect(Rect2(r.position.x, r.position.y, r.size.x, 1), color)
+	draw_rect(Rect2(r.position.x, r.position.y, 1, r.size.y), color)
+	draw_rect(Rect2(r.end.x - 1, r.position.y, 1, r.size.y), color)
+	draw_rect(Rect2(r.position.x + 1, r.position.y + 1, r.size.x - 2, r.size.y - 1), COLOR_BG)
 
 func _compute_offset() -> void:
 	var keys := _data.rooms.keys()

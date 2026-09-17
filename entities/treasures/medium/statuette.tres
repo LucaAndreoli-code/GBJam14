@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TreasureInfo" format=3 uid="uid://ckkkhrqm6p1sp"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_gtm8o"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="2_t2yun"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_gtm8o")
+region = Rect2(24, 40, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_gtm8o")
+region = Rect2(40, 0, 8, 16)
+
+[resource]
+script = ExtResource("2_t2yun")
+order = 8
+kind = 1
+name = "Statuette"
+description = "A marble statue that appears untouched by dirt. Despite its good quality, you cannot identify who it depicts."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

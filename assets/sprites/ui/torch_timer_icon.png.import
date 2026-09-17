@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h60ewbsi3dtf"
-path="res://.godot/imported/temp_inventory_cell.png-ae530bd9ba279315e73ed4f978280c11.ctex"
+uid="uid://c4t8bjo2guo6o"
+path="res://.godot/imported/torch_timer_icon.png-cbf5a0c3b31aa76e983e96ddcbfc5689.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/demo/temp_inventory_cell.png"
-dest_files=["res://.godot/imported/temp_inventory_cell.png-ae530bd9ba279315e73ed4f978280c11.ctex"]
+source_file="res://assets/sprites/ui/torch_timer_icon.png"
+dest_files=["res://.godot/imported/torch_timer_icon.png-cbf5a0c3b31aa76e983e96ddcbfc5689.ctex"]
 
 [params]
 

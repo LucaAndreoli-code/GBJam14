@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TreasureInfo" format=3 uid="uid://cegd36fetqbhp"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_n0xl4"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="1_rpep5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0xl4"]
+atlas = ExtResource("1_n0xl4")
+region = Rect2(0, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpep5"]
+atlas = ExtResource("1_n0xl4")
+region = Rect2(0, 0, 8, 8)
+
+[resource]
+script = ExtResource("1_rpep5")
+order = 1
+kind = 0
+name = "Coin"
+description = "A small coin from a long forgotten empire. A regal looking man is depicted on one of the faces."
+minigame_texture = SubResource("AtlasTexture_rpep5")
+inventory_texture = SubResource("AtlasTexture_n0xl4")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

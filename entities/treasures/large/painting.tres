@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TreasureInfo" format=3 uid="uid://k18nerwxk87j"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_1txfr"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="2_nirhy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qy1va"]
+atlas = ExtResource("1_1txfr")
+region = Rect2(96, 40, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12i8h"]
+atlas = ExtResource("1_1txfr")
+region = Rect2(80, 0, 16, 16)
+
+[resource]
+script = ExtResource("2_nirhy")
+order = 12
+kind = 2
+name = "Painting"
+description = "A painting depicting a regal looking man, woman and child. Despite the passage of time, you can still feel the love they had for each other."
+minigame_texture = SubResource("AtlasTexture_12i8h")
+inventory_texture = SubResource("AtlasTexture_qy1va")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

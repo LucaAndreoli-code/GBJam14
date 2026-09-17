@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TreasureInfo" format=3 uid="uid://bvjjfdqx7lypu"]
+
+[ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_tkt6y"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="2_4t3n7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0xl4"]
+atlas = ExtResource("1_tkt6y")
+region = Rect2(48, 16, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpep5"]
+atlas = ExtResource("1_tkt6y")
+region = Rect2(8, 8, 8, 8)
+
+[resource]
+script = ExtResource("2_4t3n7")
+order = 3
+kind = 0
+name = "Ring"
+description = "A ring that looks dirty from being covered in dirt. With a little care, its gemstone will glimmer in the sunlight."
+minigame_texture = SubResource("AtlasTexture_rpep5")
+inventory_texture = SubResource("AtlasTexture_n0xl4")
+metadata/_custom_type_script = "uid://cxkokkqglvqt6"

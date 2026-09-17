@@ -78,16 +78,11 @@ render_target_update_mode = 4
 [node name="BottomBar" type="Control" parent="PaletteContainer/Screen" unique_id=607222497]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen/BottomBar" unique_id=291082804]
-layout_mode = 0
 offset_top = 128.0
 offset_right = 160.0
 offset_bottom = 144.0
 
-[node name="HUD" type="Control" parent="PaletteContainer/Screen/BottomBar" unique_id=246248463 groups=["hud_container"]]
+[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen/BottomBar" unique_id=291082804]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,10 +98,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HUD" type="Control" parent="PaletteContainer/Screen" unique_id=246248463 groups=["hud_container"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Music" type="Node" parent="." unique_id=113485293]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
 stream = ExtResource("3_o6xl0")
-autoplay = true
 
 [node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]
