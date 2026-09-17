@@ -7,6 +7,10 @@ const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause.tscn"
 
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
+## Treasures this dungeon still has to give up, handed to the digging minigame as the exact
+## set to bury. Temporary: the list belongs in the global state once the inventory owns it,
+## see start_digging_minigame(). Left empty, the minigame falls back on its own export.
+@export var minigame_treasures: Array[TreasureInfo] = []
 
 @onready var _level_tilemap: TileMapLayer = $DungeonTilemap
 @onready var _player: PlayerDungeonController = $PlayerDungeon
@@ -49,6 +53,9 @@ func _exit_tree() -> void:
 		_torch_hud.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
+	# TODO: payload["collected_treasures"] holds the TreasureInfo the digging run brought
+	#       home. The inventory that has to bank them lives on another branch, so for now
+	#       they are simply dropped.
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
@@ -61,7 +68,10 @@ func start_digging_minigame() -> void:
 	_minimap_hud.set_disabled(true)
 	var payload := {
 		"scene_path": scene_file_path,
-		"player_position": _player.global_position
+		"player_position": _player.global_position,
+		# TODO: read the not-yet-found treasures off GameState once the inventory owns them,
+		#       instead of the list hand-filled on this node
+		"treasures": minigame_treasures
 	}
 	SceneManager.go_to(MINIGAME_SCENE_PATH, payload)
 

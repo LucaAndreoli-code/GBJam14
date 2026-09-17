@@ -9,30 +9,19 @@ extends Area2D
 ## Emits when the player walks into a revealed treasure, right before it frees itself
 signal collected(treasure: Treasure)
 
-enum Kind { SMALL, MEDIUM, BIG }
-
-## Footprint of each kind, in field cells
+## Footprint of each kind, in field cells. The artwork is authored to match: a cell is 8px
+## and every minigame_texture under entities/treasures is 8x8, 8x16 or 16x16.
 const SIZES := {
-	Kind.SMALL: Vector2i(1, 1),
-	Kind.MEDIUM: Vector2i(1, 2),
-	Kind.BIG: Vector2i(2, 2),
-}
-
-## Artwork available for each kind. More than one entry means a variant is rolled on spawn.
-const TEXTURES := {
-	Kind.SMALL: [preload("res://assets/sprites/demo/treasures/moneta.png")],
-	Kind.MEDIUM: [
-		preload("res://assets/sprites/demo/treasures/calice.png"),
-		preload("res://assets/sprites/demo/treasures/statua.png"),
-	],
-	Kind.BIG: [preload("res://assets/sprites/demo/treasures/forziere.png")],
+	TreasureInfo.Kind.SMALL: Vector2i(1, 1),
+	TreasureInfo.Kind.MEDIUM: Vector2i(1, 2),
+	TreasureInfo.Kind.BIG: Vector2i(2, 2),
 }
 
 ## Seconds each kind adds to the run timer. Unused until the timer lands.
 const TIME_BONUS := {
-	Kind.SMALL: 1.0,
-	Kind.MEDIUM: 1.5,
-	Kind.BIG: 3.0,
+	TreasureInfo.Kind.SMALL: 1.0,
+	TreasureInfo.Kind.MEDIUM: 1.5,
+	TreasureInfo.Kind.BIG: 3.0,
 }
 
 ## Seconds of one on or off step of a sonar blink
@@ -51,7 +40,7 @@ const SILHOUETTE_SHADER: Shader = preload("res://shaders/treasure_silhouette.gds
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _silhouette: Sprite2D = $Silhouette
 
-var _kind: Kind = Kind.SMALL
+var _info: TreasureInfo
 var _cells: Array[Vector2i] = []
 var _revealed: bool = false
 var _flash_left: float = 0.0
@@ -70,41 +59,52 @@ func _ready() -> void:
 	set_process(false)
 
 ## Places the treasure over the given cells and buries it.
+## `info` carries everything the run needs to know about it: the kind decides the footprint,
+## the minigame texture is the artwork, and the whole resource travels back to the dungeon
+## once the treasure is picked up.
 ## `origin` is the top-left corner of the footprint, in this node's parent space.
-## `rng` is the run's seeded generator: the variant roll has to stay reproducible.
-func setup(kind: Kind, cells: Array[Vector2i], origin: Vector2, cell_size: Vector2i, rng: RandomNumberGenerator) -> void:
-	_kind = kind
+func setup(info: TreasureInfo, cells: Array[Vector2i], origin: Vector2, cell_size: Vector2i) -> void:
+	_info = info
 	_cells = cells
-	var pixel_size := Vector2(_footprint(kind) * cell_size)
+	var footprint := _footprint()
+	var pixel_size := Vector2(footprint * cell_size)
 	position = origin + pixel_size * 0.5
 	var rect := RectangleShape2D.new()
 	rect.size = pixel_size
 	_shape.shape = rect
-	var variants: Array = TEXTURES[kind]
-	_sprite.texture = variants[rng.randi() % variants.size()]
+	_sprite.texture = info.minigame_texture
 	# A rotated footprint is the one case where the kind does not tell you the on screen
 	# orientation, see footprint_for(): the upright art has to lie down to cover the cells.
-	_sprite.rotation = PI * 0.5 if _footprint(kind) != SIZES[kind] else 0.0
+	_sprite.rotation = PI * 0.5 if footprint != SIZES[info.kind] else 0.0
 	_silhouette.texture = _sprite.texture
 	_silhouette.rotation = _sprite.rotation
+	# kind is hand authored in the .tres while the artwork comes from the sheet: a mismatch
+	# would stretch the collider past the sprite, so say it out loud instead of drawing it.
+	var art_cells := Vector2i(info.minigame_texture.get_size()) / cell_size
+	if art_cells != SIZES[info.kind]:
+		push_warning("%s: kind wants %v cells, art covers %v" % [info.name, SIZES[info.kind], art_cells])
 	_bury()
 
 ## Footprint in cells, with the 1x2 medium randomly laid on its side so horizontal and
 ## vertical tunnels have the same chance of running into it.
-static func footprint_for(kind: Kind, rng: RandomNumberGenerator) -> Vector2i:
+static func footprint_for(kind: TreasureInfo.Kind, rng: RandomNumberGenerator) -> Vector2i:
 	var size: Vector2i = SIZES[kind]
 	if size.x != size.y and rng.randi() % 2 == 1:
 		return Vector2i(size.y, size.x)
 	return size
 
-func get_kind() -> Kind:
-	return _kind
+## The resource this treasure was spawned from, for whoever collects it
+func get_info() -> TreasureInfo:
+	return _info
+
+func get_kind() -> TreasureInfo.Kind:
+	return _info.kind
 
 func get_cells() -> Array[Vector2i]:
 	return _cells
 
 func get_time_bonus() -> float:
-	return TIME_BONUS[_kind]
+	return TIME_BONUS[_info.kind]
 
 func is_revealed() -> bool:
 	return _revealed
@@ -152,10 +152,10 @@ func _bury() -> void:
 	# over terrain that has not been dug out yet.
 	monitoring = false
 
-func _footprint(kind: Kind) -> Vector2i:
+func _footprint() -> Vector2i:
 	# Derived from the cells the spawner reserved, so a rotated medium stays correct
 	if _cells.is_empty():
-		return SIZES[kind]
+		return SIZES[_info.kind]
 	var used := Rect2i(_cells[0], Vector2i.ONE)
 	for cell in _cells:
 		used = used.expand(cell).expand(cell + Vector2i.ONE)

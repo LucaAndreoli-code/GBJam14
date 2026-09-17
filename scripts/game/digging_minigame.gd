@@ -4,8 +4,8 @@ extends Node2D
 ## Root of the digging minigame: spawns the buried treasures, reveals them as the
 ## terrain is carved, and counts what the player brings home.
 
-## Emits on every pickup, with the running total and the target
-signal treasure_collected(total: int, target: int)
+## Emits on every pickup, with what was picked up plus the running total and the target
+signal treasure_collected(info: TreasureInfo, total: int, target: int)
 ## Emits when the last treasure is picked up
 signal all_treasures_collected()
 ## Emits when the sonar fires, carrying the seconds until it is usable again
@@ -19,14 +19,9 @@ const PLACEMENT_ATTEMPTS := 24
 # Input action that fires the sonar
 const SONAR_ACTION := "btn_a"
 
-## How many treasures to bury
-@export var treasure_count: int = 4
-## Relative odds of each Treasure.Kind
-@export var kind_weights: Dictionary = {
-	Treasure.Kind.SMALL: 3,
-	Treasure.Kind.MEDIUM: 2,
-	Treasure.Kind.BIG: 1,
-}
+## Treasures buried when the scene runs on its own. A run entered from the dungeon is handed
+## its list in the payload and ignores this one.
+@export var fallback_treasures: Array[TreasureInfo] = []
 ## Empty cells kept between two treasures, so a single tunnel rarely uncovers both
 @export var min_gap: int = 1
 ## Cells around the player's starting position that stay treasure free
@@ -48,6 +43,8 @@ const SONAR_ACTION := "btn_a"
 @onready var _exit: DigExit = $ExitPoint
 
 var _rng := RandomNumberGenerator.new()
+var _run_treasures: Array[TreasureInfo] = []
+var _collected_infos: Array[TreasureInfo] = []
 var _buried: Array[Treasure] = []
 var _reserved: Array[Rect2i] = []
 var _collected: int = 0
@@ -97,8 +94,21 @@ func _start_run() -> void:
 		return
 	_started = true
 	_rng.seed = GameState.get_seed()
+	_resolve_treasures()
 	_reserve_start_pocket()
 	_spawn_treasures()
+	# The HUD is mounted in _ready(), before the list is known, so it starts out on 0/0
+	if _hud != null:
+		_hud.set_progress(_collected, get_treasure_count())
+
+# The run buries exactly what it is handed: the caller owns which treasures are still out
+# there. The exported list is only what a standalone run falls back on.
+func _resolve_treasures() -> void:
+	var incoming: Array = _dungeon_payload.get("treasures", [])
+	# assign() rather than =: what comes out of the payload is an untyped Array
+	_run_treasures.assign(incoming if not incoming.is_empty() else fallback_treasures)
+	if _run_treasures.is_empty():
+		push_warning("Digging run started with no treasures")
 	
 # Seeds GameState when the scene is run on its own, so the light ratio has a duration to
 # divide by. Mirrors DungeonManager._setup_torch(): whoever gets there first wins.
@@ -119,7 +129,7 @@ func _mount_hud() -> void:
 		return
 	_hud = DigHUD.new()
 	container.add_child(_hud)
-	_hud.set_progress(_collected, treasure_count)
+	_hud.set_progress(_collected, get_treasure_count())
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
@@ -143,6 +153,14 @@ func on_scene_entered(payload: Dictionary) -> void:
 ## Returns how many treasures the player has picked up so far
 func get_collected_count() -> int:
 	return _collected
+
+## Returns how many treasures this run buried
+func get_treasure_count() -> int:
+	return _run_treasures.size()
+
+## Returns the resources of the treasures picked up so far, for the dungeon to bank
+func get_collected_treasures() -> Array[TreasureInfo]:
+	return _collected_infos
 
 ## Returns true when the sonar can be fired again
 func is_sonar_ready() -> bool:
@@ -205,17 +223,18 @@ func _reserve_start_pocket() -> void:
 # draw clumps them, and clumped treasures make the run swing on a single lucky tunnel.
 func _spawn_treasures() -> void:
 	var diggable := _field.get_diggable_rect()
-	var columns := int(ceil(sqrt(float(treasure_count))))
-	var rows := int(ceil(float(treasure_count) / float(columns)))
-	for i in treasure_count:
+	var count := get_treasure_count()
+	var columns := int(ceil(sqrt(float(count))))
+	var rows := int(ceil(float(count) / float(columns)))
+	for i in count:
+		var info := _run_treasures[i]
 		var region := _region_at(diggable, i % columns, i / columns, columns, rows)
-		var kind := _pick_kind()
-		var footprint := Treasure.footprint_for(kind, _rng)
+		var footprint := Treasure.footprint_for(info.kind, _rng)
 		var origin_cell: Variant = _find_spot(region, diggable, footprint)
 		if origin_cell == null:
-			push_warning("Could not place treasure %d of %d" % [i + 1, treasure_count])
+			push_warning("Could not place %s, treasure %d of %d" % [info.name, i + 1, count])
 			continue
-		_place_treasure(kind, origin_cell as Vector2i, footprint)
+		_place_treasure(info, origin_cell as Vector2i, footprint)
 
 func _region_at(area: Rect2i, column: int, row: int, columns: int, rows: int) -> Rect2i:
 	var cell_w := area.size.x / columns
@@ -255,7 +274,7 @@ func _overlaps_reserved(used: Rect2i) -> bool:
 			return true
 	return false
 
-func _place_treasure(kind: Treasure.Kind, origin_cell: Vector2i, footprint: Vector2i) -> void:
+func _place_treasure(info: TreasureInfo, origin_cell: Vector2i, footprint: Vector2i) -> void:
 	var cells: Array[Vector2i] = []
 	for y in footprint.y:
 		for x in footprint.x:
@@ -264,22 +283,9 @@ func _place_treasure(kind: Treasure.Kind, origin_cell: Vector2i, footprint: Vect
 	# Added before setup(): setup() touches @onready children
 	_treasures_root.add_child(treasure)
 	var world_origin := _field.cell_to_global_origin(origin_cell)
-	treasure.setup(kind, cells, _treasures_root.to_local(world_origin), _field.get_cell_size(), _rng)
+	treasure.setup(info, cells, _treasures_root.to_local(world_origin), _field.get_cell_size())
 	treasure.collected.connect(_on_treasure_collected)
 	_buried.append(treasure)
-
-func _pick_kind() -> Treasure.Kind:
-	var total := 0
-	for weight in kind_weights.values():
-		total += int(weight)
-	if total <= 0:
-		return Treasure.Kind.SMALL
-	var roll := _rng.randi_range(1, total)
-	for kind in kind_weights:
-		roll -= int(kind_weights[kind])
-		if roll <= 0:
-			return kind
-	return Treasure.Kind.SMALL
 
 # Every carve rechecks the treasures still buried - there are at most a handful of them,
 # and the set of cells just removed is no longer enough on its own: what decides a reveal
@@ -304,10 +310,12 @@ func _is_dug_out(treasure: Treasure) -> bool:
 func _on_treasure_collected(treasure: Treasure) -> void:
 	_buried.erase(treasure)
 	_collected += 1
+	var info := treasure.get_info()
+	_collected_infos.append(info)
 	if _hud != null:
-		_hud.set_progress(_collected, treasure_count)
-	treasure_collected.emit(_collected, treasure_count)
-	if _collected >= treasure_count:
+		_hud.set_progress(_collected, get_treasure_count())
+	treasure_collected.emit(info, _collected, get_treasure_count())
+	if _collected >= get_treasure_count():
 		all_treasures_collected.emit()
 		_swap_back_to_dungeon()
 
@@ -316,14 +324,14 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 # back down into the field.
 func _on_player_returned() -> void:
 	GameState.set_input_enabled(false)
-	if _collected >= treasure_count:
+	if _collected >= get_treasure_count():
 		_swap_back_to_dungeon()
 		return
 	# TODO: show the informative text ("you are leaving N treasures behind") through
 	#       GBTextBox, scenes/ui/gb_text_box.tscn, mounted in the ui_container group.
 	#       That UI lives on another branch, so the flow stops here for now: once the box
 	#       is wired, its dialogue_finished has to end on _swap_back_to_dungeon().
-	push_warning("Exit reached with %d/%d treasures" % [_collected, treasure_count])
+	push_warning("Exit reached with %d/%d treasures" % [_collected, get_treasure_count()])
 	_swap_back_to_dungeon()
 
 func _swap_back_to_dungeon() -> void:
@@ -337,6 +345,8 @@ func _swap_back_to_dungeon() -> void:
 		return
 	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
 	var payload := {
-		"player_position": player_pos
+		"player_position": player_pos,
+		# What the run actually brought home, so the dungeon can bank it
+		"collected_treasures": _collected_infos
 	}
 	SceneManager.go_to(scene_path, payload)

@@ -10,6 +10,11 @@
 [ext_resource type="Script" uid="uid://bl85uishid50v" path="res://entities/digging/torch/dig_torch.gd" id="8_torch"]
 [ext_resource type="Script" uid="uid://cmbpt2sjei16q" path="res://entities/digging/surface/dig_surface.gd" id="9_surf"]
 [ext_resource type="Script" uid="uid://dcenhvn8yoguc" path="res://entities/digging/exit/dig_exit.gd" id="10_exit"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="11_info"]
+[ext_resource type="Resource" uid="uid://cegd36fetqbhp" path="res://entities/treasures/small/coin.tres" id="12_coin"]
+[ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="13_goblet"]
+[ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="14_book"]
+[ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="15_sword"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(16, 11)
@@ -51,7 +56,7 @@ animations = [{
 
 [node name="DiggingMinigame" type="Node2D" unique_id=1655693609]
 script = ExtResource("1_root")
-treasure_count = 3
+fallback_treasures = Array[ExtResource("11_info")]([ExtResource("12_coin"), ExtResource("13_goblet"), ExtResource("14_book"), ExtResource("15_sword")])
 
 [node name="GameTime" type="Node2D" parent="." unique_id=1651738592]
 script = ExtResource("6_wm07t")
