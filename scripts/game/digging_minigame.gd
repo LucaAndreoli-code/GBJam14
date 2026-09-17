@@ -45,6 +45,7 @@ const SONAR_ACTION := "btn_a"
 @onready var _player: DigPlayer = $DigPlayer
 @onready var _treasures_root: Node2D = $Treasures
 @onready var _sonar_ring: SonarRing = $SonarRing
+@onready var _exit: DigExit = $ExitPoint
 
 var _rng := RandomNumberGenerator.new()
 var _buried: Array[Treasure] = []
@@ -64,6 +65,7 @@ func _ready() -> void:
 	_is_input_enabled = GameState.is_input_enabled()
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	_field.cells_carved.connect(_on_cells_carved)
+	_exit.player_returned.connect(_on_player_returned)
 	# DigField.fill() already ran: children are readied before their parent.
 	# The pocket is carved here rather than with the layout below because it owes nothing
 	# to the seed, and leaving it a frame late would let the player be shoved out of the
@@ -307,11 +309,32 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	treasure_collected.emit(_collected, treasure_count)
 	if _collected >= treasure_count:
 		all_treasures_collected.emit()
-		push_warning("All treasure collected")
 		_swap_back_to_dungeon()
 
+# The only way out of the run: the pit has no other exit. Stepping back into the start
+# pocket is final - input goes off here and DigExit disarms itself, so there is no way
+# back down into the field.
+func _on_player_returned() -> void:
+	GameState.set_input_enabled(false)
+	if _collected >= treasure_count:
+		_swap_back_to_dungeon()
+		return
+	# TODO: show the informative text ("you are leaving N treasures behind") through
+	#       GBTextBox, scenes/ui/gb_text_box.tscn, mounted in the ui_container group.
+	#       That UI lives on another branch, so the flow stops here for now: once the box
+	#       is wired, its dialogue_finished has to end on _swap_back_to_dungeon().
+	push_warning("Exit reached with %d/%d treasures" % [_collected, treasure_count])
+	_swap_back_to_dungeon()
+
 func _swap_back_to_dungeon() -> void:
-	var scene_path: String = _dungeon_payload.get("scene_path", null)
+	# GameState is an autoload and SceneManager never touches the input flag, so leaving it
+	# off here would hand the dungeon a frozen player
+	GameState.set_input_enabled(true)
+	var scene_path: String = _dungeon_payload.get("scene_path", "")
+	# Empty when the minigame is run on its own: there is no dungeon to go back to
+	if scene_path.is_empty():
+		push_warning("No dungeon to go back to: the minigame was entered without a payload")
+		return
 	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
 	var payload := {
 		"player_position": player_pos
