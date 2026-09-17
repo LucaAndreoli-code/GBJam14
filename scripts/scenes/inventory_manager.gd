@@ -5,11 +5,11 @@ const FRAME_SELECTED: Rect2i = Rect2i(24, 0, 24, 24)
 
 @onready var _grid: GridContainer = $Container/GridContainer/Grid
 @onready var _info_title: GBLabel = $Container/InfoTitleBar/TreasureTitle
-@onready var _info_label: GBLabel = $Container/Info/TreasureDesc
+@onready var _info_label: Label = $Container/Info/TreasureDesc
 
 @export var grid_size: Vector2i = Vector2i(4, 3)
 @export var cell_textures: Texture2D
-@export var treasures: Array[Treasure]
+@export var treasures: Array[TreasureInfo]
 
 var _parent_payload: Dictionary
 var _cell_selected: int = 0
@@ -23,7 +23,6 @@ var _treasures_count: Dictionary[int, int] = {
 }
 
 func _ready() -> void:
-	Palette.switch_to_palette("brown_shades")
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	if _grid:
 		_init_grid()
@@ -62,13 +61,13 @@ func _init_grid() -> void:
 		if treasure:
 			_grid.add_child(_make_grid_cell(treasure))
 
-func _get_treasure_by_order(order: int) -> Treasure:
+func _get_treasure_by_order(order: int) -> TreasureInfo:
 	var filtered := treasures.filter(func(t): return t.order == order)
 	if filtered.size() == 1:
 		return filtered[0]
 	return null
 
-func _make_grid_cell(treasure: Treasure) -> Control:
+func _make_grid_cell(treasure: TreasureInfo) -> Control:
 	var cell := TextureRect.new()
 	var cell_atlas := AtlasTexture.new()
 	cell_atlas.atlas = cell_textures
@@ -111,12 +110,16 @@ func _update_info() -> void:
 	var treasure_order := _order_by_index(_cell_selected)
 	if not _treasures_count.has(treasure_order):
 		_info_title.print_text("???")
-		_info_label.print_text("???")
+		_info_label.text = "It seems like you haven't found it yet..."
 	else:
 		var treasure := _get_treasure_by_order(treasure_order)
 		if treasure:
-			_info_title.print_text("%s (x%d)" % [treasure.name, _treasures_count[treasure_order]])
-			_info_label.print_text(treasure.description)
+			var count := _treasures_count[treasure_order]
+			if count > 1:
+				_info_title.print_text("%s (x%d)" % [treasure.name, count])
+			else:
+				_info_title.print_text("%s" % treasure.name)
+			_info_label.text = treasure.description
 
 func _order_by_index(index: int) -> int:
 	return index + 1

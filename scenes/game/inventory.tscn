@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dh0o3dqg7j560" path="res://scripts/scenes/inventory_manager.gd" id="1_yq6yy"]
 [ext_resource type="Texture2D" uid="uid://h60ewbsi3dtf" path="res://assets/sprites/sheets/inventory_cell_sheet.png" id="2_tw7bo"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_nq4mu"]
-[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="3_sdb1p"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="3_sdb1p"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_tw7bo"]
 [ext_resource type="Resource" uid="uid://cegd36fetqbhp" path="res://entities/treasures/small/coin.tres" id="4_w2gpr"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_tw7bo"]
@@ -18,13 +18,23 @@
 [ext_resource type="Resource" uid="uid://bija40k4ua1ac" path="res://entities/treasures/large/reliquary.tres" id="13_mdkkr"]
 [ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="14_jyvce"]
 [ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="15_5ybx7"]
+[ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="18_jyvce"]
 [ext_resource type="Texture2D" uid="uid://ddahhwo82734k" path="res://assets/sprites/ui/inventory_info_title_bar.png" id="18_mdkkr"]
+[ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="19_5ybx7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdkkr"]
+atlas = ExtResource("18_jyvce")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ybx7"]
+atlas = ExtResource("18_jyvce")
+region = Rect2(16, 0, 8, 8)
 
 [node name="Inventory" type="Node2D" unique_id=1238025634]
 script = ExtResource("1_yq6yy")
 grid_size = Vector2i(6, 2)
 cell_textures = ExtResource("2_tw7bo")
-treasures = Array[ExtResource("3_sdb1p")]([ExtResource("4_w2gpr"), ExtResource("5_w2gpr"), ExtResource("6_h80qc"), ExtResource("7_5ph2v"), ExtResource("8_t3p57"), ExtResource("9_00iqq"), ExtResource("10_y4cs5"), ExtResource("11_m5lgi"), ExtResource("12_64dcj"), ExtResource("13_mdkkr"), ExtResource("14_jyvce"), ExtResource("15_5ybx7")])
+treasures = Array[ExtResource("3_sdb1p")]([ExtResource("4_w2gpr"), ExtResource("5_w2gpr"), ExtResource("6_h80qc"), ExtResource("7_5ph2v"), ExtResource("8_t3p57"), ExtResource("9_00iqq"), ExtResource("10_y4cs5"), ExtResource("11_m5lgi"), ExtResource("15_5ybx7"), ExtResource("12_64dcj"), ExtResource("13_mdkkr"), ExtResource("14_jyvce")])
 
 [node name="Container" type="Control" parent="." unique_id=261638991]
 layout_mode = 3
@@ -34,43 +44,81 @@ offset_bottom = 144.0
 
 [node name="Label" type="Label" parent="Container" unique_id=580621407]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 74.0
-offset_bottom = 10.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 76.0
+offset_bottom = 12.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("3_nq4mu")
 theme_override_font_sizes/font_size = 8
 text = "Inventory"
-vertical_alignment = 1
 script = ExtResource("3_tw7bo")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="GridContainer" type="PanelContainer" parent="Container" unique_id=669261983]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 16.0
-offset_right = 158.0
-offset_bottom = 78.0
+offset_left = 3.0
+offset_top = 18.0
+offset_right = 157.0
+offset_bottom = 68.0
 
 [node name="Grid" type="GridContainer" parent="Container/GridContainer" unique_id=1054726173]
 layout_mode = 2
 theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = 2
 
+[node name="DpadHint" type="HBoxContainer" parent="Container" unique_id=427520531]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 76.0
+offset_right = 44.0
+offset_bottom = 84.0
+
+[node name="Icon" type="TextureRect" parent="Container/DpadHint" unique_id=1779851929]
+layout_mode = 2
+texture = SubResource("AtlasTexture_mdkkr")
+
+[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=867964007]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("19_5ybx7")
+theme_override_font_sizes/font_size = 8
+text = "Navigate"
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
+
+[node name="BHint" type="HBoxContainer" parent="Container" unique_id=1613933850]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 4.0
+offset_right = 156.0
+offset_bottom = 12.0
+
+[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1934578773]
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_5ybx7")
+
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=1222659046]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("19_5ybx7")
+theme_override_font_sizes/font_size = 8
+text = "Go back"
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
+
 [node name="InfoTitleBar" type="TextureRect" parent="Container" unique_id=1517074296]
 layout_mode = 0
 offset_left = 60.0
-offset_top = 80.0
+offset_top = 72.0
 offset_right = 160.0
-offset_bottom = 96.0
+offset_bottom = 88.0
 texture = ExtResource("18_mdkkr")
 
 [node name="TreasureTitle" type="Label" parent="Container/InfoTitleBar" unique_id=1231100977]
 layout_mode = 0
-offset_left = 20.0
+offset_left = 17.0
 offset_top = 3.0
-offset_right = 99.0
+offset_right = 96.0
 offset_bottom = 14.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -82,7 +130,7 @@ metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="Info" type="Control" parent="Container" unique_id=1231511940]
 anchors_preset = 0
-offset_top = 96.0
+offset_top = 88.0
 offset_right = 160.0
 offset_bottom = 144.0
 
@@ -95,17 +143,15 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.33333334, 0.33333334, 0.33333334, 1)
 
-[node name="TreasureDesc" type="Label" parent="Container/Info" unique_id=627400532]
-custom_maximum_size = Vector2(156, 44)
+[node name="TreasureDesc" type="Label" parent="Container/Info" unique_id=1229144955]
+custom_maximum_size = Vector2(152, 48)
 layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 158.0
-offset_bottom = 30.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 156.0
+offset_bottom = 52.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("5_tw7bo")
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 2
-script = ExtResource("3_tw7bo")
-metadata/_custom_type_script = "uid://cidt6x11067q0"

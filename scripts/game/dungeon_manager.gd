@@ -3,7 +3,7 @@ extends Node2D
 
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
 const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
-const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause_menu.tscn"
+const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
@@ -15,6 +15,7 @@ const PAUSE_MENU_SCENE_PATH: String = "res://scenes/game/pause_menu.tscn"
 var _hud_container: Control
 var _torch: TorchTimer
 
+var _pause_menu: Node
 var _minimap_hud: MinimapHUD
 var _torch_hud: TorchHUD
 
@@ -90,6 +91,9 @@ func _setup_torch() -> void:
 
 func _init_hud() -> void:
 	if _hud_container:
+		_pause_menu = PAUSE_MENU_SCENE.instantiate()
+		_pause_menu.visible = false
+		_hud_container.add_child(_pause_menu)
 		_hud_container.add_child(_torch_hud)
 		_hud_container.add_child(_minimap_hud)
 
@@ -110,10 +114,6 @@ func _open_map() -> void:
 	SceneManager.go_to(MAP_SCENE_PATH, payload)
 
 func _open_pause_menu() -> void:
-	SignalBus.visibility_shader_toggled.emit(false)
-	_minimap_hud.set_disabled(true)
-	var payload := {
-		"scene_path": scene_file_path,
-		"player_position": _player.global_position
-	}
-	SceneManager.go_to(PAUSE_MENU_SCENE_PATH, payload)
+	if _pause_menu:
+		GameState.set_paused(true)
+		_pause_menu.visible = true

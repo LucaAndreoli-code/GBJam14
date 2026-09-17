@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="Treasure" format=3 uid="uid://cegd36fetqbhp"]
+[gd_resource type="Resource" script_class="TreasureInfo" format=3 uid="uid://cegd36fetqbhp"]
 
 [ext_resource type="Texture2D" uid="uid://d2bdla1ipyd6n" path="res://assets/sprites/sheets/treasures_sheet.png" id="1_n0xl4"]
-[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure.gd" id="1_rpep5"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="1_rpep5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0xl4"]
 atlas = ExtResource("1_n0xl4")

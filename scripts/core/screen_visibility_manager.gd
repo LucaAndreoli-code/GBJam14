@@ -14,6 +14,8 @@ func _ready() -> void:
 	SignalBus.visibility_shader_toggled.connect(_on_visibility_shader_toggled)
 
 func _process(_delta: float) -> void:
+	if GameState.is_paused():
+		return
 	var light_sources := get_tree().get_nodes_in_group(Groups.LIGHT_SOURCES)
 	var lights: Array[Vector3] = []
 	for source in light_sources:

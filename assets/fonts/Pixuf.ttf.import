@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://nd0vat8y77dn"
-path="res://.godot/imported/supersoft.ttf-3dfe1ac7e22d1dad00cb384f30eec18b.fontdata"
+uid="uid://bw6ncqin2gkpv"
+path="res://.godot/imported/Pixuf.ttf-a788d14ca8995fe77106418ced145d04.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/supersoft.ttf"
-dest_files=["res://.godot/imported/supersoft.ttf-3dfe1ac7e22d1dad00cb384f30eec18b.fontdata"]
+source_file="res://assets/fonts/Pixuf.ttf"
+dest_files=["res://.godot/imported/Pixuf.ttf-a788d14ca8995fe77106418ced145d04.fontdata"]
 
 [params]
 
@@ -34,8 +34,7 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "Nuova configurazione",
-"size": Vector2i(16, 0),
-&"variation_embolden": 0.0
+"size": Vector2i(16, 0)
 }]
 language_support={}
 script_support={}

@@ -1,4 +1,4 @@
-class_name Treasure
+class_name TreasureInfo
 extends Resource
 
 @export var order: int
