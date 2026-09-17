@@ -14,6 +14,7 @@ region = Rect2(96, 0, 16, 16)
 [resource]
 script = ExtResource("2_vtqsy")
 order = 9
+kind = 2
 name = "Sword"
 description = "A sword with what appears to be an ornate grip. The weapon looks to be more ornamental than practical."
 minigame_texture = SubResource("AtlasTexture_12i8h")

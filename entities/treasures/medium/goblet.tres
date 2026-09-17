@@ -14,6 +14,7 @@ region = Rect2(16, 0, 8, 16)
 [resource]
 script = ExtResource("2_grakj")
 order = 5
+kind = 1
 name = "Goblet"
 description = "A magical goblet that supposedly never ran out of wine. It has long since run dry."
 minigame_texture = SubResource("AtlasTexture_12i8h")

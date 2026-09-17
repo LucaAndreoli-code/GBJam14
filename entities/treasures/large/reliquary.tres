@@ -14,6 +14,7 @@ region = Rect2(64, 0, 16, 16)
 [resource]
 script = ExtResource("2_jj51j")
 order = 11
+kind = 2
 name = "Reliquary"
 description = "A container with beautiful carvings and a jammed lock. What secrets it holds appears to be trapped inside."
 minigame_texture = SubResource("AtlasTexture_12i8h")

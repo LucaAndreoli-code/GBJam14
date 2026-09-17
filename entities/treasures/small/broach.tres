@@ -14,6 +14,7 @@ region = Rect2(8, 0, 8, 8)
 [resource]
 script = ExtResource("1_fsw7c")
 order = 2
+kind = 0
 name = "Broach"
 description = "An ornament in the shape of a butterfly. Its wings shine despite being long lost."
 minigame_texture = SubResource("AtlasTexture_12i8h")
