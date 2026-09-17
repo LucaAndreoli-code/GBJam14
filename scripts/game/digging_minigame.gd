@@ -37,6 +37,8 @@ const SONAR_ACTION := "btn_a"
 @export var sonar_cooldown: float = 4.0
 ## How long a treasure keeps blinking once the wave reaches it, in seconds
 @export var sonar_flash_time: float = 1.5
+## Torch seconds used only when the minigame is entered without coming from the dungeon
+@export var torch_duration_seconds: int = 120
 
 @onready var _game_time: GameTime = $GameTime
 @onready var _field: DigField = $DigField
@@ -69,6 +71,13 @@ func _ready() -> void:
 	_open_start_pocket()
 	# One place to balance the reach: the ring only needs it to pace its sweep
 	_sonar_ring.radius = sonar_radius
+	# The dungeon's TorchTimer died with the dungeon scene, so the countdown needs its own
+	# owner here or it would freeze for the whole minigame. It resumes from GameState.
+	_setup_torch()
+	_torch = TorchTimer.new()
+	# The darkness here lives on the Surface sprite alone, see dig_surface.gd: the full screen
+	# pass would swallow the dig field too, and that has to stay readable.
+	SignalBus.visibility_shader_toggled.emit(false)
 	_mount_hud()
 	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
@@ -89,6 +98,16 @@ func _start_run() -> void:
 	_reserve_start_pocket()
 	_spawn_treasures()
 	
+# Seeds GameState when the scene is run on its own, so the light ratio has a duration to
+# divide by. Mirrors DungeonManager._setup_torch(): whoever gets there first wins.
+func _setup_torch() -> void:
+	var game_torch := GameState.get_torch()
+	if game_torch.duration == 0:
+		var torch_data := TorchTimer.Data.new()
+		torch_data.duration = torch_duration_seconds
+		torch_data.countdown = torch_duration_seconds
+		GameState.set_torch(torch_data)
+
 # The strip lives in main.tscn, outside this scene, so it is found by group rather
 # than by path. Running the minigame on its own leaves the group empty, which is why
 # every later call has to tolerate a null HUD.
