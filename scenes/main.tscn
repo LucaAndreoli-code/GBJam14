@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/LevelTheme_NoTail.mp3" id="3_o6xl0"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_tipki"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="4_85g3d"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="5_choun"]
 [ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_tefeu"]
 
@@ -35,6 +36,7 @@ script = ExtResource("1_tbgi4")
 initial_scene = ExtResource("2_tefeu")
 title_font = ExtResource("3_tipki")
 text_font = ExtResource("4_85g3d")
+little_font = ExtResource("5_choun")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1

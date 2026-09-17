@@ -14,10 +14,12 @@ const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn
 
 var _hud_container: Control
 var _torch: TorchTimer
+var _minimap: Minimap
 
 var _pause_menu: Node
-var _minimap_hud: MinimapHUD
 var _torch_hud: TorchHUD
+var _keys_hud: KeysHUD
+var _points_hud: PointsHUD
 
 var _is_gameover_mode: bool = false
 var _gameover_timer: int = 0
@@ -26,9 +28,13 @@ var _is_input_enabled: bool = true
 func _ready() -> void:
 	Palette.switch_to_palette("main")
 	_setup_torch()
+	_player.set_dungeon_tilemap(_level_tilemap)
+	_minimap = Minimap.new(_level_tilemap, _player)
+	add_child(_minimap)
 	_hud_container = get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
-	_minimap_hud = MinimapHUD.new(_level_tilemap, _player)
 	_torch_hud = TorchHUD.new()
+	_keys_hud = KeysHUD.new()
+	_points_hud = PointsHUD.new()
 	_torch = TorchTimer.new()
 	_torch.torch_ended.connect(_on_torch_ended)
 	SignalBus.game_second_tick.connect(_on_game_second_tick)
@@ -45,22 +51,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		_open_pause_menu()
 
 func _exit_tree() -> void:
-	if is_instance_valid(_minimap_hud):
-		_minimap_hud.queue_free()
+	if is_instance_valid(_pause_menu):
+		_pause_menu.queue_free()
 	if is_instance_valid(_torch_hud):
 		_torch_hud.queue_free()
+	if is_instance_valid(_keys_hud):
+		_keys_hud.queue_free()
+	if is_instance_valid(_points_hud):
+		_points_hud.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
 	SceneManager.get_main_scene().toggle_bottom_bar(true)
-	_minimap_hud.set_disabled(false)
 	SignalBus.visibility_shader_toggled.emit(true)
 
 func start_digging_minigame() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
-	_minimap_hud.set_disabled(true)
 	var payload := {
 		"scene_path": scene_file_path,
 		"player_position": _player.global_position
@@ -95,7 +103,8 @@ func _init_hud() -> void:
 		_pause_menu.visible = false
 		_hud_container.add_child(_pause_menu)
 		_hud_container.add_child(_torch_hud)
-		_hud_container.add_child(_minimap_hud)
+		_hud_container.add_child(_keys_hud)
+		_hud_container.add_child(_points_hud)
 
 func _tick_gameover_timer() -> void:
 	if not _is_gameover_mode:
@@ -106,7 +115,6 @@ func _tick_gameover_timer() -> void:
 
 func _open_map() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
-	_minimap_hud.set_disabled(true)
 	var payload := {
 		"scene_path": scene_file_path,
 		"player_position": _player.global_position

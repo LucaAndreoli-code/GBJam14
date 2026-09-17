@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://d3rkgvya1ilj3"]
+
+[ext_resource type="Script" uid="uid://ct1sqjkw0rbj0" path="res://entities/dungeon/key/key_interactable.gd" id="1_h4oho"]
+[ext_resource type="Texture2D" uid="uid://ca07i2q4p4k0r" path="res://assets/sprites/dungeon_key.png" id="2_h4oho"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o5mq"]
+size = Vector2(10, 6)
+
+[node name="KeyInteractable" type="Area2D" unique_id=2015663561 groups=["level_keys"]]
+script = ExtResource("1_h4oho")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2100582308]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_6o5mq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=219659549]
+texture = ExtResource("2_h4oho")

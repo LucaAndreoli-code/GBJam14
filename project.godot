@@ -40,6 +40,7 @@ light_sources="A light source which is considered by the visibility shader"
 ui_container="The main UI container"
 hud_container="The main HUD container"
 level_torches="An interactable torch in the dungeon level"
+level_keys="An interactable key in the dungeon level"
 
 [input]
 

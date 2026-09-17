@@ -16,7 +16,6 @@ var _map_data: MinimapUtils.Data = MinimapUtils.Data.new()
 var _radius := Vector2i(999, 999)
 
 func _ready() -> void:
-	Palette.switch_to_palette("gray_shades")
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	_map_container = Control.new()
 	_map_container.name = "MapHUD"

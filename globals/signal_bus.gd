@@ -27,4 +27,7 @@ signal torch_tick(remaining: int, light_value: float)
 ## Fired when a torch refill is requested.
 signal torch_refill(source: Node2D)
 
+## Fired when the keys' counter changes
+signal keys_changed(amount: int)
+
 @warning_ignore_restore("unused_signal")

@@ -4,6 +4,8 @@ extends CharacterBody2D
 enum Axis { NONE, X, Y }
 
 const CORNER_CORRECTION := 8.0
+const DOOR_PROBE_DISTANCE := 16.0
+const DOOR_OPEN_TILESET_SOURCE_ID: int = 1
 
 @export var movement_speed: float = 30.0
 @export var torch_light_radius: float = 40.0
@@ -13,18 +15,26 @@ const CORNER_CORRECTION := 8.0
 @onready var _player_light: Sprite2D = $InnerLightSprite
 @onready var _interact_area: Area2D = $InteractArea
 
+var _dungeon: TileMapLayer
+var _interact_hud: InteractHUD
 var _torch_light_value: float = 1.0
 var _subpixel_accumulator: Vector2 = Vector2.ZERO
 var _last_axis: Axis = Axis.NONE
+var _facing: Vector2i = Vector2i.DOWN
 var _can_move: bool = true
 var _is_input_enabled: bool = true
 
 func _ready() -> void:
+	var hud_container := get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
+	if hud_container:
+		_interact_hud = InteractHUD.new(self)
+		hud_container.add_child(_interact_hud)
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	SignalBus.torch_tick.connect(_on_torch_tick)
 
 func _process(_delta: float) -> void:
 	_scale_player_light()
+	_toggle_interact_hud()
 
 func _physics_process(delta: float) -> void:
 	if not _can_move:
@@ -32,6 +42,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	var input := _get_directional_input()
+	if input != Vector2.ZERO:
+		_facing = Vector2i(input)
 	var steps_to_move := Vector2.ZERO
 	if input == Vector2.ZERO:
 		velocity = Vector2.ZERO
@@ -56,18 +68,36 @@ func _input(event: InputEvent) -> void:
 		_last_axis = Axis.Y
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _is_input_enabled:
+	if not _is_input_enabled or not event.is_action_pressed("btn_a"):
 		return
-	if event.is_action_pressed("btn_a"):
-		var o := _get_closest_interactable_object()
-		if o != null:
-			o.interact(self)
+	var o := _get_closest_interactable_object()
+	if o != null:
+		o.interact(self)
+		return
+	var keys := GameState.get_keys()
+	if keys <= 0:
+		return
+	var door = _get_facing_key_door()
+	if door != null:
+		_open_door(door)
+		GameState.set_keys(keys - 1)
+
+func _exit_tree() -> void:
+	if is_instance_valid(_interact_hud):
+		_interact_hud.queue_free()
 
 func get_light_radius() -> float:
 	return torch_light_radius * clamp(_torch_light_value, torch_light_min_value, 1.0)
 
+func set_dungeon_tilemap(tilemap: TileMapLayer) -> void:
+	_dungeon = tilemap
+
 func pick_torch() -> void:
 	SignalBus.torch_refill.emit(self)
+
+func add_key() -> void:
+	var amount := GameState.get_keys()
+	GameState.set_keys(amount + 1)
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
@@ -125,3 +155,33 @@ func _get_closest_interactable_object() -> DungeonInteractable:
 			best_d = d
 			best = a
 	return best
+
+func _toggle_interact_hud() -> void:
+	if _interact_hud:
+		var can_open_door := GameState.get_keys() > 0 and _get_facing_key_door() != null
+		_interact_hud.toggle(_get_closest_interactable_object() != null or can_open_door)
+
+func _get_facing_key_door() -> Variant:
+	if _dungeon == null:
+		return null
+	var probe := global_position + Vector2(_facing) * DOOR_PROBE_DISTANCE
+	var cell := _dungeon.local_to_map(_dungeon.to_local(probe))
+	var data := _dungeon.get_cell_tile_data(cell)
+	if data == null or not data.get_custom_data("locked_door"):
+		return null
+	return cell
+
+func _open_door(door: Vector2i) -> void:
+	var source_id := _dungeon.get_cell_source_id(door)
+	var data := _dungeon.get_cell_tile_data(door)
+	_dungeon.set_cell(door, source_id, data.get_custom_data("opened_tile"))
+	var cell := door + _facing
+	while true:
+		data = _dungeon.get_cell_tile_data(cell)
+		if data == null:
+			return
+		if data.get_custom_data("locked_door"):
+			source_id = _dungeon.get_cell_source_id(cell)
+			_dungeon.set_cell(cell, source_id, data.get_custom_data("opened_tile"))
+			return
+		cell += _facing

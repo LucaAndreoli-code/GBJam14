@@ -2,7 +2,7 @@ class_name  TorchHUD
 extends Control
 
 const TORCH_SHEET: Texture2D = preload("res://assets/sprites/ui/torch_timer_icon.png")
-const SIZE: Vector2 = Vector2(48.0, 16.0)
+const SIZE: Vector2 = Vector2(40.0, 16.0)
 const POSITION: Vector2 = Vector2(0.0, 128.0)
 
 var _container: HBoxContainer
@@ -38,7 +38,7 @@ func _make_label() -> void:
 	_label = Label.new()
 	_label.add_theme_font_override("font", GameState.get_title_font())
 	_label.add_theme_font_size_override("font_size", 8)
-	_label.add_theme_color_override("font_color", Color.BLACK)
+	_label.add_theme_color_override("font_color", Palette.darkest)
 	_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_update_label_text(-1)
 

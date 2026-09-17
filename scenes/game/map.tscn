@@ -14,16 +14,15 @@ anchors_preset = 0
 offset_right = 160.0
 offset_bottom = 144.0
 
-[node name="Label" type="Label" parent="Container" unique_id=838601897]
+[node name="Label" type="Label" parent="Container" unique_id=1087774147]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 74.0
-offset_bottom = 10.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 76.0
+offset_bottom = 12.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("1_fodlk")
 theme_override_font_sizes/font_size = 8
-text = "Dungeon map"
-vertical_alignment = 1
+text = "Map"
 script = ExtResource("2_043wi")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
