@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://cdoxxgaa800wb" path="res://assets/sprites/sheets/torch_minigame_sheet.png" id="7_rgiah"]
 [ext_resource type="Script" uid="uid://bl85uishid50v" path="res://entities/digging/torch/dig_torch.gd" id="8_torch"]
 [ext_resource type="Script" uid="uid://cmbpt2sjei16q" path="res://entities/digging/surface/dig_surface.gd" id="9_surf"]
+[ext_resource type="Script" uid="uid://dcenhvn8yoguc" path="res://entities/digging/exit/dig_exit.gd" id="10_exit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(16, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(160, 30)
@@ -67,6 +71,16 @@ outer_radius_ratio = 1.3
 [node name="DigPlayer" parent="." unique_id=710786053 node_paths=PackedStringArray("field") instance=ExtResource("5_player")]
 position = Vector2(80, 24)
 field = NodePath("../DigField")
+
+[node name="ExitPoint" type="Area2D" parent="." unique_id=70303207]
+position = Vector2(80, 24)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("10_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitPoint" unique_id=919313419]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_exit")
 
 [node name="SonarRing" parent="." unique_id=1180182209 instance=ExtResource("6_sonar")]
 
