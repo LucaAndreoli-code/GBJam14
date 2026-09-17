@@ -1,17 +1,47 @@
 [gd_scene format=3 uid="uid://diblsjuea0qel"]
 
 [ext_resource type="Script" uid="uid://dtnvm6oopdqxh" path="res://scripts/game/digging_minigame.gd" id="1_root"]
-[ext_resource type="Texture2D" uid="uid://dnmdjapkdgekl" path="res://assets/tilesets/demo/dig_dug_entrance.png" id="2_surface"]
 [ext_resource type="PackedScene" path="res://entities/digging/field/dig_field.tscn" id="3_field"]
+[ext_resource type="Texture2D" uid="uid://dakerscrtlfnc" path="res://assets/sprites/digging_wall.png" id="3_wm07t"]
 [ext_resource type="PackedScene" uid="uid://csyn3wdu62lvu" path="res://entities/digging/player/dig_player.tscn" id="5_player"]
 [ext_resource type="PackedScene" uid="uid://pwssx6o3ihgr" path="res://entities/digging/sonar/sonar_ring.tscn" id="6_sonar"]
 [ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="6_wm07t"]
+[ext_resource type="Texture2D" uid="uid://cdoxxgaa800wb" path="res://assets/sprites/sheets/torch_minigame_sheet.png" id="7_rgiah"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4h42e"]
 size = Vector2(160, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_right"]
 size = Vector2(136, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0a2q"]
+atlas = ExtResource("7_rgiah")
+region = Rect2(0, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgbdm"]
+atlas = ExtResource("7_rgiah")
+region = Rect2(8, 0, 8, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ib5tw"]
+atlas = ExtResource("7_rgiah")
+region = Rect2(16, 0, 8, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4h42e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0a2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgbdm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ib5tw")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="DiggingMinigame" type="Node2D" unique_id=1655693609]
 script = ExtResource("1_root")
@@ -23,46 +53,49 @@ metadata/_custom_type_script = "uid://gv83vdj3ao7v"
 
 [node name="Surface" type="Sprite2D" parent="." unique_id=30023449]
 position = Vector2(80, 16)
-texture = ExtResource("2_surface")
+texture = ExtResource("3_wm07t")
 
 [node name="DigField" parent="." unique_id=1462086664 instance=ExtResource("3_field")]
 
 [node name="Treasures" type="Node2D" parent="." unique_id=1480143177]
 
 [node name="DigPlayer" parent="." unique_id=710786053 node_paths=PackedStringArray("field") instance=ExtResource("5_player")]
-position = Vector2(72, 24)
+position = Vector2(80, 24)
 field = NodePath("../DigField")
 
 [node name="SonarRing" parent="." unique_id=1180182209 instance=ExtResource("6_sonar")]
 
-[node name="Bounding" type="StaticBody2D" parent="." unique_id=1949647877]
-visible = false
+[node name="BoundingBoxes" type="Node2D" parent="." unique_id=518586226]
+
+[node name="Bounding" type="StaticBody2D" parent="BoundingBoxes" unique_id=1949647877]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding" unique_id=273781272]
-position = Vector2(-16, 16)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundingBoxes/Bounding" unique_id=273781272]
+position = Vector2(-8, 16)
 shape = SubResource("RectangleShape2D_4h42e")
 
-[node name="Bounding2" type="StaticBody2D" parent="." unique_id=751340506]
-visible = false
+[node name="Bounding2" type="StaticBody2D" parent="BoundingBoxes" unique_id=751340506]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding2" unique_id=1728546571]
-position = Vector2(148, 17)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundingBoxes/Bounding2" unique_id=1728546571]
+position = Vector2(156, 16)
 shape = SubResource("RectangleShape2D_right")
 
-[node name="Bounding3" type="StaticBody2D" parent="." unique_id=1364408459]
-visible = false
+[node name="Bounding3" type="StaticBody2D" parent="BoundingBoxes" unique_id=1364408459]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding3" unique_id=85849230]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundingBoxes/Bounding3" unique_id=85849230]
 position = Vector2(72, 1)
 shape = SubResource("RectangleShape2D_4h42e")
 
-[node name="Bounding4" type="StaticBody2D" parent="." unique_id=1076719433]
-visible = false
+[node name="Bounding4" type="StaticBody2D" parent="BoundingBoxes" unique_id=1076719433]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounding4" unique_id=1102299832]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundingBoxes/Bounding4" unique_id=1102299832]
 position = Vector2(80, 142)
 shape = SubResource("RectangleShape2D_4h42e")
+
+[node name="Torch" type="AnimatedSprite2D" parent="." unique_id=924777929]
+position = Vector2(68, 20)
+sprite_frames = SubResource("SpriteFrames_4h42e")
+autoplay = "default"
