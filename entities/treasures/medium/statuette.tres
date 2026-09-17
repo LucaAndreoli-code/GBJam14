@@ -14,6 +14,7 @@ region = Rect2(40, 0, 8, 16)
 [resource]
 script = ExtResource("2_t2yun")
 order = 8
+kind = 1
 name = "Statuette"
 description = "A marble statue that appears untouched by dirt. Despite its good quality, you cannot identify who it depicts."
 minigame_texture = SubResource("AtlasTexture_12i8h")

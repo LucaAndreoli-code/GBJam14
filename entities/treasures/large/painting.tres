@@ -14,6 +14,7 @@ region = Rect2(80, 0, 16, 16)
 [resource]
 script = ExtResource("2_nirhy")
 order = 12
+kind = 2
 name = "Painting"
 description = "A painting depicting a regal looking man, woman and child. Despite the passage of time, you can still feel the love they had for each other."
 minigame_texture = SubResource("AtlasTexture_12i8h")

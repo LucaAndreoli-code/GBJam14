@@ -14,6 +14,7 @@ region = Rect2(48, 0, 16, 16)
 [resource]
 script = ExtResource("2_8hych")
 order = 10
+kind = 2
 name = "Mirror"
 description = "A fancy looking standing mirror with lots of embellishments. Upon closer inspection, the mirror appears to be made of silver."
 minigame_texture = SubResource("AtlasTexture_12i8h")

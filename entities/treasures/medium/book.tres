@@ -14,6 +14,7 @@ region = Rect2(24, 0, 8, 16)
 [resource]
 script = ExtResource("2_1qs6t")
 order = 6
+kind = 1
 name = "Book"
 description = "A plain looking book with an apple green cover. Touching the cover causes the skin to itch."
 minigame_texture = SubResource("AtlasTexture_12i8h")
