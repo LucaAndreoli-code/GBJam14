@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://c570dwsjpd21v"]
+
+[ext_resource type="Script" uid="uid://cfp3q6grp4b2s" path="res://scripts/ui/minimap_cell.gd" id="1_l1yqy"]
+
+[node name="MinimapCell" type="Control" unique_id=808945898]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 6.0
+offset_bottom = 6.0
+script = ExtResource("1_l1yqy")
+
+[node name="Room" type="ColorRect" parent="." unique_id=1826825815]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="OpenRight" type="ColorRect" parent="." unique_id=612898698]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 6.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="OpenDown" type="ColorRect" parent="." unique_id=956456628]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 4.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="DoorRight" type="ColorRect" parent="." unique_id=621320263]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 6.0
+offset_bottom = 3.0
+mouse_filter = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="DoorDown" type="ColorRect" parent="." unique_id=2139777716]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 3.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="Torch" type="ColorRect" parent="." unique_id=562494088]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 3.0
+mouse_filter = 2
+color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+
+[node name="Player" type="ColorRect" parent="." unique_id=385076529]
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 3.0
+mouse_filter = 2

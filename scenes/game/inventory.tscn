@@ -22,13 +22,13 @@
 [ext_resource type="Texture2D" uid="uid://ddahhwo82734k" path="res://assets/sprites/ui/inventory_info_title_bar.png" id="18_mdkkr"]
 [ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="19_5ybx7"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mdkkr"]
-atlas = ExtResource("18_jyvce")
-region = Rect2(0, 0, 8, 8)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_5ybx7"]
 atlas = ExtResource("18_jyvce")
 region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdkkr"]
+atlas = ExtResource("18_jyvce")
+region = Rect2(0, 0, 8, 8)
 
 [node name="Inventory" type="Node2D" unique_id=1238025634]
 script = ExtResource("1_yq6yy")
@@ -52,6 +52,26 @@ theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("3_nq4mu")
 theme_override_font_sizes/font_size = 8
 text = "Inventory"
+script = ExtResource("3_tw7bo")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
+
+[node name="BHint" type="HBoxContainer" parent="Container" unique_id=1613933850]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 4.0
+offset_right = 156.0
+offset_bottom = 12.0
+
+[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1934578773]
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_5ybx7")
+
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=1222659046]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("19_5ybx7")
+theme_override_font_sizes/font_size = 8
+text = "Go back"
 script = ExtResource("3_tw7bo")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
 
@@ -83,26 +103,6 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("19_5ybx7")
 theme_override_font_sizes/font_size = 8
 text = "Navigate"
-script = ExtResource("3_tw7bo")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
-
-[node name="BHint" type="HBoxContainer" parent="Container" unique_id=1613933850]
-layout_mode = 0
-offset_left = 118.0
-offset_top = 4.0
-offset_right = 156.0
-offset_bottom = 12.0
-
-[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1934578773]
-custom_maximum_size = Vector2(8, 8)
-layout_mode = 2
-texture = SubResource("AtlasTexture_5ybx7")
-
-[node name="Hint" type="Label" parent="Container/BHint" unique_id=1222659046]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("19_5ybx7")
-theme_override_font_sizes/font_size = 8
-text = "Go back"
 script = ExtResource("3_tw7bo")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
 
