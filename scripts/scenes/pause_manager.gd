@@ -1,13 +1,23 @@
 extends Node2D
 
-#func _ready() -> void:
-	#SceneManager.get_main_scene().toggle_bottom_bar(false)
+## Owns the whole pause toggle: a scene gets pause simply by mounting this menu, and a scene that
+## does not mount it - the map, the inventory - stays unpausable. The menu needs no process_mode of
+## its own: GameState freezes the game scene alone, see SceneManager._apply_pause().
+
+func _ready() -> void:
+	visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("btn_b"):
-		_exit()
-		return
+	if visible:
+		if event.is_action_pressed("btn_b"):
+			_close()
+	elif event.is_action_pressed("btn_start"):
+		_open()
 
-func _exit() -> void:
+func _open() -> void:
+	GameState.set_paused(true)
+	visible = true
+
+func _close() -> void:
 	GameState.set_paused(false)
 	visible = false

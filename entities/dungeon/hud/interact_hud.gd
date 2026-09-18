@@ -21,6 +21,9 @@ func _ready() -> void:
 	_build_ui()
 
 func _process(delta: float) -> void:
+	# Lives outside the game scene, so the pause has to be read rather than inherited
+	if GameState.is_paused():
+		return
 	var screen_pos := _player.get_global_transform_with_canvas().origin
 	var new_pos := (screen_pos - OFFSET).round()
 	if global_position != new_pos:

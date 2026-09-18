@@ -1,41 +1,40 @@
 class_name DigHUD
 extends Control
 
-## Status strip of the digging minigame: one pip per treasure to find, plus the scanner
-## icon, which drains when the sonar fires and colors back in from the bottom as it
-## recharges.
+## Status strip of the digging minigame: the treasure counter up in the top right corner,
+## plus the scanner icon, which drains when the sonar fires and colors back in from the
+## bottom as it recharges.
 ## Built with .new() and reparented into the hud_container group by the level, the same
 ## way DungeonManager mounts the minimap. It therefore lives outside GameWorld, so the
 ## visibility shader never touches it, and it draws over BottomRect because the HUD node
 ## comes after it in main.tscn.
 
-## The whole screen: the icon sits on the surface band up top, the pips on the bottom strip.
+## The whole screen: both widgets sit on the surface band up top.
 const SIZE: Vector2 = Vector2(160.0, 144.0)
 const POSITION: Vector2 = Vector2.ZERO
 
-## Top-left corner of the pip row, on the bottom strip. The right half of that strip is
-## where the dungeon keeps its minimap, so the two modes can share main.tscn.
-const PIP_ORIGIN: Vector2 = Vector2(3.0, 134.0)
-## One pip per treasure, plus the gap that follows it
-const PIP_SIZE: Vector2 = Vector2(5.0, 5.0)
-const PIP_GAP: float = 2.0
-
 ## On the surface band, which the entrance art paints in the darkest shade: the icon
 ## reads against it without a backing plate.
-const ICON_POSITION: Vector2 = Vector2(1.0, 0.0)
+const ICON_POSITION: Vector2 = Vector2(4.0, 4.0)
 const ICON_TEXTURE: Texture2D = preload("res://assets/sprites/demo/scanner.png")
 const CHARGE_SHADER: Shader = preload("res://shaders/hud_charge.gdshader")
 
-## Source shades, not display colors: the palette shader indexes on the red channel.
-## BottomRect is left at its default white, which resolves to the lightest shade, so the
-## strip has to be drawn in the two dark ones to read against it.
-const COLOR_ON: Color = Palette.SRC_DARKEST
-const COLOR_OFF: Color = Palette.SRC_DARK
+## Top right corner: the counter is right aligned inside this box, so the text keeps its
+## edge when the collected count grows a digit.
+const COUNTER_SIZE: Vector2 = Vector2(40.0, 10.0)
+const COUNTER_POSITION: Vector2 = Vector2(SIZE.x - COUNTER_SIZE.x - 5.0, 5.0)
+const COUNTER_FONT_SIZE: int = 8
+
+## Source shade, not a display color: the palette shader indexes on the red channel. The
+## surface band the counter sits on is painted in the darkest shade, so the text takes the
+## lightest one to read against it.
+const COUNTER_COLOR: Color = Palette.SRC_LIGHTEST
 
 var _collected: int = 0
 var _target: int = 0
 var _charge: float = 1.0
 var _icon: TextureRect
+var _counter: Label
 
 func _ready() -> void:
 	name = "DigHUD"
@@ -44,9 +43,10 @@ func _ready() -> void:
 	# Keyboard and joypad only, and a full screen Control would otherwise eat the mouse
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_build_icon()
+	_build_counter()
 
 # The icon is its own node rather than a draw_texture() call: the charge shader is a
-# material, and a material on this Control would recolor the pips along with it.
+# material, and a material on this Control would recolor the counter along with it.
 func _build_icon() -> void:
 	var charge_material := ShaderMaterial.new()
 	charge_material.shader = CHARGE_SHADER
@@ -61,13 +61,31 @@ func _build_icon() -> void:
 	add_child(_icon)
 	_apply_charge()
 
+# Same recipe as TorchHUD: the font comes from GameState, which main.gd fills in before
+# any level mounts, so a Label built this late already has it.
+func _build_counter() -> void:
+	_counter = Label.new()
+	_counter.name = "TreasureCounter"
+	_counter.position = COUNTER_POSITION
+	_counter.size = COUNTER_SIZE
+	_counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_counter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_counter.add_theme_font_override("font", GameState.get_title_font())
+	_counter.add_theme_font_size_override("font_size", COUNTER_FONT_SIZE)
+	_counter.add_theme_color_override("font_color", COUNTER_COLOR)
+	add_child(_counter)
+	_update_counter_text()
+
 ## Sets how many treasures are in hand out of how many were actually buried
 func set_progress(collected: int, target: int) -> void:
 	if collected == _collected and target == _target:
 		return
 	_collected = collected
 	_target = target
-	queue_redraw()
+	_update_counter_text()
+
+func _update_counter_text() -> void:
+	_counter.text = "%d/%d" % [_collected, _target]
 
 ## 1 right after a ping, 0 once the sonar is usable again
 func set_cooldown_ratio(ratio: float) -> void:
@@ -82,11 +100,3 @@ func set_cooldown_ratio(ratio: float) -> void:
 
 func _apply_charge() -> void:
 	(_icon.material as ShaderMaterial).set_shader_parameter("charge", _charge)
-
-func _draw() -> void:
-	for i in _target:
-		var origin := PIP_ORIGIN + Vector2(i * (PIP_SIZE.x + PIP_GAP), 0.0)
-		if i < _collected:
-			draw_rect(Rect2(origin, PIP_SIZE), COLOR_ON)
-		else:
-			draw_rect(Rect2(origin, PIP_SIZE), COLOR_OFF, false, 1.0)
