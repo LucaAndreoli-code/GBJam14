@@ -20,6 +20,9 @@ var _treasures_count: Dictionary[int, int] = {
 
 func _ready() -> void:
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
+	var collected_treasures := GameState.get_collected_treasures()
+	for t in collected_treasures.keys():
+		_treasures_count[t.order] = collected_treasures[t]
 	if _grid:
 		_init_grid()
 		_refresh_grid()
