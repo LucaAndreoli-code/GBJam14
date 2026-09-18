@@ -13,6 +13,11 @@ signal sonar_pinged(cooldown: float)
 
 const TREASURE_SCENE := preload("res://entities/digging/treasure/treasure.tscn")
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
+const CONFIRM_BOX_SCENE: PackedScene = preload("res://scenes/ui/gb_text_box.tscn")
+
+# Clear of the bottom bar, which nothing switches off for the run: main.tscn keeps that
+# strip at y 128, and the box is 48px tall.
+const CONFIRM_BOX_POSITION := Vector2(0.0, 76.0)
 
 # Attempts per region before giving up on placing that treasure
 const PLACEMENT_ATTEMPTS := 24
@@ -53,9 +58,14 @@ var _sonar_left: float = 0.0
 var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
+# The sonar polls Input, which knows nothing about the confirm box having eaten a press,
+# so the btn_a that answers the exit question would ping on that same frame. The flag
+# covers exactly that frame, see _process().
+var _swallow_sonar_press: bool = false
 var _hud: DigHUD
 var _status_hud: StatusHUD
 var _pause_menu: Node
+var _confirm_box: GBTextBox
 var _started: bool = false
 var _torch: TorchTimer
 var _dungeon_payload: Dictionary
@@ -94,6 +104,8 @@ func _exit_tree() -> void:
 		_status_hud.queue_free()
 	if is_instance_valid(_pause_menu):
 		_pause_menu.queue_free()
+	if is_instance_valid(_confirm_box):
+		_confirm_box.queue_free()
 
 # Builds the layout the seed describes. Guarded because both _ready() and
 # on_scene_entered() ask for it and only the first one may run.
@@ -146,11 +158,21 @@ func _mount_hud() -> void:
 	# btn_start / btn_b toggle on its own, see pause_manager.gd.
 	_pause_menu = PAUSE_MENU_SCENE.instantiate()
 	container.add_child(_pause_menu)
+	# After the pause menu on purpose: _unhandled_input walks the tree bottom up, so the
+	# box sees btn_start first and can keep the paused screen off a live question.
+	_confirm_box = CONFIRM_BOX_SCENE.instantiate()
+	_confirm_box.position = CONFIRM_BOX_POSITION
+	container.add_child(_confirm_box)
+	_confirm_box.choice_made.connect(_on_leave_choice)
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
-	if _is_input_enabled and _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
+	var can_ping := _is_input_enabled and not _swallow_sonar_press and _sonar_left <= 0.0
+	if can_ping and Input.is_action_just_pressed(SONAR_ACTION):
 		_fire_sonar()
+	# Cleared right here rather than deferred: the message queue can flush before _process
+	# and would let the very press the flag exists for through.
+	_swallow_sonar_press = false
 	_advance_sonar_wave()
 	if _hud != null:
 		_hud.set_cooldown_ratio(get_sonar_cooldown_ratio())
@@ -335,20 +357,36 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 		all_treasures_collected.emit()
 		_swap_back_to_dungeon()
 
-# The only way out of the run: the pit has no other exit. Stepping back into the start
-# pocket is final - input goes off here and DigExit disarms itself, so there is no way
-# back down into the field.
+# The only way out of the run: the pit has no other exit. Everything dug up means leaving
+# on the spot; anything still buried gets the player asked first. Input goes off either
+# way, so nobody walks around behind the question.
 func _on_player_returned() -> void:
 	GameState.set_input_enabled(false)
 	if _collected >= get_treasure_count():
 		_swap_back_to_dungeon()
 		return
-	# TODO: show the informative text ("you are leaving N treasures behind") through
-	#       GBTextBox, scenes/ui/gb_text_box.tscn, mounted in the ui_container group.
-	#       That UI lives on another branch, so the flow stops here for now: once the box
-	#       is wired, its dialogue_finished has to end on _swap_back_to_dungeon().
-	push_warning("Exit reached with %d/%d treasures" % [_collected, get_treasure_count()])
-	_swap_back_to_dungeon()
+	# Null when the run found no HUD to mount into, see _mount_hud(): there is nothing to
+	# ask with, so the exit stays as final as it was before the question existed.
+	if _confirm_box == null:
+		push_warning("Exit reached with %d/%d treasures" % [_collected, get_treasure_count()])
+		_swap_back_to_dungeon()
+		return
+	var left := get_treasure_count() - _collected
+	var subject := "treasure" if left == 1 else "treasures"
+	_confirm_box.show_confirm(PackedStringArray([
+		"You're leaving %d %s behind. Climb out anyway?" % [left, subject]
+	]))
+
+func _on_leave_choice(accepted: bool) -> void:
+	# Either way the press that answered is spent, and gameplay is about to hear about it
+	# again through the polled Input state
+	_swallow_sonar_press = true
+	if accepted:
+		_swap_back_to_dungeon()
+		return
+	# Staying: the exit has to be walked out of and back into before it asks again
+	_exit.rearm()
+	GameState.set_input_enabled(true)
 
 func _swap_back_to_dungeon() -> void:
 	# GameState is an autoload and SceneManager never touches the input flag, so leaving it
