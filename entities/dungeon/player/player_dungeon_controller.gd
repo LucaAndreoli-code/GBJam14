@@ -13,7 +13,12 @@ const DOOR_OPEN_TILESET_SOURCE_ID: int = 1
 
 @export var movement_speed: float = 30.0
 @export var torch_light_radius: float = 40.0
-@export var player_light_max_diameter: float = 20.0
+@export var light_max_diameter: float = 20.0
+@export var light_central_radius_ratio: float = 1.15
+@export var light_outer_radius_ratio: float = 2.0
+@export var no_light_inner_radius: float = 0.0
+@export var no_light_central_radius_ratio: float = 0.0
+@export var no_light_outer_radius_ratio: float = 2.0
 @export var torch_light_min_value: float = 0.25
 
 @onready var _player_light: Sprite2D = $InnerLightSprite
@@ -23,6 +28,7 @@ const DOOR_OPEN_TILESET_SOURCE_ID: int = 1
 var _dungeon: TileMapLayer
 var _animator: PlayerDungeonAnimator
 var _interact_hud: InteractHUD
+var _torch_remaining: int = 999
 var _torch_light_value: float = 1.0
 var _subpixel_accumulator: Vector2 = Vector2.ZERO
 var _last_axis: Axis = Axis.NONE
@@ -68,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 	move_and_slide()
 	global_position = global_position.round()
-	_animator.update(input != Vector2.ZERO and _can_move, _facing)
+	_animator.update(input != Vector2.ZERO and _can_move, _torch_remaining > 0, _facing)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("dpad_left") or event.is_action_pressed("dpad_right"):
@@ -95,8 +101,16 @@ func _exit_tree() -> void:
 	if is_instance_valid(_interact_hud):
 		_interact_hud.queue_free()
 
-func get_light_radius() -> float:
-	return torch_light_radius * clamp(_torch_light_value, torch_light_min_value, 1.0)
+func get_light_radius() -> Vector3:
+	var light_radius: float = torch_light_radius * clamp(_torch_light_value, torch_light_min_value, 1.0)
+	var has_torch := _torch_remaining > 0
+	var inner_radius := no_light_inner_radius if not has_torch else light_radius
+	var central_ratio := no_light_central_radius_ratio if not has_torch else light_central_radius_ratio
+	var outer_ratio := no_light_outer_radius_ratio if not has_torch else light_outer_radius_ratio
+	return Vector3(inner_radius, central_ratio, outer_ratio)
+
+func force_darkness() -> bool:
+	return _torch_remaining <= 0
 
 func set_dungeon_tilemap(tilemap: TileMapLayer) -> void:
 	_dungeon = tilemap
@@ -112,7 +126,8 @@ func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
 	_can_move = _is_input_enabled
 
-func _on_torch_tick(_remaining: int, light_value: float) -> void:
+func _on_torch_tick(remaining: int, light_value: float) -> void:
+	_torch_remaining = remaining
 	_torch_light_value = light_value
 
 func _get_directional_input() -> Vector2:
@@ -146,7 +161,7 @@ func _try_corner_correction(direction: Vector2, delta: float, steps_to_move: Vec
 	return false
 
 func _scale_player_light() -> void:
-	var d: int = int(round(player_light_max_diameter * _torch_light_value))
+	var d: int = int(round(light_max_diameter * _torch_light_value))
 	d -= d % 2
 	var s := d / float(_player_light.texture.get_width())
 	_player_light.scale = Vector2(s, s)

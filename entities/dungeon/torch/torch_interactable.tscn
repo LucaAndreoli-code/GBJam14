@@ -30,6 +30,10 @@ animations = [{
 
 [node name="TorchInteractable" type="Area2D" unique_id=2015663561 groups=["level_torches"]]
 script = ExtResource("1_6o5mq")
+light_radius = null
+light_central_radius_ratio = null
+light_outer_radius_ratio = null
+is_sprite_visible = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2100582308]
 shape = SubResource("RectangleShape2D_6o5mq")
