@@ -2,7 +2,7 @@ class_name PointsHUD
 extends Control
 
 const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
-const CROWN_TEXTURE_REGION: Rect2 = Rect2(0.0, 40.0, 16.0, 16.0)
+const CROWN_TEXTURE_REGION: Rect2 = Rect2(0.0, 16.0, 16.0, 16.0)
 const SIZE: Vector2 = Vector2(64.0, 16.0)
 const POSITION: Vector2 = Vector2(84.0, 128.0)
 

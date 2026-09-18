@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cv4mp7oq7adu7" path="res://scripts/scenes/pause_manager.gd" id="1_0n058"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_1gnl8"]
-[ext_resource type="Script" uid="uid://dpantyfyknx4r" path="res://scenes/ui/pause_menu_item.gd" id="2_cech8"]
+[ext_resource type="Script" uid="uid://dpantyfyknx4r" path="res://scripts/ui/pause_menu_item.gd" id="2_cech8"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_lalf1"]
 [ext_resource type="Texture2D" uid="uid://c8v37piis07jg" path="res://assets/sprites/ui/ui_pause_menu_frame.png" id="4_1gnl8"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="5_aaarr"]

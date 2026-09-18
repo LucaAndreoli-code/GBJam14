@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://myh8jwljbtmk"]
+
+[node name="TitleScreen" type="Node2D" unique_id=1598100393]
+
+[node name="Container" type="Control" parent="." unique_id=1369956892]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 150.0
+offset_bottom = 134.0

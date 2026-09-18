@@ -21,6 +21,7 @@ func setup(scene_path: String, player: PlayerDungeonController) -> void:
 func _ready() -> void:
 	visible = false
 	_build_ui()
+	_refresh_ui()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
