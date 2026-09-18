@@ -8,23 +8,39 @@ extends Area2D
 ## Emits the first time the player comes back, and never again
 signal player_returned()
 
+var _player: DigPlayer
+var _rect: Rect2
 var _armed: bool = false
-var _used: bool = false
+# The player spawns on top of the exit, see the scene
+var _was_inside: bool = true
 
 func _ready() -> void:
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	# No body_entered / body_exited: the pause takes the scene out of the physics space and gets
+	# the whole pair replayed on resume, ending the run with the player standing still. The
+	# overlap is sampled instead, and only while the scene runs.
+	monitoring = false
+	monitorable = false
+	var shape := $CollisionShape2D as CollisionShape2D
+	var shape_size := (shape.shape as RectangleShape2D).size
+	_rect = Rect2(global_position + shape.position - shape_size * 0.5, shape_size)
 
-# Digging down is what arms the exit
-func _on_body_exited(body: Node2D) -> void:
-	if body is not DigPlayer:
-		return
-	_armed = true
+func set_player(player: DigPlayer) -> void:
+	_player = player
 
-func _on_body_entered(body: Node2D) -> void:
-	if _used or not _armed:
+func _physics_process(_delta: float) -> void:
+	# Set one frame late by the minigame: children are readied before their parent
+	if _player == null:
 		return
-	if body is not DigPlayer:
+	var inside := _rect.intersects(_player.get_body_rect())
+	if inside == _was_inside:
 		return
-	_used = true
+	_was_inside = inside
+	# Digging down is what arms the exit
+	if not inside:
+		_armed = true
+		return
+	if not _armed:
+		return
 	player_returned.emit()
+	# Nothing left to sample: the run is over
+	set_physics_process(false)

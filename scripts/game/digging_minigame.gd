@@ -66,6 +66,7 @@ func _ready() -> void:
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	_field.cells_carved.connect(_on_cells_carved)
 	_exit.player_returned.connect(_on_player_returned)
+	_exit.set_player(_player)
 	# DigField.fill() already ran: children are readied before their parent.
 	# The pocket is carved here rather than with the layout below because it owes nothing
 	# to the seed, and leaving it a frame late would let the player be shoved out of the
