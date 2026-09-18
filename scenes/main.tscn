@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://cfivtqcri64l4" path="res://scenes/demo/test_dungeon/test_dungeon_dazorn.tscn" id="2_tefeu"]
-[ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/LevelTheme_NoTail.mp3" id="3_o6xl0"]
+[ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/Music/LevelTheme_NoTail.mp3" id="3_o6xl0"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_tipki"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="4_85g3d"]
 [ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="5_choun"]

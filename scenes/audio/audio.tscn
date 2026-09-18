@@ -1,10 +1,24 @@
-[gd_scene format=3 uid="uid://ba1qiviu2vd38"]
+[gd_scene format=4 uid="uid://ba1qiviu2vd38"]
 
 [ext_resource type="Script" uid="uid://bkct8soin3ig7" path="res://scripts/audio/levelLoop.gd" id="1_d0wfh"]
 [ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="3_3g2y6"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="4_lpqkh"]
 [ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_lymfh"]
 [ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_p5uep"]
+[ext_resource type="Script" uid="uid://bw00eccmdc0n0" path="res://scripts/audio/AudioManager.gd" id="6_qdsjy"]
+[ext_resource type="AudioStream" uid="uid://dira2nrv1bows" path="res://assets/audio/SFX/CaveIn.wav" id="7_2xnne"]
+[ext_resource type="AudioStream" uid="uid://yik4655125a0" path="res://assets/audio/SFX/Dig.wav" id="8_55new"]
+[ext_resource type="AudioStream" uid="uid://camx65tfngq2g" path="res://assets/audio/SFX/Discovery.wav" id="9_y3h0k"]
+[ext_resource type="AudioStream" uid="uid://bauhv7bt8gcnr" path="res://assets/audio/SFX/Footstep.wav" id="10_qvebx"]
+[ext_resource type="AudioStream" uid="uid://dvtxu60r8l6av" path="res://assets/audio/SFX/Bump.wav" id="11_1aq1n"]
+[ext_resource type="AudioStream" uid="uid://dwkhtlo5ey2v6" path="res://assets/audio/SFX/KeyPickup.wav" id="12_3xy1l"]
+[ext_resource type="AudioStream" uid="uid://cgxmfno0jrc62" path="res://assets/audio/SFX/TorchOut.wav" id="13_xtvt5"]
+[ext_resource type="AudioStream" uid="uid://buniddpsx76g" path="res://assets/audio/SFX/UnlockDoor.wav" id="14_h8whh"]
+[ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/Music/LevelTheme_NoTail.mp3" id="15_3xy1l"]
+[ext_resource type="AudioStream" uid="uid://cm6ivrv0qq311" path="res://assets/audio/Music/Minigame_160BPM.mp3" id="16_xtvt5"]
+[ext_resource type="AudioStream" uid="uid://benkedq3jl0g8" path="res://assets/audio/Music/LoseStinger.wav" id="17_h8whh"]
+[ext_resource type="AudioStream" uid="uid://dxdlt3tkde31s" path="res://assets/audio/Music/WinStinger.wav" id="18_f2klo"]
+[ext_resource type="AudioStream" uid="uid://bgbikqo1mqc5p" path="res://assets/audio/Music/TitleScreen_Draft1.wav" id="19_e7jea"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sgp6g"]
 shader = ExtResource("3_3g2y6")
@@ -17,8 +31,9 @@ shader_parameter/fade_step = 0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sugp2"]
 shader = ExtResource("5_lymfh")
 shader_parameter/viewport_size = Vector2(160, 144)
-shader_parameter/lights = PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+shader_parameter/lights = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/lights_count = 0
+shader_parameter/ratios = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
 
 [node name="Main" type="Control" unique_id=309915900]
 layout_mode = 3
@@ -88,3 +103,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="AudioManager" type="Node" parent="." unique_id=1520263664]
+script = ExtResource("6_qdsjy")
+cave_sound = ExtResource("7_2xnne")
+dig_sound = ExtResource("8_55new")
+discovery_sound = ExtResource("9_y3h0k")
+footstep_sound = ExtResource("10_qvebx")
+bump_sound = ExtResource("11_1aq1n")
+key_pickup_sound = ExtResource("12_3xy1l")
+torch_out_sound = ExtResource("13_xtvt5")
+unlock_door_sound = ExtResource("14_h8whh")
+leveltheme = ExtResource("15_3xy1l")
+minigametheme = ExtResource("16_xtvt5")
+losestinger = ExtResource("17_h8whh")
+winstinger = ExtResource("18_f2klo")
+titletheme = ExtResource("19_e7jea")

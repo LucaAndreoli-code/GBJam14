@@ -24,6 +24,7 @@ GameState="*uid://dj01nk3yfpu4m"
 DebugOverlay="*uid://q3a61ow46ucd"
 SceneManager="*uid://dd0xvqg4prhfg"
 Groups="*uid://kp8q0p2plwq3"
+AudioManager="*uid://bw00eccmdc0n0"
 
 [display]
 
