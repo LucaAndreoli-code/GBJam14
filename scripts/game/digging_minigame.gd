@@ -91,6 +91,7 @@ func _ready() -> void:
 	# owner here or it would freeze for the whole minigame. It resumes from GameState.
 	_setup_torch()
 	_torch = TorchTimer.new()
+	_torch.torch_ended.connect(_on_torch_ended)
 	# The darkness here lives on the Surface sprite alone, see dig_surface.gd: the full screen
 	# pass would swallow the dig field too, and that has to stay readable.
 	SignalBus.visibility_shader_toggled.emit(false)
@@ -393,12 +394,26 @@ func _on_leave_choice(accepted: bool) -> void:
 	# Either way the press that answered is spent, and gameplay is about to hear about it
 	# again through the polled Input state
 	_swallow_sonar_press = true
+	# The torch can die with the question up: the run is already leaving, the answer is moot
+	if _leaving:
+		return
 	if accepted:
 		_swap_back_to_dungeon()
 		return
 	# Staying: the exit has to be walked out of and back into before it asks again
 	_exit.rearm()
 	GameState.set_input_enabled(true)
+
+# No torch, no run: the pit goes dark and the player is put back in the dungeon with
+# whatever they already dug up. Mirrors DungeonManager._on_torch_ended(), which is the only
+# other listener TorchTimer has.
+func _on_torch_ended() -> void:
+	# The swap goes first, so _leaving is up before the question below is taken down: a
+	# close() answers choice_made, and that answer must not rearm an exit the run is
+	# already leaving through.
+	_swap_back_to_dungeon()
+	if _confirm_box != null and _confirm_box.is_open():
+		_confirm_box.close()
 
 func _swap_back_to_dungeon() -> void:
 	if _leaving:

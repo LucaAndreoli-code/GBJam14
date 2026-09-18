@@ -17,6 +17,11 @@ func _ready() -> void:
 		_update_tile()
 		queue_free()
 
+## The pit is only worth entering with a lit torch: at zero the spot stops answering, and
+## the A prompt goes off with it, see PlayerDungeonController._toggle_interact_hud().
+func can_interact(_player: PlayerDungeonController) -> bool:
+	return GameState.get_torch().countdown > 0
+
 func interact(_player: PlayerDungeonController) -> void:
 	if not tilemap or not scene_root:
 		return
