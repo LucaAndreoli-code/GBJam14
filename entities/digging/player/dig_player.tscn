@@ -17,7 +17,7 @@ shape = SubResource("RectangleShape2D_body")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1582943451]
 sprite_frames = ExtResource("2_frames")
-animation = &"dig_right"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="Debris" parent="." unique_id=1845057571 instance=ExtResource("3_debris")]

@@ -1,7 +1,11 @@
 class_name PlayerDungeonController
 extends CharacterBody2D
 
-enum Axis { NONE, X, Y }
+enum Axis { 
+	NONE, 
+	X, 
+	Y 
+}
 
 const CORNER_CORRECTION := 8.0
 const DOOR_PROBE_DISTANCE := 16.0
@@ -14,8 +18,10 @@ const DOOR_OPEN_TILESET_SOURCE_ID: int = 1
 
 @onready var _player_light: Sprite2D = $InnerLightSprite
 @onready var _interact_area: Area2D = $InteractArea
+@onready var _anim_player: AnimationPlayer = $AnimationPlayer
 
 var _dungeon: TileMapLayer
+var _animator: PlayerDungeonAnimator
 var _interact_hud: InteractHUD
 var _torch_light_value: float = 1.0
 var _subpixel_accumulator: Vector2 = Vector2.ZERO
@@ -25,6 +31,7 @@ var _can_move: bool = true
 var _is_input_enabled: bool = true
 
 func _ready() -> void:
+	_animator = PlayerDungeonAnimator.new(_anim_player)
 	var hud_container := get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
 	if hud_container:
 		_interact_hud = InteractHUD.new(self)
@@ -35,6 +42,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_scale_player_light()
 	_toggle_interact_hud()
+	_animator.animate()
 
 func _physics_process(delta: float) -> void:
 	if not _can_move:
@@ -60,6 +68,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 	move_and_slide()
 	global_position = global_position.round()
+	_animator.update(input != Vector2.ZERO and _can_move, _facing)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("dpad_left") or event.is_action_pressed("dpad_right"):
