@@ -5,6 +5,7 @@ const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_mini
 const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
+@export var level_minimum_points: int = 100
 @export var level_target_points: int = 250
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
@@ -101,10 +102,16 @@ func _setup_treasures() -> void:
 	if digging_spots_count <= 0:
 		push_warning("No digging spots found for this level!")
 		return
-	var treasures_count := randi_range( \
-		minigame_session_min_treasures * digging_spots_count, \
-		minigame_session_max_treasures * digging_spots_count)
-	var composition := TreasureUtils.pick_composition(treasures_count, level_target_points)
+	var composition := TreasureUtils.pick_composition(
+		level_target_points, \
+		digging_spots_count, \
+		minigame_session_min_treasures, \
+		minigame_session_max_treasures)
+	if composition.size() == 0:
+		push_warning("Failed to pick a composition")
+		push_warning("Digging spots: %d" % digging_spots_count)
+		push_warning("Target points: %d" % level_target_points)
+		return
 	var minigame_treasures := GameState.get_treasures_pool()
 	minigame_treasures.clear()
 	for kind in composition.keys():

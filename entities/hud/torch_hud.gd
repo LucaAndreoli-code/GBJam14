@@ -3,11 +3,13 @@ extends Control
 
 const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
 const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 40.0, 16.0, 16.0)
+const TORCH_OFF_TEXTURE_REGION: Rect2 = Rect2(32.0, 40.0, 16.0, 16.0)
 const SIZE: Vector2 = Vector2(40.0, 16.0)
 const POSITION: Vector2 = Vector2(0.0, 128.0)
 
 var _container: HBoxContainer
 var _label: Label
+var _icon: TextureRect
 
 func _init() -> void:
 	_build_ui()
@@ -20,21 +22,25 @@ func _ready() -> void:
 
 func _on_torch_tick(remaining: int, _light_value: float) -> void:
 	_update_label_text(remaining)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = UI_ICONS_SHEET
+	atlas.region = TORCH_OFF_TEXTURE_REGION if remaining <= 0 else TORCH_TEXTURE_REGION
+	_icon.texture = atlas
 
 func _build_ui() -> void:
 	_container = HBoxContainer.new()
 	_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_container.add_theme_constant_override("separation", 0)
-	var icon := TextureRect.new()
+	_icon = TextureRect.new()
 	var atlas := AtlasTexture.new()
 	atlas.atlas = UI_ICONS_SHEET
 	atlas.region = TORCH_TEXTURE_REGION
-	icon.texture = atlas
-	icon.stretch_mode = TextureRect.STRETCH_KEEP
-	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_icon.texture = atlas
+	_icon.stretch_mode = TextureRect.STRETCH_KEEP
+	_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_make_label()
-	_container.add_child(icon)
+	_container.add_child(_icon)
 	_container.add_child(_label)
 	add_child(_container)
 
