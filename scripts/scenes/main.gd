@@ -8,10 +8,12 @@ extends Control
 
 @onready var _game_viewport: SubViewport = $PaletteContainer/Screen/VisibilityContainer/GameWorld
 @onready var _bottom_bar: Control = $PaletteContainer/Screen/BottomBar
+@onready var music_player = $Music/Music
 
 func _ready() -> void:
 	GameState.set_fonts(title_font, text_font, little_font)
 	SceneManager.register_viewport(self, _game_viewport)
+	music_player.play(0.0) 
 	if initial_scene == null:
 		push_warning("No initial scene set on Main!")
 	else:
