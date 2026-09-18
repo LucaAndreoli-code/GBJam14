@@ -142,6 +142,8 @@ func _burst_debris(dir: Vector2i) -> void:
 func _update_animation(dir: Vector2i) -> void:
 	if dir.y < 0:
 		_sprite.play("up")
+	elif dir.y > 0:
+		_sprite.play("down")
 	elif dir == Vector2i.ZERO:
 		_sprite.play("idle")
 	elif dir.x < 0:
