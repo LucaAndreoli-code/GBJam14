@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://dwf60vshhxqt"]
+
+[ext_resource type="Script" uid="uid://cv4mp7oq7adu7" path="res://scripts/scenes/pause_manager.gd" id="1_0n058"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_1gnl8"]
+[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_lalf1"]
+
+[node name="Pause" type="Node2D" unique_id=1341933268]
+script = ExtResource("1_0n058")
+
+[node name="Container" type="Control" parent="." unique_id=2097853989]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 144.0
+
+[node name="Title" type="Control" parent="Container" unique_id=1443667049]
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 16.0
+
+[node name="ColorRect" type="ColorRect" parent="Container/Title" unique_id=1291337053]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Container/Title" unique_id=514348185]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 92.0
+offset_bottom = 12.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("2_1gnl8")
+theme_override_font_sizes/font_size = 8
+text = "Game paused"
+script = ExtResource("3_lalf1")
+metadata/_custom_type_script = "uid://cidt6x11067q0"

@@ -2,6 +2,7 @@ extends Node
 
 var _title_font: Font
 var _text_font: Font
+var _little_font: Font
 
 var _seed: int = 0
 var _paused: bool = false
@@ -9,6 +10,7 @@ var _input_enabled: bool = true
 
 var _time: GameTime.Data = GameTime.Data.new()
 var _torch: TorchTimer.Data = TorchTimer.Data.new()
+var _keys: int = 0
 
 var _dug_interactables: Dictionary[Vector2i, bool] = {}
 
@@ -20,9 +22,13 @@ func get_title_font() -> Font:
 func get_text_font() -> Font:
 	return _text_font
 
-func set_fonts(title_font: Font, text_font: Font) -> void:
+func get_little_font() -> Font:
+	return _little_font
+
+func set_fonts(title_font: Font, text_font: Font, little_font: Font) -> void:
 	_title_font = title_font
 	_text_font = text_font
+	_little_font = little_font
 
 func get_seed() -> int:
 	if _seed == 0:
@@ -73,6 +79,15 @@ func set_torch(data: TorchTimer.Data) -> void:
 			_torch.duration = data.duration
 		if data.countdown != _torch.countdown:
 			_torch.countdown = data.countdown
+
+func get_keys() -> int:
+	return _keys
+
+func set_keys(value: int) -> void:
+	if _keys == value:
+		return
+	_keys = value
+	SignalBus.keys_changed.emit(_keys)
 
 func is_interactable_dug(cell: Vector2i) -> bool:
 	if not _dug_interactables.has(cell):

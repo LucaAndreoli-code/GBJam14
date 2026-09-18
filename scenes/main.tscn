@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/LevelTheme_NoTail.mp3" id="3_o6xl0"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_tipki"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="4_85g3d"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="5_choun"]
 [ext_resource type="Shader" uid="uid://dd0kqf5ag0lpk" path="res://shaders/visibility.gdshader" id="5_tbgi4"]
 [ext_resource type="Script" uid="uid://b3ge86acku0vx" path="res://scripts/core/screen_visibility_manager.gd" id="6_tefeu"]
 
@@ -35,6 +36,7 @@ script = ExtResource("1_tbgi4")
 initial_scene = ExtResource("2_tefeu")
 title_font = ExtResource("3_tipki")
 text_font = ExtResource("4_85g3d")
+little_font = ExtResource("5_choun")
 
 [node name="PaletteContainer" type="SubViewportContainer" parent="." unique_id=137043907]
 texture_filter = 1
@@ -78,16 +80,11 @@ render_target_update_mode = 4
 [node name="BottomBar" type="Control" parent="PaletteContainer/Screen" unique_id=607222497]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen/BottomBar" unique_id=291082804]
-layout_mode = 0
 offset_top = 128.0
 offset_right = 160.0
 offset_bottom = 144.0
 
-[node name="HUD" type="Control" parent="PaletteContainer/Screen/BottomBar" unique_id=246248463 groups=["hud_container"]]
+[node name="BottomRect" type="ColorRect" parent="PaletteContainer/Screen/BottomBar" unique_id=291082804]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,10 +100,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HUD" type="Control" parent="PaletteContainer/Screen" unique_id=246248463 groups=["hud_container"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Music" type="Node" parent="." unique_id=113485293]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
 stream = ExtResource("3_o6xl0")
-autoplay = true
 
 [node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]

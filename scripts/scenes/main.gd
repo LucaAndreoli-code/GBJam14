@@ -4,14 +4,13 @@ extends Control
 @export var initial_scene: PackedScene
 @export var title_font: Font
 @export var text_font: Font
-@export var font_ascent: int
-@export var font_descent: int
+@export var little_font: Font
 
 @onready var _game_viewport: SubViewport = $PaletteContainer/Screen/VisibilityContainer/GameWorld
 @onready var _bottom_bar: Control = $PaletteContainer/Screen/BottomBar
 
 func _ready() -> void:
-	GameState.set_fonts(title_font, text_font)
+	GameState.set_fonts(title_font, text_font, little_font)
 	SceneManager.register_viewport(self, _game_viewport)
 	if initial_scene == null:
 		push_warning("No initial scene set on Main!")

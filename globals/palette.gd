@@ -24,12 +24,6 @@ var light := Color.from_rgba8(222, 155, 79)
 var dark := Color.from_rgba8(48, 69, 92)
 var darkest := Color.from_rgba8(7, 24, 33)
 
-#TODO we should consider this palette as default
-#var lightest := Color.from_rgba8(224, 248, 208)
-#var light := Color.from_rgba8(136, 192, 112)
-#var dark := Color.from_rgba8(52, 104, 86)
-#var darkest := Color.from_rgba8(7, 25, 32)
-
 # Currently loaded .gpl files
 var _loaded: Dictionary = {}
 var _fade_step: int = 0
