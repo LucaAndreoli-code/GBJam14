@@ -14,12 +14,8 @@ const FRAME_SELECTED: Rect2i = Rect2i(24, 0, 24, 24)
 var _parent_payload: Dictionary
 var _cell_selected: int = 0
 var _treasures_count: Dictionary[int, int] = {
-	1: 1,
-	4: 1,
-	5: 1,
-	9: 2,
-	10: 1,
-	12: 1,
+	#10: 1,
+	#12: 2,
 }
 
 func _ready() -> void:
@@ -73,12 +69,12 @@ func _make_grid_cell(treasure: TreasureInfo) -> Control:
 	cell_atlas.atlas = cell_textures
 	cell_atlas.region = FRAME_NOT_SELECTED
 	cell.texture = cell_atlas
-	cell.stretch_mode = TextureRect.STRETCH_KEEP
+	cell.stretch_mode = TextureRect.STRETCH_SCALE
 	cell.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var sub_cell := TextureRect.new()
 	sub_cell.position = Vector2.ZERO
 	sub_cell.texture = treasure.inventory_texture
-	sub_cell.stretch_mode = TextureRect.STRETCH_KEEP
+	sub_cell.stretch_mode = TextureRect.STRETCH_SCALE
 	sub_cell.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	cell.add_child(sub_cell)
 	return cell

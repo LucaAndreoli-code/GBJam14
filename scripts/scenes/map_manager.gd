@@ -1,11 +1,10 @@
 extends Control
 
-const CELL_SIZE: Vector2i = Vector2i(6, 6)
+const CELL_SIZE: Vector2i = Vector2i(9, 9)
 const CELL_SCENE: PackedScene = preload("res://scenes/ui/minimap_cell.tscn")
 
 @onready var _view: Control = $Container/MapContainer/View
 @onready var _scroll: Control = $Container/MapContainer/View/Scroll
-@onready var _player: ColorRect = $Container/MapContainer/View/Scroll/Player
 
 var _parent_payload: Dictionary
 var _cells: Dictionary = {}
@@ -38,11 +37,12 @@ func _build() -> void:
 			data.rooms[cell],
 			data.visited.has(cell + Vector2i.RIGHT),
 			data.visited.has(cell + Vector2i.DOWN),
-			data.torches.has(cell)
+			cell == _current_room,
+			data.torches.has(cell),
+			CELL_SIZE,
+			Vector2i(2, 2)
 		)
 		_cells[cell] = node
-	_player.position = Vector2(_current_room * CELL_SIZE) + Vector2(1, 1)
-	_scroll.move_child(_player, -1)
 	_recenter()
 
 func _recenter() -> void:

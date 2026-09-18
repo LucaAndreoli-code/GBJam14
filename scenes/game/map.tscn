@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0sjnjamt4ac3" path="res://scripts/scenes/map_manager.gd" id="1_043wi"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="1_fodlk"]
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="2_8xalg"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="2_043wi"]
 [ext_resource type="PackedScene" uid="uid://c570dwsjpd21v" path="res://scenes/ui/minimap_cell.tscn" id="4_7g61j"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="4_jhmgq"]
@@ -12,14 +13,6 @@
 atlas = ExtResource("4_jhmgq")
 region = Rect2(16, 0, 8, 8)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_043wi"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
-
 [node name="Map" type="Control" unique_id=856458967]
 layout_mode = 3
 anchors_preset = 0
@@ -27,15 +20,15 @@ script = ExtResource("1_043wi")
 
 [node name="Container" type="Control" parent="." unique_id=1895323090]
 anchors_preset = 0
-offset_right = 160.0
-offset_bottom = 144.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 150.0
+offset_bottom = 134.0
 
 [node name="Label" type="Label" parent="Container" unique_id=1087774147]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 76.0
-offset_bottom = 12.0
+offset_right = 72.0
+offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("1_fodlk")
 theme_override_font_sizes/font_size = 8
@@ -45,10 +38,9 @@ metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1256200367]
 layout_mode = 0
-offset_left = 118.0
-offset_top = 4.0
-offset_right = 156.0
-offset_bottom = 12.0
+offset_left = 104.0
+offset_right = 142.0
+offset_bottom = 8.0
 
 [node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1186543009]
 custom_maximum_size = Vector2(8, 8)
@@ -65,11 +57,9 @@ metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="MapContainer" type="Panel" parent="Container" unique_id=491903023]
 layout_mode = 0
-offset_left = 3.0
-offset_top = 18.0
-offset_right = 157.0
-offset_bottom = 118.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_043wi")
+offset_top = 12.0
+offset_right = 142.0
+offset_bottom = 112.0
 
 [node name="View" type="Control" parent="Container/MapContainer" unique_id=1042496269]
 clip_contents = true
@@ -83,28 +73,25 @@ grow_vertical = 2
 [node name="Scroll" type="Control" parent="Container/MapContainer/View" unique_id=1965517584]
 anchors_preset = 0
 
-[node name="Player" type="ColorRect" parent="Container/MapContainer/View/Scroll" unique_id=1152911602]
+[node name="CenterContainer" type="CenterContainer" parent="Container" unique_id=1557165907]
 layout_mode = 0
-offset_right = 2.0
-offset_bottom = 2.0
+offset_top = 116.0
+offset_right = 142.0
+offset_bottom = 127.0
 
-[node name="InfoContainer" type="HBoxContainer" parent="Container" unique_id=2023937201]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 122.0
-offset_right = 157.0
-offset_bottom = 133.0
+[node name="InfoContainer" type="HBoxContainer" parent="Container/CenterContainer" unique_id=2023937201]
+layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="PlayerCell" type="HBoxContainer" parent="Container/InfoContainer" unique_id=1975983555]
+[node name="PlayerCell" type="HBoxContainer" parent="Container/CenterContainer/InfoContainer" unique_id=1975983555]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="MinimapCell" parent="Container/InfoContainer/PlayerCell" unique_id=808945898 instance=ExtResource("4_7g61j")]
+[node name="MinimapCell" parent="Container/CenterContainer/InfoContainer/PlayerCell" unique_id=808945898 instance=ExtResource("4_7g61j")]
 layout_mode = 2
 type = 1
 
-[node name="GBLabel" type="Label" parent="Container/InfoContainer/PlayerCell" unique_id=804197324]
+[node name="GBLabel" type="Label" parent="Container/CenterContainer/InfoContainer/PlayerCell" unique_id=804197324]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("7_8xalg")
@@ -113,15 +100,15 @@ text = "You're here!"
 script = ExtResource("2_043wi")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
 
-[node name="TorchCell" type="HBoxContainer" parent="Container/InfoContainer" unique_id=1228769005]
+[node name="TorchCell" type="HBoxContainer" parent="Container/CenterContainer/InfoContainer" unique_id=1228769005]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="MinimapCell" parent="Container/InfoContainer/TorchCell" unique_id=663416044 instance=ExtResource("4_7g61j")]
+[node name="MinimapCell" parent="Container/CenterContainer/InfoContainer/TorchCell" unique_id=663416044 instance=ExtResource("4_7g61j")]
 layout_mode = 2
 type = 2
 
-[node name="GBLabel" type="Label" parent="Container/InfoContainer/TorchCell" unique_id=675822286]
+[node name="GBLabel" type="Label" parent="Container/CenterContainer/InfoContainer/TorchCell" unique_id=675822286]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_fonts/font = ExtResource("7_8xalg")
@@ -129,3 +116,9 @@ theme_override_font_sizes/font_size = 8
 text = "A torch is here"
 script = ExtResource("2_043wi")
 metadata/_custom_type_script = "uid://cidt6x11067q0"
+
+[node name="Frame" type="TextureRect" parent="." unique_id=2144385664]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("2_8xalg")
