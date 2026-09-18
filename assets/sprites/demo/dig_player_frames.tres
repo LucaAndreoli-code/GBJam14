@@ -1,45 +1,107 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://cyoaa7hlufe1s"]
 
-[ext_resource type="Texture2D" uid="uid://cc6n65kmgkuit" path="res://assets/tilesets/demo/dig_dug_tileset.png" id="1_sheet"]
+[ext_resource type="Texture2D" uid="uid://dlggwqosy6oir" path="res://assets/sprites/sheets/character_sheet.png" id="1_w4iqs"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dig_a"]
-atlas = ExtResource("1_sheet")
-region = Rect2(16, 40, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7w0e"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(128, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dig_b"]
-atlas = ExtResource("1_sheet")
-region = Rect2(32, 40, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ilmx"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(112, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_front"]
-atlas = ExtResource("1_sheet")
-region = Rect2(0, 40, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_p5ch1"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(96, 16, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_back"]
-atlas = ExtResource("1_sheet")
-region = Rect2(48, 40, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pnsf"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(96, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jpj3s"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(112, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5xxwt"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(128, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54urv"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qe2nu"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbjli"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38hg0"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6il6a"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(96, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gn120"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(128, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wy3ln"]
+atlas = ExtResource("1_w4iqs")
+region = Rect2(112, 48, 16, 16)
 
 [resource]
 resource_name = "DigPlayerFrames"
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dig_a")
+"texture": SubResource("AtlasTexture_e7w0e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ilmx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p5ch1")
 }],
 "loop": 1,
 "name": &"dig_left",
-"speed": 8.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dig_b")
+"texture": SubResource("AtlasTexture_8pnsf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jpj3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5xxwt")
 }],
 "loop": 1,
 "name": &"dig_right",
-"speed": 5.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_front")
+"texture": SubResource("AtlasTexture_54urv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qe2nu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbjli")
+}],
+"loop": 1,
+"name": &"down",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38hg0")
 }],
 "loop": 1,
 "name": &"idle",
@@ -47,9 +109,15 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_back")
+"texture": SubResource("AtlasTexture_6il6a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gn120")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wy3ln")
 }],
 "loop": 1,
 "name": &"up",
-"speed": 5.0
+"speed": 7.0
 }]
