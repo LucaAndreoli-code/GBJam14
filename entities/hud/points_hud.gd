@@ -28,7 +28,7 @@ func _build_ui():
 	_label = Label.new()
 	_label.add_theme_font_override("font", GameState.get_title_font())
 	_label.add_theme_font_size_override("font_size", 8)
-	_label.add_theme_color_override("font_color", Palette.darkest)
+	_label.add_theme_color_override("font_color", Palette.SRC_DARKEST)
 	_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_label.text = "%03d:%03d" % [0, 999]
 	container.add_child(_label)

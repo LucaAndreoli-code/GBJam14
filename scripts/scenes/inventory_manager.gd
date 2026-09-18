@@ -19,6 +19,8 @@ var _treasures_count: Dictionary[int, int] = {
 }
 
 func _ready() -> void:
+	GameState.set_paused(false)
+	SignalBus.visibility_shader_toggled.emit(false)
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	var collected_treasures := GameState.get_collected_treasures()
 	for t in collected_treasures.keys():
