@@ -196,7 +196,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	# The treasure outlives the pickup by the length of the flicker, so it has to stop
 	# answering the player or standing on it would collect it a second time.
-	monitoring = false
+	set_deferred("monitoring", false)
 	# A sonar blink can be running on this very treasure, and it owns _process: end it here
 	# so the flicker starts from a clean node.
 	_end_flash()
