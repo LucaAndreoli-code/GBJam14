@@ -18,7 +18,7 @@ const POSITION: Vector2 = Vector2.ZERO
 const ICON_POSITION: Vector2 = Vector2(3.0, 2.0)
 ## Same shared sheet the dungeon HUDs pull from, see torch_hud.gd and points_hud.gd
 const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
-const ICON_REGION: Rect2 = Rect2(0.0, 16.0, 16.0, 24.0)
+const ICON_REGION: Rect2 = Rect2(0.0, 32.0, 16.0, 24.0)
 const CHARGE_SHADER: Shader = preload("res://shaders/hud_charge.gdshader")
 
 ## Top right corner: the counter is right aligned inside this box, so the text keeps its
