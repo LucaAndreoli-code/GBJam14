@@ -147,13 +147,19 @@ player = NodePath("../PlayerDungeon")
 
 [node name="Torches" type="Node2D" parent="." unique_id=953464231]
 
-[node name="TorchInteractable" parent="Torches" unique_id=2015663561 groups=["light_sources"] instance=ExtResource("5_deviu")]
-position = Vector2(245, 45)
-
-[node name="TorchInteractable3" parent="Torches" unique_id=538814493 groups=["light_sources"] instance=ExtResource("5_deviu")]
+[node name="EntranceTorch" parent="Torches" unique_id=538814493 groups=["light_sources"] instance=ExtResource("5_deviu")]
 position = Vector2(72, -6)
 light_radius = 20.0
+light_central_radius_ratio = 1.15
+light_outer_radius_ratio = 0.0
 is_sprite_visible = false
+
+[node name="TorchInteractable" parent="Torches" unique_id=2015663561 groups=["light_sources"] instance=ExtResource("5_deviu")]
+position = Vector2(245, 45)
+light_radius = 10.0
+light_central_radius_ratio = 1.15
+light_outer_radius_ratio = 2.0
+is_sprite_visible = true
 
 [node name="Keys" type="Node2D" parent="." unique_id=588186782]
 
