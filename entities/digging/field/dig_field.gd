@@ -42,7 +42,7 @@ const MASK_TO_ATLAS := {
 ## player on screen is DigPlayer's viewport clamp, not a solid frame.
 @export var diggable_inset: int = 0
 ## Atlas source holding the dirt tiles
-@export var source_id: int = 0
+@export var source_id: int = 1
 
 func _ready() -> void:
 	fill()

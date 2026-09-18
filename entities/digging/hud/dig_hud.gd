@@ -15,7 +15,7 @@ const POSITION: Vector2 = Vector2.ZERO
 
 ## On the surface band, which the entrance art paints in the darkest shade: the icon
 ## reads against it without a backing plate.
-const ICON_POSITION: Vector2 = Vector2(1.0, 0.0)
+const ICON_POSITION: Vector2 = Vector2(4.0, 4.0)
 const ICON_TEXTURE: Texture2D = preload("res://assets/sprites/demo/scanner.png")
 const CHARGE_SHADER: Shader = preload("res://shaders/hud_charge.gdshader")
 
