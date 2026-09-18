@@ -47,10 +47,13 @@ func _process(_delta: float) -> void:
 		if not source.has_method(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE):
 			continue
 		var source_pos := _to_texture_pixels((source as Node2D).global_position)
-		var source_radius: float = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
+		# Only the inner radius is read here: the band multipliers in y and z are per source for
+		# ScreenVisibilityManager, while torch_glow.gdshader takes its own three as scalar uniforms.
+		var source_radius: Vector3 = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
 		# Offset per instance, so two torches never pulse in unison
 		var source_offset := float(source.get_instance_id() % 100 / 10.0)
-		lights.append(Vector3(source_pos.x, source_pos.y, _calc_flickering(source_radius, source_offset)))
+		lights.append(Vector3(source_pos.x, source_pos.y,
+				_calc_flickering(source_radius.x, source_offset)))
 		if lights.size() == MAX_LIGHTS:
 			break
 	_material.set_shader_parameter("lights", lights)
