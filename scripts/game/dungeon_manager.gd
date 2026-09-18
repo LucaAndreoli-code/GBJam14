@@ -21,9 +21,7 @@ var _torch: TorchTimer
 var _minimap: Minimap
 
 var _pause_menu: Node
-var _torch_hud: TorchHUD
-var _keys_hud: KeysHUD
-var _points_hud: PointsHUD
+var _status_hud: StatusHUD
 
 var _is_gameover_mode: bool = false
 var _gameover_timer: int = 0
@@ -36,9 +34,6 @@ func _ready() -> void:
 	_minimap = Minimap.new(_level_tilemap, _player)
 	add_child(_minimap)
 	_hud_container = get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
-	_torch_hud = TorchHUD.new()
-	_keys_hud = KeysHUD.new()
-	_points_hud = PointsHUD.new()
 	_torch = TorchTimer.new()
 	_torch.torch_ended.connect(_on_torch_ended)
 	SignalBus.game_second_tick.connect(_on_game_second_tick)
@@ -51,18 +46,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("btn_select"):
 		_open_map()
-	elif event.is_action_pressed("btn_start"):
-		_open_pause_menu()
 
 func _exit_tree() -> void:
 	if is_instance_valid(_pause_menu):
 		_pause_menu.queue_free()
-	if is_instance_valid(_torch_hud):
-		_torch_hud.queue_free()
-	if is_instance_valid(_keys_hud):
-		_keys_hud.queue_free()
-	if is_instance_valid(_points_hud):
-		_points_hud.queue_free()
+	if is_instance_valid(_status_hud):
+		_status_hud.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
 	# TODO: payload["collected_treasures"] holds the TreasureInfo the digging run brought
@@ -109,12 +98,12 @@ func _setup_torch() -> void:
 
 func _init_hud() -> void:
 	if _hud_container:
+		_status_hud = StatusHUD.new()
+		_hud_container.add_child(_status_hud)
+		# Mounted last, so the paused screen covers the HUD instead of being drawn under it.
+		# The menu hides itself and owns the btn_start / btn_b toggle, see pause_manager.gd.
 		_pause_menu = PAUSE_MENU_SCENE.instantiate()
-		_pause_menu.visible = false
 		_hud_container.add_child(_pause_menu)
-		_hud_container.add_child(_torch_hud)
-		_hud_container.add_child(_keys_hud)
-		_hud_container.add_child(_points_hud)
 
 func _tick_gameover_timer() -> void:
 	if not _is_gameover_mode:
@@ -130,8 +119,3 @@ func _open_map() -> void:
 		"player_position": _player.global_position
 	}
 	SceneManager.go_to(MAP_SCENE_PATH, payload)
-
-func _open_pause_menu() -> void:
-	if _pause_menu:
-		GameState.set_paused(true)
-		_pause_menu.visible = true

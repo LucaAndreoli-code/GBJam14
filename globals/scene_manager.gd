@@ -15,6 +15,20 @@ var _is_swapping: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	SignalBus.game_paused.connect(_on_game_paused)
+
+func _on_game_paused(is_paused: bool) -> void:
+	_apply_pause(is_paused)
+
+# The pause freezes the running scene alone, never the whole tree. Everything outside the GameWorld
+# viewport - the HUD, the pause menu, the palette - has to stay live, and a SubViewportContainer
+# stops forwarding input into its viewport the moment it is paused itself: pausing the tree would
+# cut the pause menu off from the very input that closes it. Freezing the scene keeps that path
+# open with no PROCESS_MODE_ALWAYS bookkeeping, and DISABLED is inherited by the whole subtree.
+func _apply_pause(is_paused: bool) -> void:
+	if _current_scene == null:
+		return
+	_current_scene.process_mode = Node.PROCESS_MODE_DISABLED if is_paused else Node.PROCESS_MODE_INHERIT
 
 func get_main_scene() -> MainScene:
 	return _main_scene
@@ -59,7 +73,7 @@ func _do_swap(path: String, payload: Dictionary) -> void:
 	var scene_pack := load(path)
 	if scene_pack == null or scene_pack is not PackedScene:
 		push_error("Unable to load scene at \"%s\": null or unexpected format" % path)
-		get_tree().paused = GameState.is_paused()
+		get_tree().paused = false
 		_is_swapping = false
 		return
 	await Palette.fade_out()
@@ -70,10 +84,13 @@ func _do_swap(path: String, payload: Dictionary) -> void:
 	_current_viewport.add_child(scene)
 	_current_scene = scene
 	_current_path = path
+	# A scene entered while the game is paused has to come up frozen, not running
+	_apply_pause(GameState.is_paused())
 	if _current_scene.has_method(NEW_SCENE_PAYLOAD_METHOD_SIGNATURE):
 		_current_scene.call(NEW_SCENE_PAYLOAD_METHOD_SIGNATURE, payload)
 	await get_tree().process_frame
 	await Palette.fade_in()
-	get_tree().paused = GameState.is_paused()
+	# Only the swap used the tree pause; the game pause lives on _current_scene, see _apply_pause()
+	get_tree().paused = false
 	_is_swapping = false
 	scene_changed.emit(_current_scene)

@@ -12,6 +12,7 @@ signal all_treasures_collected()
 signal sonar_pinged(cooldown: float)
 
 const TREASURE_SCENE := preload("res://entities/digging/treasure/treasure.tscn")
+const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
 # Attempts per region before giving up on placing that treasure
 const PLACEMENT_ATTEMPTS := 24
@@ -53,6 +54,8 @@ var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
 var _hud: DigHUD
+var _status_hud: StatusHUD
+var _pause_menu: Node
 var _started: bool = false
 var _torch: TorchTimer
 var _dungeon_payload: Dictionary
@@ -84,8 +87,12 @@ func _ready() -> void:
 	_start_run.call_deferred()
 	
 func _exit_tree() -> void:
-	if _hud:
+	if is_instance_valid(_hud):
 		_hud.queue_free()
+	if is_instance_valid(_status_hud):
+		_status_hud.queue_free()
+	if is_instance_valid(_pause_menu):
+		_pause_menu.queue_free()
 
 # Builds the layout the seed describes. Guarded because both _ready() and
 # on_scene_entered() ask for it and only the first one may run.
@@ -130,6 +137,14 @@ func _mount_hud() -> void:
 	_hud = DigHUD.new()
 	container.add_child(_hud)
 	_hud.set_progress(_collected, get_treasure_count())
+	# The dungeon HUD died with the dungeon scene, so the run mounts its own copy: the torch
+	# keeps burning down here and the player has to see it.
+	_status_hud = StatusHUD.new()
+	container.add_child(_status_hud)
+	# Mounted last, so the paused screen covers everything else. The menu owns the
+	# btn_start / btn_b toggle on its own, see pause_manager.gd.
+	_pause_menu = PAUSE_MENU_SCENE.instantiate()
+	container.add_child(_pause_menu)
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
