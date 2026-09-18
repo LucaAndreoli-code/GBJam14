@@ -2,7 +2,7 @@ class_name DungeonManager
 extends Node2D
 
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
-const MAP_SCENE_PATH: String = "res://scenes/game/inventory.tscn"
+const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
 @export var level_target_points: int = 250
@@ -130,6 +130,7 @@ func _init_hud() -> void:
 		# Mounted last, so the paused screen covers the HUD instead of being drawn under it.
 		# The menu hides itself and owns the btn_start / btn_b toggle, see pause_manager.gd.
 		_pause_menu = PAUSE_MENU_SCENE.instantiate()
+		(_pause_menu as PauseMenuManager).setup(scene_file_path, _player)
 		_hud_container.add_child(_pause_menu)
 
 func _tick_gameover_timer() -> void:
@@ -140,9 +141,8 @@ func _tick_gameover_timer() -> void:
 	print("Game update: %d seconds from gameover" % _gameover_timer)
 
 func _open_map() -> void:
-	SignalBus.visibility_shader_toggled.emit(false)
 	var payload := {
-		"scene_path": scene_file_path,
+			"scene_path": scene_file_path,
 		"player_position": _player.global_position
 	}
 	SceneManager.go_to(MAP_SCENE_PATH, payload)
