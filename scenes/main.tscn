@@ -2,8 +2,8 @@
 
 [ext_resource type="Shader" uid="uid://cpiqrd1u2nd6w" path="res://shaders/palette.gdshader" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://g62xslriqynh" path="res://scripts/scenes/main.gd" id="1_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://brlei0juwbko8" path="res://scenes/game/level_selection.tscn" id="2_choun"]
 [ext_resource type="Script" uid="uid://clj7owb3w84eg" path="res://scripts/core/screen_palette_manager.gd" id="2_jyhfs"]
-[ext_resource type="PackedScene" uid="uid://cfivtqcri64l4" path="res://scenes/demo/test_dungeon/test_dungeon_dazorn.tscn" id="2_tefeu"]
 [ext_resource type="AudioStream" uid="uid://c82325iscag1t" path="res://assets/audio/LevelTheme_NoTail.mp3" id="3_o6xl0"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_tipki"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="4_85g3d"]
@@ -33,7 +33,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tbgi4")
-initial_scene = ExtResource("2_tefeu")
+initial_scene = ExtResource("2_choun")
 title_font = ExtResource("3_tipki")
 text_font = ExtResource("4_85g3d")
 little_font = ExtResource("5_choun")
