@@ -2,15 +2,15 @@ class_name DungeonManager
 extends Node2D
 
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
-const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
+const MAP_SCENE_PATH: String = "res://scenes/game/inventory.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
+@export var level_target_points: int = 250
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60
-## Treasures this dungeon still has to give up, handed to the digging minigame as the exact
-## set to bury. Temporary: the list belongs in the global state once the inventory owns it,
-## see start_digging_minigame(). Left empty, the minigame falls back on its own export.
-@export var minigame_treasures: Array[TreasureInfo] = []
+@export var minigame_session_min_treasures: int = 4
+@export var minigame_session_max_treasures: int = 4
+@export var available_treasures: Array[TreasureInfo] = []
 
 @onready var _level_tilemap: TileMapLayer = $DungeonTilemap
 @onready var _player: PlayerDungeonController = $PlayerDungeon
@@ -29,6 +29,8 @@ var _is_input_enabled: bool = true
 
 func _ready() -> void:
 	Palette.switch_to_palette("main")
+	GameState.get_seed()
+	_setup_treasures()
 	_setup_torch()
 	_player.set_dungeon_tilemap(_level_tilemap)
 	_minimap = Minimap.new(_level_tilemap, _player)
@@ -54,23 +56,27 @@ func _exit_tree() -> void:
 		_status_hud.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
-	# TODO: payload["collected_treasures"] holds the TreasureInfo the digging run brought
-	#       home. The inventory that has to bank them lives on another branch, so for now
-	#       they are simply dropped.
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
+	if payload.has("collected_treasures"):
+		GameState.add_treasures_to_collection(payload.get("collected_treasures", {}))
 	SceneManager.get_main_scene().toggle_bottom_bar(true)
 	SignalBus.visibility_shader_toggled.emit(true)
 
 func start_digging_minigame() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
+	var treasure_count := randi_range(minigame_session_min_treasures, minigame_session_max_treasures)
+	var minigame_treasures := GameState.get_treasures_pool()
+	if minigame_treasures.size() < treasure_count:
+		treasure_count = minigame_treasures.size()
+	var session_treasures: Array[TreasureInfo] = []
+	for i in range(treasure_count):
+		session_treasures.append(minigame_treasures.pop_back())
 	var payload := {
 		"scene_path": scene_file_path,
 		"player_position": _player.global_position,
-		# TODO: read the not-yet-found treasures off GameState once the inventory owns them,
-		#       instead of the list hand-filled on this node
-		"treasures": minigame_treasures
+		"treasures": session_treasures
 	}
 	SceneManager.go_to(MINIGAME_SCENE_PATH, payload)
 
@@ -87,6 +93,27 @@ func _on_torch_refill(_source: Node2D) -> void:
 func _on_torch_ended() -> void:
 	_gameover_timer = gameover_duration_seconds
 	_is_gameover_mode = true
+
+func _setup_treasures() -> void:
+	if GameState.is_treasures_pool_generated():
+		return
+	var digging_spots_count := get_tree().get_node_count_in_group(Groups.LEVEL_DIGGING_SPOTS)
+	if digging_spots_count <= 0:
+		push_warning("No digging spots found for this level!")
+		return
+	var treasures_count := randi_range( \
+		minigame_session_min_treasures * digging_spots_count, \
+		minigame_session_max_treasures * digging_spots_count)
+	var composition := TreasureUtils.pick_composition(treasures_count, level_target_points)
+	var minigame_treasures := GameState.get_treasures_pool()
+	minigame_treasures.clear()
+	for kind in composition.keys():
+		var availables := available_treasures.filter(func(t): return t.kind == kind)
+		for i in range(composition[kind]):
+			var pick: TreasureInfo = availables[randi_range(0, availables.size() - 1)]
+			minigame_treasures.append(pick)
+	minigame_treasures.shuffle()
+	GameState.set_treasures_pool(minigame_treasures)
 
 func _setup_torch() -> void:
 	var game_torch := GameState.get_torch()

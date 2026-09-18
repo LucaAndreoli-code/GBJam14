@@ -41,6 +41,7 @@ ui_container="The main UI container"
 hud_container="The main HUD container"
 level_torches="An interactable torch in the dungeon level"
 level_keys="An interactable key in the dungeon level"
+level_digging_spots="A digging spot in the dungeon"
 
 [input]
 

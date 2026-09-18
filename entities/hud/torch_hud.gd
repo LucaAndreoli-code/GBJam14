@@ -1,7 +1,8 @@
 class_name  TorchHUD
 extends Control
 
-const TORCH_SHEET: Texture2D = preload("res://assets/sprites/ui/torch_timer_icon.png")
+const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
+const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 40.0, 16.0, 16.0)
 const SIZE: Vector2 = Vector2(40.0, 16.0)
 const POSITION: Vector2 = Vector2(0.0, 128.0)
 
@@ -25,7 +26,10 @@ func _build_ui() -> void:
 	_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_container.add_theme_constant_override("separation", 0)
 	var icon := TextureRect.new()
-	icon.texture = TORCH_SHEET
+	var atlas := AtlasTexture.new()
+	atlas.atlas = UI_ICONS_SHEET
+	atlas.region = TORCH_TEXTURE_REGION
+	icon.texture = atlas
 	icon.stretch_mode = TextureRect.STRETCH_KEEP
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER

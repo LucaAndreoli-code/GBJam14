@@ -3,11 +3,24 @@
 [ext_resource type="Script" uid="uid://dv4mka4odeeqs" path="res://scripts/game/dungeon_manager.gd" id="1_7tgtp"]
 [ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/dungeon/player/player_dungeon.tscn" id="2_8irmh"]
 [ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="2_fj2dp"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="2_mbwg8"]
 [ext_resource type="Script" uid="uid://brslu3yjsif13" path="res://entities/dungeon/camera/camera_dungeon.gd" id="3_rj1lc"]
+[ext_resource type="Resource" uid="uid://cegd36fetqbhp" path="res://entities/treasures/small/coin.tres" id="3_ueavt"]
+[ext_resource type="Resource" uid="uid://cd50ddvh0rx4n" path="res://entities/treasures/small/broach.tres" id="4_qastf"]
+[ext_resource type="Resource" uid="uid://bvjjfdqx7lypu" path="res://entities/treasures/small/ring.tres" id="5_cinjs"]
 [ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/dungeon/torch/torch_interactable.tscn" id="5_deviu"]
 [ext_resource type="Texture2D" uid="uid://dm3j2amxf5848" path="res://assets/tilesets/dungeon_tileset.png" id="5_vrokx"]
+[ext_resource type="Resource" uid="uid://d0o8euefw4jf1" path="res://entities/treasures/small/pipe.tres" id="6_7ssra"]
+[ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="7_b3mqq"]
 [ext_resource type="PackedScene" uid="uid://d3rkgvya1ilj3" path="res://entities/dungeon/key/key_interactable.tscn" id="7_mbwg8"]
+[ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="8_cj7yi"]
 [ext_resource type="PackedScene" uid="uid://mou8qfukr7v4" path="res://entities/dungeon/dig/dig_interactable.tscn" id="8_vrokx"]
+[ext_resource type="Resource" uid="uid://b7i1qbasb3ypo" path="res://entities/treasures/medium/necklace.tres" id="9_yf7r3"]
+[ext_resource type="Resource" uid="uid://ckkkhrqm6p1sp" path="res://entities/treasures/medium/statuette.tres" id="10_q3lar"]
+[ext_resource type="Resource" uid="uid://b6sub528mq6a1" path="res://entities/treasures/large/mirror.tres" id="11_5m515"]
+[ext_resource type="Resource" uid="uid://bija40k4ua1ac" path="res://entities/treasures/large/reliquary.tres" id="12_ao06p"]
+[ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="13_gxe3p"]
+[ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="14_8h5qb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fj2dp"]
 texture = ExtResource("5_vrokx")
@@ -113,6 +126,7 @@ sources/1 = SubResource("TileSetAtlasSource_fj2dp")
 
 [node name="TestDungeonDazorn" type="Node2D" unique_id=536535527]
 script = ExtResource("1_7tgtp")
+available_treasures = Array[ExtResource("2_mbwg8")]([ExtResource("3_ueavt"), ExtResource("4_qastf"), ExtResource("5_cinjs"), ExtResource("6_7ssra"), ExtResource("7_b3mqq"), ExtResource("8_cj7yi"), ExtResource("9_yf7r3"), ExtResource("10_q3lar"), ExtResource("11_5m515"), ExtResource("12_ao06p"), ExtResource("13_gxe3p"), ExtResource("14_8h5qb")])
 
 [node name="GameTime" type="Node2D" parent="." unique_id=1219174099]
 script = ExtResource("2_fj2dp")
@@ -157,17 +171,17 @@ position = Vector2(42, 346)
 
 [node name="DigSpots" type="Node2D" parent="." unique_id=54567627]
 
-[node name="DigInteractable" parent="DigSpots" unique_id=320448274 node_paths=PackedStringArray("scene_root", "tilemap") instance=ExtResource("8_vrokx")]
+[node name="DigInteractable" parent="DigSpots" unique_id=320448274 node_paths=PackedStringArray("scene_root", "tilemap") groups=["level_digging_spots"] instance=ExtResource("8_vrokx")]
 position = Vector2(40, 200)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
 
-[node name="DigInteractable2" parent="DigSpots" unique_id=742334512 node_paths=PackedStringArray("scene_root", "tilemap") instance=ExtResource("8_vrokx")]
+[node name="DigInteractable2" parent="DigSpots" unique_id=742334512 node_paths=PackedStringArray("scene_root", "tilemap") groups=["level_digging_spots"] instance=ExtResource("8_vrokx")]
 position = Vector2(296, 88)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
 
-[node name="DigInteractable3" parent="DigSpots" unique_id=1195452886 node_paths=PackedStringArray("scene_root", "tilemap") instance=ExtResource("8_vrokx")]
+[node name="DigInteractable3" parent="DigSpots" unique_id=1195452886 node_paths=PackedStringArray("scene_root", "tilemap") groups=["level_digging_spots"] instance=ExtResource("8_vrokx")]
 position = Vector2(104, 232)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
