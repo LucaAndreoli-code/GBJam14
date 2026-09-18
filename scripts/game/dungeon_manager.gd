@@ -5,6 +5,7 @@ const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_mini
 const MAP_SCENE_PATH: String = "res://scenes/game/inventory.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 
+@export var level_minimum_points: int = 100
 @export var level_target_points: int = 250
 @export var torch_duration_seconds: int = 120
 @export var gameover_duration_seconds: int = 60

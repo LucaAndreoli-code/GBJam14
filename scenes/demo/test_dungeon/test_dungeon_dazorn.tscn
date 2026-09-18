@@ -93,6 +93,7 @@ texture = ExtResource("5_vrokx")
 0:4/0/custom_data_2 = Vector2i(1, 4)
 0:4/1 = 1
 0:4/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:4/1/custom_data_3 = true
 1:4/0 = 0
 1:4/0/custom_data_0 = true
 2:4/0 = 0
@@ -122,10 +123,13 @@ custom_data_layer_1/name = "locked_door"
 custom_data_layer_1/type = 1
 custom_data_layer_2/name = "opened_tile"
 custom_data_layer_2/type = 6
+custom_data_layer_3/name = "dungeon_entrance"
+custom_data_layer_3/type = 1
 sources/1 = SubResource("TileSetAtlasSource_fj2dp")
 
 [node name="TestDungeonDazorn" type="Node2D" unique_id=536535527]
 script = ExtResource("1_7tgtp")
+torch_duration_seconds = 10
 available_treasures = Array[ExtResource("2_mbwg8")]([ExtResource("3_ueavt"), ExtResource("4_qastf"), ExtResource("5_cinjs"), ExtResource("6_7ssra"), ExtResource("7_b3mqq"), ExtResource("8_cj7yi"), ExtResource("9_yf7r3"), ExtResource("10_q3lar"), ExtResource("11_5m515"), ExtResource("12_ao06p"), ExtResource("13_gxe3p"), ExtResource("14_8h5qb")])
 
 [node name="GameTime" type="Node2D" parent="." unique_id=1219174099]
