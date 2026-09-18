@@ -6,8 +6,11 @@ extends Area2D
 ## digging uncovers it a slice at a time, and it only becomes collectible once every cell
 ## of its footprint is gone.
 
-## Emits when the player walks into a revealed treasure, right before it frees itself
+## Emits when the player walks into a revealed treasure, before the pickup flicker starts
 signal collected(treasure: Treasure)
+## Emits when the pickup flicker is over, right before the treasure frees itself. Whoever
+## has to wait for the treasure to be off screen listens here instead of to collected.
+signal pickup_finished()
 
 ## Footprint of each kind, in field cells. The artwork is authored to match: a cell is 8px
 ## and every minigame_texture under entities/treasures is 8x8, 8x16 or 16x16.
@@ -36,6 +39,14 @@ const BURIED_Z: int = -1
 const FLASH_Z: int = 1
 const SILHOUETTE_SHADER: Shader = preload("res://shaders/treasure_silhouette.gdshader")
 
+## Seconds one on or off step of the pickup flicker lasts. Quicker than a sonar blink on
+## purpose: the flicker is a receipt for something the player just did, not a hint to read.
+@export_range(0.01, 0.5, 0.01) var pickup_step: float = 0.05
+## Seconds the whole pickup flicker lasts, before the treasure frees itself. The minigame
+## holds the swap back to the dungeon for this long on the last treasure, see
+## DiggingMinigame._on_treasure_collected().
+@export_range(0.05, 2.0, 0.05) var pickup_time: float = 0.3
+
 @onready var _shape: CollisionShape2D = $CollisionShape2D
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _silhouette: Sprite2D = $Silhouette
@@ -44,6 +55,7 @@ var _info: TreasureInfo
 var _cells: Array[Vector2i] = []
 var _revealed: bool = false
 var _flash_left: float = 0.0
+var _pickup_left: float = 0.0
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
@@ -128,6 +140,11 @@ func flash(duration: float) -> void:
 	set_process(true)
 
 func _process(delta: float) -> void:
+	# The pickup goes first: it takes the node over for good, while a sonar blink is only
+	# ever a passing hint.
+	if _pickup_left > 0.0:
+		_flicker_step(delta)
+		return
 	_flash_left -= delta
 	# _revealed can flip mid blink, when the player digs the treasure out while it shows
 	if _flash_left <= 0.0 or _revealed:
@@ -141,6 +158,19 @@ func _end_flash() -> void:
 	# Only the extra layer goes away. Whatever had been dug out stays uncovered
 	# underneath, exactly as it was before the ping.
 	_silhouette.visible = false
+
+## One frame of the pickup flicker, and the end of the treasure. The artwork is what blinks:
+## it is the layer the player is looking at, the silhouette belongs to the sonar.
+func _flicker_step(delta: float) -> void:
+	_pickup_left -= delta
+	if _pickup_left <= 0.0:
+		_pickup_left = 0.0
+		set_process(false)
+		_sprite.visible = false
+		pickup_finished.emit()
+		queue_free()
+		return
+	_sprite.visible = int(_pickup_left / pickup_step) % 2 == 0
 
 func _bury() -> void:
 	_revealed = false
@@ -164,5 +194,14 @@ func _footprint() -> Vector2i:
 func _on_body_entered(body: Node2D) -> void:
 	if body is not DigPlayer:
 		return
+	# The treasure outlives the pickup by the length of the flicker, so it has to stop
+	# answering the player or standing on it would collect it a second time.
+	monitoring = false
+	# A sonar blink can be running on this very treasure, and it owns _process: end it here
+	# so the flicker starts from a clean node.
+	_end_flash()
+	_pickup_left = pickup_time
+	set_process(true)
+	# Emitted now and not at the end of the flicker: the counter and the HUD answer the
+	# press, the flicker is only what the player sees while they do.
 	collected.emit(self)
-	queue_free()

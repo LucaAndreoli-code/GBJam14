@@ -67,6 +67,9 @@ var _status_hud: StatusHUD
 var _pause_menu: Node
 var _confirm_box: GBTextBox
 var _started: bool = false
+# The run can ask to leave more than once: the last pickup waits out its flicker before
+# swapping, and the exit stays walkable for those frames. Only the first ask counts.
+var _leaving: bool = false
 var _torch: TorchTimer
 var _dungeon_payload: Dictionary
 
@@ -360,7 +363,11 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	treasure_collected.emit(info, _collected, get_treasure_count())
 	if _collected >= get_treasure_count():
 		all_treasures_collected.emit()
-		_swap_back_to_dungeon()
+		# The swap pauses the whole tree, so starting it now would freeze the flicker on the
+		# last treasure, the one pickup the player is most likely to be watching. Input goes
+		# off meanwhile, and _swap_back_to_dungeon() puts it back.
+		GameState.set_input_enabled(false)
+		treasure.pickup_finished.connect(_swap_back_to_dungeon, CONNECT_ONE_SHOT)
 
 # The only way out of the run: the pit has no other exit. Everything dug up means leaving
 # on the spot; anything still buried gets the player asked first. Input goes off either
@@ -394,6 +401,9 @@ func _on_leave_choice(accepted: bool) -> void:
 	GameState.set_input_enabled(true)
 
 func _swap_back_to_dungeon() -> void:
+	if _leaving:
+		return
+	_leaving = true
 	# GameState is an autoload and SceneManager never touches the input flag, so leaving it
 	# off here would hand the dungeon a frozen player
 	GameState.set_input_enabled(true)
