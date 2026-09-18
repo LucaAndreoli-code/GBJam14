@@ -114,6 +114,11 @@ func _start_run() -> void:
 		return
 	_started = true
 	_rng.seed = GameState.get_seed()
+	# DigField filled itself on _ready(), before the seed was known: repainting here is what
+	# makes the same seed scatter the same debris twice.
+	_field.fill(_rng)
+	# The refill put back the dirt the pocket had taken out
+	_open_start_pocket()
 	_resolve_treasures()
 	_reserve_start_pocket()
 	_spawn_treasures()
