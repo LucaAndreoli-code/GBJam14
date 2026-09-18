@@ -2,8 +2,8 @@ class_name  TorchHUD
 extends Control
 
 const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
-const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 40.0, 16.0, 16.0)
-const TORCH_OFF_TEXTURE_REGION: Rect2 = Rect2(32.0, 40.0, 16.0, 16.0)
+const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 16.0, 16.0, 16.0)
+const TORCH_OFF_TEXTURE_REGION: Rect2 = Rect2(32.0, 16.0, 16.0, 16.0)
 const SIZE: Vector2 = Vector2(40.0, 16.0)
 const POSITION: Vector2 = Vector2(0.0, 128.0)
 
