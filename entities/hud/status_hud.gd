@@ -10,11 +10,19 @@ var _torch: TorchHUD
 var _keys: KeysHUD
 var _points: PointsHUD
 
-func _init() -> void:
-	_top_bar = TopBarHUD.new()
-	_torch = TorchHUD.new()
-	_keys = KeysHUD.new()
-	_points = PointsHUD.new()
+func _init(
+	top_bar_hud: bool = true, \
+	torch_hud: bool = true, \
+	keys_hud: bool = true, \
+	points_hud: bool = true) -> void:
+	if top_bar_hud:
+		_top_bar = TopBarHUD.new()
+	if torch_hud:
+		_torch = TorchHUD.new()
+	if keys_hud:
+		_keys = KeysHUD.new()
+	if points_hud:
+		_points = PointsHUD.new()
 
 func _ready() -> void:
 	name = "StatusHUD"

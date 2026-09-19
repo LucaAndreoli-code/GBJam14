@@ -184,7 +184,7 @@ func _mount_hud() -> void:
 	_hud.set_progress(_collected, get_treasure_count())
 	# The dungeon HUD died with the dungeon scene, so the run mounts its own copy: the torch
 	# keeps burning down here and the player has to see it.
-	_status_hud = StatusHUD.new()
+	_status_hud = StatusHUD.new(false)
 	container.add_child(_status_hud)
 	# Mounted last, so the paused screen covers everything else. The menu owns the
 	# btn_start / btn_b toggle on its own, see pause_manager.gd.
