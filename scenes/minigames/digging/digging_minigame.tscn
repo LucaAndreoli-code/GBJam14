@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="13_goblet"]
 [ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="14_book"]
 [ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="15_sword"]
+[ext_resource type="Script" uid="uid://lhjpnnmfek43" path="res://scripts/game/scene_intro_dialogue.gd" id="16_uc182"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(16, 11)
@@ -127,3 +128,8 @@ autoplay = "default"
 offset = Vector2(0, 3)
 script = ExtResource("8_torch")
 torch_light_radius = 40.0
+
+[node name="SceneIntro" type="Node2D" parent="." unique_id=1840034697]
+script = ExtResource("16_uc182")
+lines = ["Down in the dirt! Every wall crumbles: point the D-pad and tunnel wherever you please.", "Tap A: the sonar pings, buried loot winks back. It needs a breath before the next ping.", "Your torch burns the whole time. Grab the shinies, then dive back in the hole to climb out."]
+metadata/_custom_type_script = "uid://lhjpnnmfek43"
