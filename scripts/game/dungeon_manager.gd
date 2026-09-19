@@ -4,6 +4,9 @@ extends Node2D
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
 const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
+const TEXT_BOX_SCENE: PackedScene = preload("res://scenes/ui/gb_text_box.tscn")
+# Clear of the bottom bar at y 128: the box is 52px tall.
+const TEXT_BOX_POSITION := Vector2(0.0, 76.0)
 const EXIT_TILE_DATA_LAYER: String = "dungeon_entrance"
 const OPENED_TILE_DATA_LAYER: String = "opened_tile"
 
@@ -26,6 +29,7 @@ var _minimap: Minimap
 
 var _pause_menu: Node
 var _status_hud: StatusHUD
+var _text_box: GBTextBox
 
 var _exit_cells: Array[Vector2i] = []
 
@@ -48,6 +52,7 @@ func _ready() -> void:
 	_gameover = GameoverTimer.new()
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	SignalBus.points_changed.connect(_on_points_changed)
+	SignalBus.dialogue_requested.connect(_on_dialogue_requested)
 	_init_hud()
 	_torch.broadcast()
 	_gameover.broadcast()
@@ -66,6 +71,8 @@ func _exit_tree() -> void:
 		_pause_menu.queue_free()
 	if is_instance_valid(_status_hud):
 		_status_hud.queue_free()
+	if is_instance_valid(_text_box):
+		_text_box.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
 	if payload.has("player_position"):
@@ -95,6 +102,17 @@ func _on_input_enabled(is_enabled: bool) -> void:
 
 func _on_points_changed(_collected: int, _total: int) -> void:
 	_refresh_exit_door()
+
+# The box lives in main.tscn's HUD, outside this scene, so the dungeon drives it through the bus
+# instead of the sign reaching for it.
+func _on_dialogue_requested(lines: PackedStringArray) -> void:
+	if _text_box == null or _text_box.is_open():
+		return
+	GameState.set_input_enabled(false)
+	_text_box.show_dialogue(lines)
+
+func _on_dialogue_finished() -> void:
+	GameState.set_input_enabled(true)
 
 # The exit is authored as the alternative tile of the entrance door, so the cells are looked up by
 # tile data instead of by a hardcoded coordinate.
@@ -198,6 +216,12 @@ func _init_hud() -> void:
 		_pause_menu = PAUSE_MENU_SCENE.instantiate()
 		(_pause_menu as PauseMenuManager).setup(scene_file_path, _player)
 		_hud_container.add_child(_pause_menu)
+		# Mounted after the pause menu on purpose: _unhandled_input walks the tree bottom-up, so
+		# the box gets btn_a first and swallows it while it is open.
+		_text_box = TEXT_BOX_SCENE.instantiate()
+		_text_box.position = TEXT_BOX_POSITION
+		_hud_container.add_child(_text_box)
+		_text_box.dialogue_finished.connect(_on_dialogue_finished)
 
 func _open_map() -> void:
 	var payload := {
