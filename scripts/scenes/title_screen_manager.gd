@@ -9,6 +9,7 @@ const LEVEL_SEL_SCENE_PATH: String = "res://scenes/game/level_selection.tscn"
 @onready var _menu: VBoxContainer = $Container/Menu
 
 var _item_selected: int = 0
+var _is_input_enabled: bool = false
 
 func _ready() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
@@ -18,6 +19,8 @@ func _ready() -> void:
 	_splash_screen_anim.animation_finished.connect(_on_splash_screen_finished)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not _is_input_enabled:
+		return
 	if event.is_action_pressed("btn_a"):
 		if _item_selected == 0:
 			SceneManager.go_to(LEVEL_SEL_SCENE_PATH)
@@ -54,6 +57,7 @@ func _on_splash_screen_finished():
 	await char_move_tween.finished
 	_menu.visible = true
 	_refresh_ui()
+	_is_input_enabled = true
 
 func _refresh_ui() -> void:
 	for index in _menu.get_child_count():
