@@ -51,7 +51,7 @@ offset_top = 8.0
 offset_right = 150.0
 offset_bottom = 134.0
 
-[node name="Label" type="Label" parent="Container" unique_id=580621407]
+[node name="Label" type="Label" parent="Container" unique_id=283692390]
 layout_mode = 1
 offset_right = 72.0
 offset_bottom = 8.0
@@ -59,8 +59,6 @@ theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("3_nq4mu")
 theme_override_font_sizes/font_size = 8
 text = "Treasures"
-script = ExtResource("3_tw7bo")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1613933850]
 layout_mode = 1
@@ -76,13 +74,11 @@ custom_maximum_size = Vector2(8, 8)
 layout_mode = 2
 texture = SubResource("AtlasTexture_5ybx7")
 
-[node name="Hint" type="Label" parent="Container/BHint" unique_id=1222659046]
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=1751687355]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("19_5ybx7")
 theme_override_font_sizes/font_size = 8
 text = "Go back"
-script = ExtResource("3_tw7bo")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="GridContainer" type="PanelContainer" parent="Container" unique_id=669261983]
 layout_mode = 0
@@ -106,13 +102,11 @@ offset_bottom = 77.0
 layout_mode = 2
 texture = SubResource("AtlasTexture_mdkkr")
 
-[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=867964007]
+[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=2057592548]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("19_5ybx7")
 theme_override_font_sizes/font_size = 8
 text = "Navigate"
-script = ExtResource("3_tw7bo")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="InfoTitleBar" type="TextureRect" parent="Container" unique_id=1517074296]
 layout_mode = 0

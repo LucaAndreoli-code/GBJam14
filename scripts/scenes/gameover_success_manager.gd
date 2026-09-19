@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var _frame_title: GBLabel = $Container/Label
+@onready var _frame_title: Label = $Container/Label
 @onready var _treasure_t: Control = $"Container/TreasuresTitle"
 @onready var _treasure_i: Control = $"Container/TreasuresInfo"
 @onready var _required_points_v_label: Label = $Container/PointsInfo/RequiredCollected/Value
