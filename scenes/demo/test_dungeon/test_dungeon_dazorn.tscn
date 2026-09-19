@@ -130,6 +130,7 @@ sources/1 = SubResource("TileSetAtlasSource_fj2dp")
 [node name="TestDungeonDazorn" type="Node2D" unique_id=536535527]
 script = ExtResource("1_7tgtp")
 torch_duration_seconds = 10
+gameover_duration_seconds = 10
 available_treasures = Array[ExtResource("2_mbwg8")]([ExtResource("3_ueavt"), ExtResource("4_qastf"), ExtResource("5_cinjs"), ExtResource("6_7ssra"), ExtResource("7_b3mqq"), ExtResource("8_cj7yi"), ExtResource("9_yf7r3"), ExtResource("10_q3lar"), ExtResource("11_5m515"), ExtResource("12_ao06p"), ExtResource("13_gxe3p"), ExtResource("14_8h5qb")])
 
 [node name="GameTime" type="Node2D" parent="." unique_id=1219174099]

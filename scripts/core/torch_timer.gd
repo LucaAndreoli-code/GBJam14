@@ -49,6 +49,8 @@ func _on_refill(source: Node2D) -> void:
 	if source is PlayerDungeonController:
 		_countdown_timer = _duration
 		_update_game_state()
+		# The HUD and the light only hear changes, and the next tick is up to a second away.
+		broadcast()
 
 func _update_game_state() -> void:
 	var torch_data := Data.new()

@@ -27,6 +27,12 @@ signal torch_tick(remaining: int, light_value: float)
 ## Fired when a torch refill is requested.
 signal torch_refill(source: Node2D)
 
+## Fired when the gameover countdown changes: the seconds left and whether it is running.
+signal gameover_tick(remaining: int, is_active: bool)
+
+## Fired once when the gameover countdown runs out.
+signal gameover_triggered()
+
 ## Fired when the keys' counter changes
 signal keys_changed(amount: int)
 

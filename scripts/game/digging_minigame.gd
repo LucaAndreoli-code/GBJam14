@@ -40,6 +40,8 @@ const SONAR_ACTION := "btn_a"
 @export var sonar_flash_time: float = 1.5
 ## Torch seconds used only when the minigame is entered without coming from the dungeon
 @export var torch_duration_seconds: int = 120
+## Gameover seconds used only when the minigame is entered without coming from the dungeon
+@export var gameover_duration_seconds: int = 60
 
 @onready var _game_time: GameTime = $GameTime
 @onready var _field: DigField = $DigField
@@ -71,6 +73,7 @@ var _started: bool = false
 # swapping, and the exit stays walkable for those frames. Only the first ask counts.
 var _leaving: bool = false
 var _torch: TorchTimer
+var _gameover: GameoverTimer
 var _dungeon_payload: Dictionary
 
 func _ready() -> void:
@@ -90,13 +93,18 @@ func _ready() -> void:
 	# The dungeon's TorchTimer died with the dungeon scene, so the countdown needs its own
 	# owner here or it would freeze for the whole minigame. It resumes from GameState.
 	_setup_torch()
+	_setup_gameover()
 	_torch = TorchTimer.new()
 	_torch.torch_ended.connect(_on_torch_ended)
+	# The gameover countdown keeps running down here: the torch can die with the exit
+	# question up, and GameState is the only thing that carries it across the swap.
+	_gameover = GameoverTimer.new()
 	# The darkness here lives on the Surface sprite alone, see dig_surface.gd: the full screen
 	# pass would swallow the dig field too, and that has to stay readable.
 	SignalBus.visibility_shader_toggled.emit(false)
 	_mount_hud()
 	_torch.broadcast()
+	_gameover.broadcast()
 	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
 	# about to replace. Whichever path runs first wins, the other is a no-op.
@@ -149,6 +157,15 @@ func _setup_torch() -> void:
 		torch_data.duration = torch_duration_seconds
 		torch_data.countdown = torch_duration_seconds
 		GameState.set_torch(torch_data)
+
+# Mirrors DungeonManager._setup_gameover(): whoever gets there first wins.
+func _setup_gameover() -> void:
+	var data := GameState.get_gameover()
+	if data.duration == 0:
+		var gameover_data := GameoverTimer.Data.new()
+		gameover_data.duration = gameover_duration_seconds
+		gameover_data.countdown = gameover_duration_seconds
+		GameState.set_gameover(gameover_data)
 
 # The strip lives in main.tscn, outside this scene, so it is found by group rather
 # than by path. Running the minigame on its own leaves the group empty, which is why

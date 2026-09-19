@@ -10,6 +10,7 @@ var _input_enabled: bool = true
 
 var _time: GameTime.Data = GameTime.Data.new()
 var _torch: TorchTimer.Data = TorchTimer.Data.new()
+var _gameover: GameoverTimer.Data = GameoverTimer.Data.new()
 var _keys: int = 0
 var _collected_treasures: Dictionary[TreasureInfo, int] = {}
 
@@ -85,6 +86,18 @@ func set_torch(data: TorchTimer.Data) -> void:
 			_torch.duration = data.duration
 		if data.countdown != _torch.countdown:
 			_torch.countdown = data.countdown
+
+func get_gameover() -> GameoverTimer.Data:
+	return _gameover
+
+func set_gameover(data: GameoverTimer.Data) -> void:
+	if data:
+		if data.duration != _gameover.duration:
+			_gameover.duration = data.duration
+		if data.countdown != _gameover.countdown:
+			_gameover.countdown = data.countdown
+		if data.active != _gameover.active:
+			_gameover.active = data.active
 
 func get_keys() -> int:
 	return _keys
