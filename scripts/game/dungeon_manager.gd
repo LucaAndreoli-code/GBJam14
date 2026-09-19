@@ -45,7 +45,7 @@ func _ready() -> void:
 	_init_hud()
 	_torch.broadcast()
 	_gameover.broadcast()
-	
+	#TODO
 	SignalBus.gameover_triggered.connect(func(): push_warning("GAMEOVER"))
 
 func _unhandled_input(event: InputEvent) -> void:
