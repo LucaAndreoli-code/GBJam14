@@ -15,6 +15,10 @@ const LEVEL_SELECTED_ICON_TEXTURE_REGION: Rect2 = Rect2(24.0, 0.0, 24.0, 24.0)
 var _item_selected: int = 0
 
 func _ready() -> void:
+	# Reaching this screen ends a run, whether the player finished the level, quit it or died, so
+	# this is the single place the world state has to be wiped. Harmless on boot: this scene is
+	# main.tscn's initial_scene.
+	GameState.reset_run()
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	_refresh_ui()
 

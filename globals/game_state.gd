@@ -14,7 +14,14 @@ var _gameover: GameoverTimer.Data = GameoverTimer.Data.new()
 var _keys: int = 0
 var _collected_treasures: Dictionary[TreasureInfo, int] = {}
 
-var _dug_interactables: Dictionary[Vector2i, bool] = {}
+# World state, scoped per level: the level's scene_file_path maps to a
+# Dictionary[Vector2i, bool] of tilemap cells. The dungeon scene is rebuilt from its .tscn on
+# every return from a digging run, so whatever the world lost has to be replayed from here.
+var _dug_interactables: Dictionary[String, Dictionary] = {}
+var _taken_torches: Dictionary[String, Dictionary] = {}
+var _taken_keys: Dictionary[String, Dictionary] = {}
+var _opened_doors: Dictionary[String, Dictionary] = {}
+
 var _seen_scene_intros: Dictionary[String, bool] = {}
 
 var _minimap: MinimapUtils.Data = MinimapUtils.Data.new()
@@ -141,15 +148,43 @@ func set_exit_door_opened() -> void:
 	_exit_door_opened = true
 	SignalBus.exit_door_opened.emit()
 
-func is_interactable_dug(cell: Vector2i) -> bool:
-	if not _dug_interactables.has(cell):
-		return false
-	return _dug_interactables[cell]
+func is_interactable_dug(level_key: String, cell: Vector2i) -> bool:
+	return _has_level_cell(_dug_interactables, level_key, cell)
 
-func add_dug_interactable(cell: Vector2i) -> void:
-	if _dug_interactables.has(cell):
-		return
-	_dug_interactables[cell] = true
+func add_dug_interactable(level_key: String, cell: Vector2i) -> void:
+	_add_level_cell(_dug_interactables, level_key, cell)
+
+func is_torch_taken(level_key: String, cell: Vector2i) -> bool:
+	return _has_level_cell(_taken_torches, level_key, cell)
+
+func add_taken_torch(level_key: String, cell: Vector2i) -> void:
+	_add_level_cell(_taken_torches, level_key, cell)
+
+func is_key_taken(level_key: String, cell: Vector2i) -> bool:
+	return _has_level_cell(_taken_keys, level_key, cell)
+
+func add_taken_key(level_key: String, cell: Vector2i) -> void:
+	_add_level_cell(_taken_keys, level_key, cell)
+
+func is_door_opened(level_key: String, cell: Vector2i) -> bool:
+	return _has_level_cell(_opened_doors, level_key, cell)
+
+func add_opened_door(level_key: String, cell: Vector2i) -> void:
+	_add_level_cell(_opened_doors, level_key, cell)
+
+## The cells a level has to re-open on load, see DungeonManager._reapply_opened_doors().
+func get_opened_doors(level_key: String) -> Array:
+	return _opened_doors.get(level_key, {}).keys()
+
+func _has_level_cell(store: Dictionary, level_key: String, cell: Vector2i) -> bool:
+	var cells: Dictionary = store.get(level_key, {})
+	return cells.get(cell, false)
+
+func _add_level_cell(store: Dictionary, level_key: String, cell: Vector2i) -> void:
+	if not store.has(level_key):
+		var cells: Dictionary[Vector2i, bool] = {}
+		store[level_key] = cells
+	store[level_key][cell] = true
 
 # Session state: never reset, so a scene's intro text plays once per launch even though the
 # dungeon scene is rebuilt on every return from a digging run.
@@ -180,3 +215,26 @@ func set_treasures_pool(value: Array[TreasureInfo]) -> void:
 	for t in _treasures_pool:
 		_total_points += TreasureUtils.get_treasure_points(t)
 	SignalBus.points_changed.emit(_collected_points, _total_points)
+
+# Wipes everything a single run owns. Called when the level selection opens, so replaying a level
+# starts from a clean world. Fonts and _seen_scene_intros are deliberately left alone: the first
+# is process-wide setup, the second is session state by design, see is_scene_intro_seen().
+func reset_run() -> void:
+	_seed = 0
+	_paused = false
+	_input_enabled = true
+	_time = GameTime.Data.new()
+	_torch = TorchTimer.Data.new()
+	_gameover = GameoverTimer.Data.new()
+	_keys = 0
+	_collected_treasures = {}
+	_dug_interactables = {}
+	_taken_torches = {}
+	_taken_keys = {}
+	_opened_doors = {}
+	_minimap = MinimapUtils.Data.new()
+	_treasures_pool_generated = false
+	_treasures_pool = []
+	_collected_points = 0
+	_total_points = 0
+	_exit_door_opened = false
