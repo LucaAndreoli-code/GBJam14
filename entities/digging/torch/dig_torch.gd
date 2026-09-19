@@ -18,8 +18,7 @@ extends AnimatedSprite2D
 var _light_value: float = 1.0
 
 func _ready() -> void:
-	# Read once as well as listening: the signal only fires on a change
-	_light_value = _read_light_value()
+	# The seeding tick comes from DiggingMinigame._ready(), see TorchTimer.broadcast()
 	SignalBus.torch_tick.connect(_on_torch_tick)
 
 ## Called every frame by DigSurface, see dig_surface.gd. Same duck-typed contract as the dungeon's
@@ -31,11 +30,3 @@ func get_light_radius() -> Vector3:
 
 func _on_torch_tick(_remaining: int, light_value: float) -> void:
 	_light_value = light_value
-
-# TorchTimer.Data only carries the raw numbers, so the ratio is rebuilt here. The guard
-# covers the scene being run on its own, before anything seeded GameState.
-func _read_light_value() -> float:
-	var torch := GameState.get_torch()
-	if torch.duration <= 0:
-		return 1.0
-	return clamp(float(torch.countdown) / float(torch.duration), 0.0, 1.0)

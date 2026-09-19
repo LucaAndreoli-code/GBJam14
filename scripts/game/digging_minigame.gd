@@ -96,6 +96,9 @@ func _ready() -> void:
 	# pass would swallow the dig field too, and that has to stay readable.
 	SignalBus.visibility_shader_toggled.emit(false)
 	_mount_hud()
+	# Last, once the HUD is up: DigTorch and the HUD start from their own defaults, and a spent
+	# torch never ticks again, see TorchTimer.broadcast().
+	_torch.broadcast()
 	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
 	# about to replace. Whichever path runs first wins, the other is a no-op.

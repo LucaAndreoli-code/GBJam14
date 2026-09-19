@@ -21,7 +21,17 @@ func get_remaining_duration() -> int:
 	return _countdown_timer
 
 func get_light_value() -> float:
+	# A scene run on its own seeds nothing, and 0 / 0 would poison the radius with a NAN
+	if _duration <= 0:
+		return 1.0
 	return clamp(float(_countdown_timer) / float(_duration), 0.0, 1.0)
+
+## Pushes the state rehydrated in _init() out to the listeners. Every scene rebuilds its own
+## nodes from defaults, and _on_game_second_tick() stops emitting once the countdown is spent,
+## so without this a scene entered on a dead torch would keep a full light forever. The caller
+## decides when: the listeners have to be connected first.
+func broadcast() -> void:
+	SignalBus.torch_tick.emit(_countdown_timer, get_light_value())
 
 func _on_game_second_tick(_game_seconds: int) -> void:
 	if _countdown_timer == 0:
