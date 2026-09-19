@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_37fnd"]
 [ext_resource type="Script" uid="uid://o3at6pxfxnqs" path="res://scripts/scenes/gameover_success_manager.gd" id="1_v0ipw"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_3w8a8"]
-[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_v0ipw"]
 [ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_fd4ci"]
 [ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="6_ihndi"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="7_b4466"]
@@ -33,7 +32,7 @@ offset_top = 8.0
 offset_right = 152.0
 offset_bottom = 136.0
 
-[node name="Label" type="Label" parent="Container" unique_id=877051718]
+[node name="Label" type="Label" parent="Container" unique_id=144500561]
 layout_mode = 1
 offset_right = 72.0
 offset_bottom = 8.0
@@ -41,8 +40,6 @@ theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("2_3w8a8")
 theme_override_font_sizes/font_size = 8
 text = "You lose!"
-script = ExtResource("3_v0ipw")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="PointsTitle" type="Control" parent="Container" unique_id=464216859]
 anchors_preset = 0
@@ -237,13 +234,11 @@ custom_maximum_size = Vector2(8, 8)
 layout_mode = 2
 texture = SubResource("AtlasTexture_taqsa")
 
-[node name="Hint" type="Label" parent="Container/BHint" unique_id=1448884055]
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=296296034]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_qex75")
 theme_override_font_sizes/font_size = 8
 text = "Back to title"
-script = ExtResource("3_v0ipw")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="AHint" type="HBoxContainer" parent="Container" unique_id=1199279602]
 layout_mode = 1
@@ -261,10 +256,8 @@ grow_vertical = 0
 layout_mode = 2
 texture = SubResource("AtlasTexture_b4466")
 
-[node name="Hint" type="Label" parent="Container/AHint" unique_id=1385925243]
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=738497594]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("8_qex75")
 theme_override_font_sizes/font_size = 8
 text = "Retry level"
-script = ExtResource("3_v0ipw")
-metadata/_custom_type_script = "uid://cidt6x11067q0"

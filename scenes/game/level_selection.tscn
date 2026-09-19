@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_bfpls"]
 [ext_resource type="Script" uid="uid://qpn5we7qgoys" path="res://scripts/ui/level_selection_item.gd" id="2_0vt1s"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_5etf1"]
-[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_0vt1s"]
 [ext_resource type="Texture2D" uid="uid://c4sy2muwpruk1" path="res://assets/sprites/ui/level_selection_background.png" id="4_5etf1"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="4_bxyb5"]
 [ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="5_amf2j"]
@@ -37,9 +36,9 @@ animations = [{
 "speed": 7.5
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5pjst"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3au1a"]
 atlas = ExtResource("4_bxyb5")
-region = Rect2(16, 0, 8, 8)
+region = Rect2(24, 0, 23, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qgx0i"]
 atlas = ExtResource("4_bxyb5")
@@ -93,7 +92,7 @@ offset_top = 8.0
 offset_right = 152.0
 offset_bottom = 134.0
 
-[node name="Label" type="Label" parent="Container" unique_id=1137264972]
+[node name="Label" type="Label" parent="Container" unique_id=1888111467]
 layout_mode = 1
 offset_right = 72.0
 offset_bottom = 8.0
@@ -101,30 +100,27 @@ theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("2_5etf1")
 theme_override_font_sizes/font_size = 8
 text = "Levels"
-script = ExtResource("3_0vt1s")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1836299033]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -38.0
+offset_left = -53.0
 offset_bottom = 8.0
 grow_horizontal = 0
 
 [node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=525337032]
-custom_maximum_size = Vector2(8, 8)
+custom_maximum_size = Vector2(23, 8)
 layout_mode = 2
-texture = SubResource("AtlasTexture_5pjst")
+texture = SubResource("AtlasTexture_3au1a")
+stretch_mode = 2
 
-[node name="Hint" type="Label" parent="Container/BHint" unique_id=545606726]
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=2145433296]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_amf2j")
 theme_override_font_sizes/font_size = 8
 text = "Go back"
-script = ExtResource("3_0vt1s")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="DpadHint" type="HBoxContainer" parent="Container" unique_id=1259326809]
 layout_mode = 1
@@ -141,13 +137,11 @@ grow_vertical = 0
 layout_mode = 2
 texture = SubResource("AtlasTexture_qgx0i")
 
-[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=1424976464]
+[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=2042202573]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_amf2j")
 theme_override_font_sizes/font_size = 8
 text = "Navigate"
-script = ExtResource("3_0vt1s")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="LevelInfo" type="Panel" parent="Container" unique_id=1460801962]
 layout_mode = 0
@@ -258,13 +252,11 @@ grow_vertical = 0
 layout_mode = 2
 texture = SubResource("AtlasTexture_bfpls")
 
-[node name="Hint" type="Label" parent="Container/AHint" unique_id=453939762]
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=113039781]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_amf2j")
 theme_override_font_sizes/font_size = 8
 text = "Confirm"
-script = ExtResource("3_0vt1s")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="Levels" type="Control" parent="Container" unique_id=1189034896]
 anchors_preset = 0
@@ -305,14 +297,3 @@ pivot_offset = Vector2(39, 21)
 texture = SubResource("AtlasTexture_0mymv")
 stretch_mode = 2
 script = ExtResource("2_0vt1s")
-
-[node name="ListContainer_UNUSED" type="ScrollContainer" parent="." unique_id=64489417]
-visible = false
-offset_left = 8.0
-offset_top = 24.0
-offset_right = 150.0
-offset_bottom = 80.0
-follow_focus = true
-
-[node name="List" type="VBoxContainer" parent="ListContainer_UNUSED" unique_id=316285441]
-layout_mode = 2
