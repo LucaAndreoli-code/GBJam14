@@ -72,6 +72,9 @@ var _started: bool = false
 # The run can ask to leave more than once: the last pickup waits out its flicker before
 # swapping, and the exit stays walkable for those frames. Only the first ask counts.
 var _leaving: bool = false
+# Tells the two things the confirm box is used for apart: dialogue_finished fires for a
+# question as well, and that path is owned by _on_leave_choice().
+var _dialogue_open: bool = false
 var _torch: TorchTimer
 var _gameover: GameoverTimer
 var _dungeon_payload: Dictionary
@@ -80,6 +83,8 @@ func _ready() -> void:
 	# Read once as well as listening: the signal only fires on a change
 	_is_input_enabled = GameState.is_input_enabled()
 	SignalBus.input_enabled.connect(_on_input_enabled)
+	SignalBus.dialogue_requested.connect(_on_dialogue_requested)
+	SignalBus.game_paused.connect(_on_game_paused)
 	_field.cells_carved.connect(_on_cells_carved)
 	_exit.player_returned.connect(_on_player_returned)
 	_exit.set_player(_player)
@@ -185,12 +190,17 @@ func _mount_hud() -> void:
 	# btn_start / btn_b toggle on its own, see pause_manager.gd.
 	_pause_menu = PAUSE_MENU_SCENE.instantiate()
 	container.add_child(_pause_menu)
+	# No inventory halfway down a dig: the run never calls setup(), so the menu has neither a
+	# player nor a scene to come back to, see PauseMenuManager._open_inventory().
+	(_pause_menu as PauseMenuManager).set_action_disabled(&"_open_inventory", true)
 	# After the pause menu on purpose: _unhandled_input walks the tree bottom up, so the
 	# box sees btn_start first and can keep the paused screen off a live question.
 	_confirm_box = CONFIRM_BOX_SCENE.instantiate()
 	_confirm_box.position = CONFIRM_BOX_POSITION
 	container.add_child(_confirm_box)
 	_confirm_box.choice_made.connect(_on_leave_choice)
+	# Same box serves the exit question and any plain dialogue, see _on_dialogue_requested()
+	_confirm_box.dialogue_finished.connect(_on_dialogue_finished)
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
@@ -206,6 +216,14 @@ func _process(delta: float) -> void:
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
+
+# Resume is answered with btn_a, and the scene starts processing again on that very frame: the
+# polled sonar would read the same press, exactly like it does after the exit question, see
+# _on_leave_choice().
+func _on_game_paused(is_paused: bool) -> void:
+	if is_paused:
+		return
+	_swallow_sonar_press = true
 
 ## Called by SceneManager when this scene is entered, see scene_manager.gd
 func on_scene_entered(payload: Dictionary) -> void:
@@ -412,6 +430,29 @@ func _on_player_returned() -> void:
 	_confirm_box.show_confirm(PackedStringArray([
 		"You're leaving %d %s behind. Climb out anyway?" % [left, subject]
 	]))
+
+# The box lives in main.tscn's HUD, outside this scene, so the run drives it through the bus
+# instead of the caller reaching for it. Mirrors DungeonManager._on_dialogue_requested().
+func _on_dialogue_requested(lines: PackedStringArray) -> void:
+	if _confirm_box == null or _confirm_box.is_open():
+		return
+	_dialogue_open = true
+	GameState.set_input_enabled(false)
+	# Nobody burns torch seconds reading. Both countdowns hang off GameTime's second tick,
+	# see TorchTimer._on_game_second_tick() and GameoverTimer._on_game_second_tick(), so the
+	# clock itself is what goes off - stopping only the torch would let the gameover run on.
+	_game_time.set_process(false)
+	_confirm_box.show_dialogue(lines)
+
+func _on_dialogue_finished() -> void:
+	# A closing question fires this too, and that one is answered by _on_leave_choice()
+	if not _dialogue_open:
+		return
+	_dialogue_open = false
+	_game_time.set_process(true)
+	# The press that closed the box is spent, and the polled sonar is about to read it again
+	_swallow_sonar_press = true
+	GameState.set_input_enabled(true)
 
 func _on_leave_choice(accepted: bool) -> void:
 	# Either way the press that answered is spent, and gameplay is about to hear about it

@@ -15,6 +15,7 @@ var _keys: int = 0
 var _collected_treasures: Dictionary[TreasureInfo, int] = {}
 
 var _dug_interactables: Dictionary[Vector2i, bool] = {}
+var _seen_scene_intros: Dictionary[String, bool] = {}
 
 var _minimap: MinimapUtils.Data = MinimapUtils.Data.new()
 var _treasures_pool_generated: bool = false
@@ -149,6 +150,14 @@ func add_dug_interactable(cell: Vector2i) -> void:
 	if _dug_interactables.has(cell):
 		return
 	_dug_interactables[cell] = true
+
+# Session state: never reset, so a scene's intro text plays once per launch even though the
+# dungeon scene is rebuilt on every return from a digging run.
+func is_scene_intro_seen(intro_key: String) -> bool:
+	return _seen_scene_intros.get(intro_key, false)
+
+func mark_scene_intro_seen(intro_key: String) -> void:
+	_seen_scene_intros[intro_key] = true
 
 func get_minimap() -> MinimapUtils.Data:
 	return _minimap
