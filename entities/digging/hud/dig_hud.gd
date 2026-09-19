@@ -15,8 +15,10 @@ const POSITION: Vector2 = Vector2.ZERO
 
 ## On the surface band, which the entrance art paints in the darkest shade: the icon
 ## reads against it without a backing plate.
-const ICON_POSITION: Vector2 = Vector2(4.0, 4.0)
-const ICON_TEXTURE: Texture2D = preload("res://assets/sprites/demo/scanner.png")
+const ICON_POSITION: Vector2 = Vector2(3.0, 2.0)
+## Same shared sheet the dungeon HUDs pull from, see torch_hud.gd and points_hud.gd
+const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
+const ICON_REGION: Rect2 = Rect2(0.0, 32.0, 16.0, 24.0)
 const CHARGE_SHADER: Shader = preload("res://shaders/hud_charge.gdshader")
 
 ## Top right corner: the counter is right aligned inside this box, so the text keeps its
@@ -50,12 +52,21 @@ func _ready() -> void:
 func _build_icon() -> void:
 	var charge_material := ShaderMaterial.new()
 	charge_material.shader = CHARGE_SHADER
+	# The icon is a region of the sheet, so the shader's UV spans that region rather than
+	# 0..1: it needs the span to place the fill level on the icon's own rows.
+	var sheet_height := UI_ICONS_SHEET.get_size().y
+	charge_material.set_shader_parameter("region_v_min", ICON_REGION.position.y / sheet_height)
+	charge_material.set_shader_parameter("region_v_size", ICON_REGION.size.y / sheet_height)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = UI_ICONS_SHEET
+	atlas.region = ICON_REGION
 	_icon = TextureRect.new()
 	_icon.name = "SonarCharge"
-	_icon.texture = ICON_TEXTURE
+	_icon.texture = atlas
+	_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_icon.position = ICON_POSITION
-	# 1:1 with the texture, so the shader's UV.y lands exactly on rows of pixels
-	_icon.size = ICON_TEXTURE.get_size()
+	# 1:1 with the region, so the shader's fill level lands exactly on rows of pixels
+	_icon.size = ICON_REGION.size
 	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_icon.material = charge_material
 	add_child(_icon)
@@ -91,7 +102,7 @@ func _update_counter_text() -> void:
 func set_cooldown_ratio(ratio: float) -> void:
 	# Quantized to the row of pixels the fill would actually reach: the level pushes this
 	# every frame, and rewriting the uniform for a step too small to see is wasted work.
-	var rows := float(ICON_TEXTURE.get_height())
+	var rows := ICON_REGION.size.y
 	var charge := roundf((1.0 - clampf(ratio, 0.0, 1.0)) * rows) / rows
 	if is_equal_approx(charge, _charge):
 		return

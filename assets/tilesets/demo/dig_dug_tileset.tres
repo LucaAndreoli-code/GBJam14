@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://b5xjkag1yxbtb"]
 
 [ext_resource type="Texture2D" uid="uid://b3yhgmq7rwb6c" path="res://assets/tilesets/digging_tileset.png" id="1_bkrfj"]
+[ext_resource type="Texture2D" uid="uid://dvyf8vblbyh05" path="res://assets/tilesets/digging_border_and_debris.png" id="2_decor"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_80kvp"]
 texture = ExtResource("1_bkrfj")
@@ -25,8 +26,29 @@ texture_region_size = Vector2i(8, 8)
 4:2/0 = 0
 5:2/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_decor"]
+texture = ExtResource("2_decor")
+texture_region_size = Vector2i(8, 8)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+
 [resource]
 resource_name = "DigDugTileSet"
 tile_size = Vector2i(8, 8)
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_80kvp")
+sources/2 = SubResource("TileSetAtlasSource_decor")

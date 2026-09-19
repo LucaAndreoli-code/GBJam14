@@ -5,7 +5,8 @@ extends Area2D
 ## The player spawns inside it, so it only counts as a return once the player has actually
 ## left it: without that, the run would end on the very first frame.
 
-## Emits the first time the player comes back, and never again
+## Emits when the player comes back into the pocket, and then the exit stops sampling:
+## the run is over unless rearm() puts it back to work.
 signal player_returned()
 
 var _player: DigPlayer
@@ -27,6 +28,16 @@ func _ready() -> void:
 func set_player(player: DigPlayer) -> void:
 	_player = player
 
+## Puts the exit back to work after the player refused to leave. The player is standing
+## inside the pocket right now, so the arming flag goes back down with it: it takes a walk
+## out into the field, and a second walk in, before the return is reported again.
+func rearm() -> void:
+	_armed = false
+	# The player is inside as of the frame that emitted, so the sampler has to agree or the
+	# very next frame would read a fresh entry and fire straight away.
+	_was_inside = true
+	set_physics_process(true)
+
 func _physics_process(_delta: float) -> void:
 	# Set one frame late by the minigame: children are readied before their parent
 	if _player == null:
@@ -42,5 +53,5 @@ func _physics_process(_delta: float) -> void:
 	if not _armed:
 		return
 	player_returned.emit()
-	# Nothing left to sample: the run is over
+	# Nothing left to sample until someone asks for more, see rearm()
 	set_physics_process(false)

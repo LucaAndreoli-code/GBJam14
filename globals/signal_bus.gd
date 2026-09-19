@@ -27,7 +27,20 @@ signal torch_tick(remaining: int, light_value: float)
 ## Fired when a torch refill is requested.
 signal torch_refill(source: Node2D)
 
+## Fired when the gameover countdown changes: the seconds left and whether it is running.
+signal gameover_tick(remaining: int, is_active: bool)
+
+## Fired once when the gameover countdown runs out.
+signal gameover_triggered()
+
 ## Fired when the keys' counter changes
 signal keys_changed(amount: int)
+
+## Fired when the treasure points change: what has been banked so far, and what the level's
+## pool is worth in total.
+signal points_changed(collected: int, total: int)
+
+## Fired once when the dungeon's exit door unlocks.
+signal exit_door_opened()
 
 @warning_ignore_restore("unused_signal")

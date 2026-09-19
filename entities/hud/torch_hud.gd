@@ -10,6 +10,10 @@ const POSITION: Vector2 = Vector2(0.0, 128.0)
 var _container: HBoxContainer
 var _label: Label
 var _icon: TextureRect
+# Starts at -1 so a scene run on its own still shows "---" until a tick seeds it
+var _torch_remaining: int = -1
+var _gameover_remaining: int = 0
+var _is_gameover: bool = false
 
 func _init() -> void:
 	_build_ui()
@@ -19,12 +23,25 @@ func _ready() -> void:
 	size = SIZE
 	position = POSITION
 	SignalBus.torch_tick.connect(_on_torch_tick)
+	SignalBus.gameover_tick.connect(_on_gameover_tick)
 
 func _on_torch_tick(remaining: int, _light_value: float) -> void:
-	_update_label_text(remaining)
+	_torch_remaining = remaining
+	_refresh()
+
+func _on_gameover_tick(remaining: int, is_active: bool) -> void:
+	_gameover_remaining = remaining
+	_is_gameover = is_active
+	_refresh()
+
+# In gameover mode the torch reads 000 and stays there, which the unlit icon already says.
+# The slot lends its label to the countdown that is actually running.
+func _refresh() -> void:
+	var is_lit := not _is_gameover and _torch_remaining > 0
+	_update_label_text(_gameover_remaining if _is_gameover else _torch_remaining)
 	var atlas := AtlasTexture.new()
 	atlas.atlas = UI_ICONS_SHEET
-	atlas.region = TORCH_OFF_TEXTURE_REGION if remaining <= 0 else TORCH_TEXTURE_REGION
+	atlas.region = TORCH_TEXTURE_REGION if is_lit else TORCH_OFF_TEXTURE_REGION
 	_icon.texture = atlas
 
 func _build_ui() -> void:
