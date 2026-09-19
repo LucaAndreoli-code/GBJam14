@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://ddfgeusjr4v27" path="res://scripts/scenes/level_selection_manager.gd" id="1_5etf1"]
 [ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_bfpls"]
-[ext_resource type="Script" uid="uid://d2y617d3c5l1r" path="res://scripts/ui/level_selection_item.gd" id="2_0vt1s"]
+[ext_resource type="Script" uid="uid://qpn5we7qgoys" path="res://scripts/ui/level_selection_item.gd" id="2_0vt1s"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_5etf1"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_0vt1s"]
-[ext_resource type="PackedScene" uid="uid://cfivtqcri64l4" path="res://scenes/demo/test_dungeon/test_dungeon_dazorn.tscn" id="3_bxyb5"]
 [ext_resource type="Texture2D" uid="uid://c4sy2muwpruk1" path="res://assets/sprites/ui/level_selection_background.png" id="4_5etf1"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="4_bxyb5"]
 [ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="5_amf2j"]
@@ -14,6 +13,7 @@
 [ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="10_uwyhh"]
 [ext_resource type="Texture2D" uid="uid://dtfdsy1rkw1h6" path="res://assets/sprites/ui/level_selected_icon.png" id="11_bxyb5"]
 [ext_resource type="Texture2D" uid="uid://h5gt8sakogsi" path="res://assets/sprites/ui/ui_mini_icons.png" id="11_cqdyp"]
+[ext_resource type="Resource" uid="uid://tmbu8wl5ns4l" path="res://scenes/game/level_1/level_1_info.tres" id="14_cqdyp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_amf2j"]
 atlas = ExtResource("11_bxyb5")
@@ -90,7 +90,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 150.0
+offset_right = 152.0
 offset_bottom = 134.0
 
 [node name="Label" type="Label" parent="Container" unique_id=1137264972]
@@ -131,10 +131,10 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 58.0
-offset_top = -126.0
-offset_right = 100.0
-offset_bottom = -118.0
+offset_left = 102.0
+offset_top = -56.0
+offset_right = 144.0
+offset_bottom = -48.0
 grow_vertical = 0
 
 [node name="Icon" type="TextureRect" parent="Container/DpadHint" unique_id=769138635]
@@ -244,20 +244,21 @@ theme_override_fonts/font = ExtResource("10_uwyhh")
 theme_override_font_sizes/font_size = 8
 text = "x0"
 
-[node name="AHint" type="HBoxContainer" parent="Container/LevelInfo/Control" unique_id=596154111]
+[node name="AHint" type="HBoxContainer" parent="Container" unique_id=596154111]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -8.0
+offset_top = -56.0
 offset_right = 38.0
+offset_bottom = -48.0
 grow_vertical = 0
 
-[node name="Icon" type="TextureRect" parent="Container/LevelInfo/Control/AHint" unique_id=1220679460]
+[node name="Icon" type="TextureRect" parent="Container/AHint" unique_id=1220679460]
 layout_mode = 2
 texture = SubResource("AtlasTexture_bfpls")
 
-[node name="Hint" type="Label" parent="Container/LevelInfo/Control/AHint" unique_id=453939762]
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=453939762]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_amf2j")
 theme_override_font_sizes/font_size = 8
@@ -281,12 +282,7 @@ pivot_offset = Vector2(39, 21)
 texture = SubResource("AtlasTexture_0mymv")
 stretch_mode = 2
 script = ExtResource("2_0vt1s")
-title = "Level 1"
-short_text = "A very very test level"
-level_scene = ExtResource("3_bxyb5")
-digging_spots = 3
-keys = 4
-torches = 1
+level_info = ExtResource("14_cqdyp")
 
 [node name="Level2" type="TextureRect" parent="Container/Levels" unique_id=1319212318]
 layout_mode = 0
@@ -298,12 +294,6 @@ pivot_offset = Vector2(39, 21)
 texture = SubResource("AtlasTexture_0mymv")
 stretch_mode = 2
 script = ExtResource("2_0vt1s")
-title = "Level 2"
-short_text = "Just for UI test purpose"
-level_scene = ExtResource("3_bxyb5")
-digging_spots = 1
-keys = 4
-torches = 2
 
 [node name="Level3" type="TextureRect" parent="Container/Levels" unique_id=500192121]
 layout_mode = 0
@@ -315,12 +305,6 @@ pivot_offset = Vector2(39, 21)
 texture = SubResource("AtlasTexture_0mymv")
 stretch_mode = 2
 script = ExtResource("2_0vt1s")
-title = "Level 3"
-short_text = "Just for UI test purpose"
-level_scene = ExtResource("3_bxyb5")
-digging_spots = 1
-keys = 4
-torches = 2
 
 [node name="ListContainer_UNUSED" type="ScrollContainer" parent="." unique_id=64489417]
 visible = false

@@ -3,6 +3,7 @@ extends Node2D
 
 const MINIGAME_SCENE_PATH: String = "res://scenes/minigames/digging/digging_minigame.tscn"
 const MAP_SCENE_PATH: String = "res://scenes/game/map.tscn"
+const GAMEOVER_SCENE_PATH: String = "res://scenes/game/gameover_success.tscn"
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
 const TEXT_BOX_SCENE: PackedScene = preload("res://scenes/ui/gb_text_box.tscn")
 # Clear of the bottom bar at y 128: the box is 52px tall.
@@ -59,8 +60,7 @@ func _ready() -> void:
 	_torch.broadcast()
 	_gameover.broadcast()
 	_refresh_exit_door()
-	#TODO
-	SignalBus.gameover_triggered.connect(func(): push_warning("GAMEOVER"))
+	SignalBus.gameover_triggered.connect(_on_gameover_triggered)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_input_enabled:
@@ -115,6 +115,13 @@ func _on_dialogue_requested(lines: PackedStringArray) -> void:
 
 func _on_dialogue_finished() -> void:
 	GameState.set_input_enabled(true)
+
+func _on_gameover_triggered() -> void:
+	var payload := {
+		"scene_path": scene_file_path,
+		"is_gameover": true
+	}
+	SceneManager.go_to(GAMEOVER_SCENE_PATH, payload)
 
 # The exit is authored as the alternative tile of the entrance door, so the cells are looked up by
 # tile data instead of by a hardcoded coordinate.
