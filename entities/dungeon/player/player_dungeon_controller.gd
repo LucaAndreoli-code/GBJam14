@@ -195,10 +195,14 @@ func _get_facing_key_door() -> Variant:
 		return null
 	return cell
 
+# Both halves are recorded as they are swapped: the pairing is known here and nowhere else, so
+# DungeonManager._reapply_opened_doors() never has to re-derive it after a scene reload.
 func _open_door(door: Vector2i) -> void:
+	var level_key := _get_level_key()
 	var source_id := _dungeon.get_cell_source_id(door)
 	var data := _dungeon.get_cell_tile_data(door)
 	_dungeon.set_cell(door, source_id, data.get_custom_data("opened_tile"))
+	GameState.add_opened_door(level_key, door)
 	var cell := door + _facing
 	while true:
 		data = _dungeon.get_cell_tile_data(cell)
@@ -207,5 +211,10 @@ func _open_door(door: Vector2i) -> void:
 		if data.get_custom_data("locked_door"):
 			source_id = _dungeon.get_cell_source_id(cell)
 			_dungeon.set_cell(cell, source_id, data.get_custom_data("opened_tile"))
+			GameState.add_opened_door(level_key, cell)
 			return
 		cell += _facing
+
+## Mirrors DungeonInteractable.get_level_key(): owner is the dungeon root.
+func _get_level_key() -> String:
+	return owner.scene_file_path if owner else ""

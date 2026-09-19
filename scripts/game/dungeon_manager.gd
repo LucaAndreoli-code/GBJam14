@@ -9,6 +9,7 @@ const TEXT_BOX_SCENE: PackedScene = preload("res://scenes/ui/gb_text_box.tscn")
 const TEXT_BOX_POSITION := Vector2(0.0, 76.0)
 const EXIT_TILE_DATA_LAYER: String = "dungeon_entrance"
 const OPENED_TILE_DATA_LAYER: String = "opened_tile"
+const LOCKED_TILE_DATA_LAYER: String = "locked_door"
 
 @export var level_minimum_points: int = 100
 @export var level_target_points: int = 250
@@ -43,6 +44,7 @@ func _ready() -> void:
 	_setup_gameover()
 	_player.set_dungeon_tilemap(_level_tilemap)
 	_find_exit_cells()
+	_reapply_opened_doors()
 	_minimap = Minimap.new(_level_tilemap, _player)
 	add_child(_minimap)
 	_hud_container = get_tree().get_first_node_in_group(Groups.HUD_CONTAINER) as Control
@@ -149,6 +151,19 @@ func _are_all_digging_spots_dug() -> bool:
 		if not (spot as DigInteractable).is_dug():
 			return false
 	return true
+
+# Key doors are tiles, not nodes, so the reload brings them back locked. Idempotent the same way
+# _open_exit_cells() is: a cell that no longer reads as locked has already been swapped.
+func _reapply_opened_doors() -> void:
+	for cell in GameState.get_opened_doors(scene_file_path):
+		var data := _level_tilemap.get_cell_tile_data(cell)
+		if data == null or not data.get_custom_data(LOCKED_TILE_DATA_LAYER):
+			continue
+		var opened_tile: Vector2i = data.get_custom_data(OPENED_TILE_DATA_LAYER)
+		if opened_tile == Vector2i.ZERO:
+			push_warning("Locked door at %s has no opened_tile set" % cell)
+			continue
+		_level_tilemap.set_cell(cell, _level_tilemap.get_cell_source_id(cell), opened_tile)
 
 # Idempotent: a cell that no longer reads as an exit has already been swapped.
 func _open_exit_cells() -> void:

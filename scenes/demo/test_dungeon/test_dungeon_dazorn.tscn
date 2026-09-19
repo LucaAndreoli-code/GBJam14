@@ -169,14 +169,17 @@ player = NodePath("../PlayerDungeon")
 
 [node name="Torches" type="Node2D" parent="." unique_id=953464231]
 
-[node name="EntranceTorch" parent="Torches" unique_id=538814493 groups=["light_sources"] instance=ExtResource("5_deviu")]
+[node name="EntranceTorch" parent="Torches" unique_id=538814493 groups=["light_sources"] node_paths=PackedStringArray("tilemap") instance=ExtResource("5_deviu")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(72, -6)
+is_pickable = false
 light_radius = 20.0
 light_central_radius_ratio = 1.15
 light_outer_radius_ratio = 0.0
 is_sprite_visible = false
 
-[node name="TorchInteractable" parent="Torches" unique_id=2015663561 groups=["light_sources"] instance=ExtResource("5_deviu")]
+[node name="TorchInteractable" parent="Torches" unique_id=2015663561 groups=["light_sources"] node_paths=PackedStringArray("tilemap") instance=ExtResource("5_deviu")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(245, 45)
 light_radius = 10.0
 light_central_radius_ratio = 1.15
@@ -185,16 +188,20 @@ is_sprite_visible = true
 
 [node name="Keys" type="Node2D" parent="." unique_id=588186782]
 
-[node name="KeyInteractable" parent="Keys" unique_id=1178760682 instance=ExtResource("7_mbwg8")]
+[node name="KeyInteractable" parent="Keys" unique_id=1178760682 node_paths=PackedStringArray("tilemap") instance=ExtResource("7_mbwg8")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(58, 374)
 
-[node name="KeyInteractable2" parent="Keys" unique_id=1703350284 instance=ExtResource("7_mbwg8")]
+[node name="KeyInteractable2" parent="Keys" unique_id=1703350284 node_paths=PackedStringArray("tilemap") instance=ExtResource("7_mbwg8")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(136, 70)
 
-[node name="KeyInteractable3" parent="Keys" unique_id=232887413 instance=ExtResource("7_mbwg8")]
+[node name="KeyInteractable3" parent="Keys" unique_id=232887413 node_paths=PackedStringArray("tilemap") instance=ExtResource("7_mbwg8")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(118, 382)
 
-[node name="KeyInteractable4" parent="Keys" unique_id=2075056670 instance=ExtResource("7_mbwg8")]
+[node name="KeyInteractable4" parent="Keys" unique_id=2075056670 node_paths=PackedStringArray("tilemap") instance=ExtResource("7_mbwg8")]
+tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(42, 346)
 
 [node name="DigSpots" type="Node2D" parent="." unique_id=54567627]

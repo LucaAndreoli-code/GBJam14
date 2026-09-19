@@ -44,8 +44,10 @@ torch_light_radius = 20.0
 player_light_max_diameter = 20.0
 torch_light_min_value = 0.25
 
-[node name="TorchInteractable" parent="." unique_id=555735461 groups=["light_sources"] instance=ExtResource("4_l5dg3")]
+[node name="TorchInteractable" parent="." unique_id=555735461 groups=["light_sources"] node_paths=PackedStringArray("tilemap") instance=ExtResource("4_l5dg3")]
+tilemap = NodePath("../TerrainTilemap")
 position = Vector2(48, 80)
 
-[node name="TorchInteractable2" parent="." unique_id=117931280 instance=ExtResource("4_l5dg3")]
+[node name="TorchInteractable2" parent="." unique_id=117931280 node_paths=PackedStringArray("tilemap") instance=ExtResource("4_l5dg3")]
+tilemap = NodePath("../TerrainTilemap")
 position = Vector2(122, 49)

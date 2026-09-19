@@ -14,7 +14,7 @@ func _ready() -> void:
 		push_warning("Tilemap not set on interactable %s" % name)
 	if not scene_root:
 		push_warning("Scene root node not set on interactable %s" % name)
-	if GameState.is_interactable_dug(_get_tilemap_cell()):
+	if GameState.is_interactable_dug(get_level_key(), _get_tilemap_cell()):
 		_update_tile()
 		queue_free()
 
@@ -27,7 +27,7 @@ func can_interact(_player: PlayerDungeonController) -> bool:
 func is_dug() -> bool:
 	if not tilemap:
 		return false
-	return GameState.is_interactable_dug(_get_tilemap_cell())
+	return GameState.is_interactable_dug(get_level_key(), _get_tilemap_cell())
 
 func interact(_player: PlayerDungeonController) -> void:
 	if not tilemap or not scene_root:
@@ -35,7 +35,7 @@ func interact(_player: PlayerDungeonController) -> void:
 	if _is_busy:
 		return
 	_is_busy = true
-	GameState.add_dug_interactable(_get_tilemap_cell())
+	GameState.add_dug_interactable(get_level_key(), _get_tilemap_cell())
 	scene_root.start_digging_minigame()
 
 func _update_tile() -> void:
