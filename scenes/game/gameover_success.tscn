@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://d3voaqsodpcr4"]
+
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_37fnd"]
+[ext_resource type="Script" uid="uid://o3at6pxfxnqs" path="res://scripts/scenes/gameover_success_manager.gd" id="1_v0ipw"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_3w8a8"]
+[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_v0ipw"]
+[ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_fd4ci"]
+
+[node name="Gameover" type="Node2D" unique_id=1127617407]
+script = ExtResource("1_v0ipw")
+
+[node name="Frame" type="TextureRect" parent="." unique_id=1030883206]
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("1_37fnd")
+
+[node name="Container" type="Control" parent="." unique_id=1149693888]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 152.0
+offset_bottom = 134.0
+
+[node name="Label" type="Label" parent="Container" unique_id=877051718]
+layout_mode = 1
+offset_right = 72.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("2_3w8a8")
+theme_override_font_sizes/font_size = 8
+text = "You lose!"
+script = ExtResource("3_v0ipw")
+metadata/_custom_type_script = "uid://cidt6x11067q0"
+
+[node name="Info" type="VBoxContainer" parent="Container" unique_id=1745038928]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 142.0
+offset_bottom = 52.0
+
+[node name="PointsRequested" type="HSplitContainer" parent="Container/Info" unique_id=717294099]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/Info/PointsRequested" unique_id=1757017784]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_fd4ci")
+text = "Points requested:"
+
+[node name="Value" type="Label" parent="Container/Info/PointsRequested" unique_id=949113350]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_fd4ci")
+text = "1000"
+horizontal_alignment = 2

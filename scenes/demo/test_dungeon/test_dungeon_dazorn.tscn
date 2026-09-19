@@ -22,7 +22,7 @@
 [ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="13_gxe3p"]
 [ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="14_8h5qb"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fj2dp"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ueavt"]
 texture = ExtResource("5_vrokx")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
@@ -141,7 +141,7 @@ custom_data_layer_2/name = "opened_tile"
 custom_data_layer_2/type = 6
 custom_data_layer_3/name = "dungeon_entrance"
 custom_data_layer_3/type = 1
-sources/1 = SubResource("TileSetAtlasSource_fj2dp")
+sources/1 = SubResource("TileSetAtlasSource_ueavt")
 
 [node name="TestDungeonDazorn" type="Node2D" unique_id=536535527]
 script = ExtResource("1_7tgtp")

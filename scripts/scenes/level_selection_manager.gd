@@ -52,12 +52,13 @@ func _refresh_ui() -> void:
 			if _selection_icon:
 				_selection_icon.position = tex_rect.global_position
 				_selection_icon.position.x += tex_rect.size.x / 2
-			var level := node as LevelSelectionItem
-			_level_title_label.text = level.title
-			_level_text_label.text = level.short_text
-			_level_shovel_label.text = "%02d" % level.digging_spots
-			_level_key_label.text = "%02d" % level.keys
-			_level_torch_label.text = "%02d" % level.torches
+			var level := (node as LevelSelectionItem).level_info
+			if level:
+				_level_title_label.text = level.title
+				_level_text_label.text = level.short_text
+				_level_shovel_label.text = "%02d" % level.digging_spots
+				_level_key_label.text = "%02d" % level.keys
+				_level_torch_label.text = "%02d" % level.torches
 
 func _move_list_selection(dy: int) -> void:
 	var count := _levels_container.get_child_count()
@@ -72,6 +73,9 @@ func _move_list_selection(dy: int) -> void:
 func _confirm_level() -> void:
 	var levels_count := _levels_container.get_child_count()
 	if _item_selected >= 0 and _item_selected < levels_count:
-		var level := _levels_container.get_child(_item_selected)
+		var node := _levels_container.get_child(_item_selected)
+		if node == null or node is not LevelSelectionItem:
+			return
+		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
 			SceneManager.go_to(level.level_scene.resource_path)
