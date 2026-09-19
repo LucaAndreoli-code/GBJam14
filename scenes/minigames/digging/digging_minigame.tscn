@@ -131,5 +131,5 @@ torch_light_radius = 40.0
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=1840034697]
 script = ExtResource("16_uc182")
-lines = ["Down in the dirt! Every wall crumbles: point the D-pad and tunnel wherever you please.", "Tap A: the sonar pings, buried loot winks back. It needs a breath before the next ping.", "Your torch burns the whole time. Grab the shinies, then dive back in the hole to climb out."]
+lines = ["Here we are, explorer!", "Every wall here crumbles: use the D-Pad (WASD) to dig in any direction.", "Press A (X) to use the sonar. Buried treasures will light up for a moment.", "Wait a bit before the next ping... it needs to recharge!", "Oh... be careful, your torch keeps burning down here too.", "Grab what you can, then head back to the hole to climb out."]
 metadata/_custom_type_script = "uid://lhjpnnmfek43"

@@ -8,4 +8,7 @@ script = ExtResource("1_rcrjv")
 title = "Level 1"
 short_text = "This level introduces you to the game."
 level_scene = ExtResource("1_qsq4t")
+digging_spots = 2
+keys = 1
+torches = 1
 metadata/_custom_type_script = "uid://d2y617d3c5l1r"

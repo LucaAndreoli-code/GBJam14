@@ -96,6 +96,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if door != null:
 		_open_door(door)
 		GameState.set_keys(keys - 1)
+		var lines: PackedStringArray = ["The door unlocked!"]
+		SignalBus.dialogue_requested.emit(lines)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_interact_hud):
@@ -117,10 +119,14 @@ func set_dungeon_tilemap(tilemap: TileMapLayer) -> void:
 
 func pick_torch() -> void:
 	SignalBus.torch_refill.emit(self)
+	var lines: PackedStringArray = ["Torch refilled!"]
+	SignalBus.dialogue_requested.emit(lines)
 
 func add_key() -> void:
 	var amount := GameState.get_keys()
 	GameState.set_keys(amount + 1)
+	var lines: PackedStringArray = ["Got a key!"]
+	SignalBus.dialogue_requested.emit(lines)
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
