@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LevelInfo" format=3 uid="uid://dcprupx8tpbr3"]
+
+[ext_resource type="PackedScene" uid="uid://cs66mdymun2u0" path="res://scenes/game/level_3/level_3.tscn" id="1_220ds"]
+[ext_resource type="Script" uid="uid://d2y617d3c5l1r" path="res://scripts/ui/level_info.gd" id="1_em3dd"]
+
+[resource]
+script = ExtResource("1_em3dd")
+title = "Level 3"
+short_text = "If you've made it this far, you must like our game. Enjoy what's left of it :)"
+level_scene = ExtResource("1_220ds")
+digging_spots = 4
+keys = 3
+torches = 4
+metadata/_custom_type_script = "uid://d2y617d3c5l1r"
