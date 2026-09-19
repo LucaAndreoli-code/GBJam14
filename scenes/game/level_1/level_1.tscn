@@ -147,7 +147,6 @@ sources/1 = SubResource("TileSetAtlasSource_r0gmu")
 script = ExtResource("1_r0gmu")
 level_minimum_points = 50
 level_target_points = 100
-torch_duration_seconds = 60
 available_treasures = Array[ExtResource("2_rfw5n")]([ExtResource("3_4dlj5"), ExtResource("4_uksyj"), ExtResource("5_garbb"), ExtResource("6_4l87u"), ExtResource("7_dl85d"), ExtResource("8_vbsy0"), ExtResource("9_hc8h7"), ExtResource("10_dxkae"), ExtResource("11_wwv35"), ExtResource("12_3clxb"), ExtResource("13_8b3d6"), ExtResource("14_3hyjb")])
 
 [node name="GameTime" type="Node2D" parent="." unique_id=1217055201]
