@@ -43,6 +43,9 @@ signal points_changed(collected: int, total: int)
 ## Fired once when the dungeon's exit door unlocks.
 signal exit_door_opened()
 
+## Fired once the player crosses the exit door.
+signal exit_door_crossed()
+
 ## Fired when an entity asks the current scene to show a dialogue box, one array entry per page.
 signal dialogue_requested(lines: PackedStringArray)
 

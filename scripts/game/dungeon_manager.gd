@@ -59,8 +59,8 @@ func _ready() -> void:
 	_init_hud()
 	_torch.broadcast()
 	_gameover.broadcast()
-	_refresh_exit_door()
 	SignalBus.gameover_triggered.connect(_on_gameover_triggered)
+	SignalBus.exit_door_crossed.connect(_on_exit_door_crossed)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_input_enabled:
@@ -82,6 +82,10 @@ func on_scene_entered(payload: Dictionary) -> void:
 		_camera.snap_to_player()
 	SceneManager.get_main_scene().toggle_bottom_bar(true)
 	SignalBus.visibility_shader_toggled.emit(true)
+	# Moved here because in _ready it renders dialogue box when shader has
+	# not already been set up
+	await get_tree().create_timer(0.5).timeout
+	_refresh_exit_door()
 
 func start_digging_minigame() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
@@ -110,16 +114,25 @@ func _on_points_changed(_collected: int, _total: int) -> void:
 func _on_dialogue_requested(lines: PackedStringArray) -> void:
 	if _text_box == null or _text_box.is_open():
 		return
+	GameState.set_paused(true)
 	GameState.set_input_enabled(false)
 	_text_box.show_dialogue(lines)
 
 func _on_dialogue_finished() -> void:
+	GameState.set_paused(false)
 	GameState.set_input_enabled(true)
 
 func _on_gameover_triggered() -> void:
 	var payload := {
 		"scene_path": scene_file_path,
 		"is_gameover": true
+	}
+	SceneManager.go_to(GAMEOVER_SCENE_PATH, payload)
+
+func _on_exit_door_crossed() -> void:
+	var payload := {
+		"scene_path": scene_file_path,
+		"is_gameover": false
 	}
 	SceneManager.go_to(GAMEOVER_SCENE_PATH, payload)
 
@@ -140,6 +153,8 @@ func _refresh_exit_door() -> void:
 	if not GameState.is_exit_door_opened():
 		if not _is_exit_unlocked():
 			return
+		var lines: PackedStringArray = ["You feel a draft on your back... a door must have opened somewhere."]
+		SignalBus.dialogue_requested.emit(lines)
 		GameState.set_exit_door_opened()
 	_open_exit_cells()
 

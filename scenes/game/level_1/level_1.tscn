@@ -21,8 +21,10 @@
 [ext_resource type="Resource" uid="uid://bija40k4ua1ac" path="res://entities/treasures/large/reliquary.tres" id="12_3clxb"]
 [ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="13_8b3d6"]
 [ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="14_3hyjb"]
+[ext_resource type="Script" uid="uid://nw3qtks4jhds" path="res://scripts/core/exit_area_manager.gd" id="19_uksyj"]
+[ext_resource type="PackedScene" uid="uid://c8snk3xqv1wr4" path="res://entities/dungeon/sign/sign_interactable.tscn" id="22_4dlj5"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r0gmu"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uksyj"]
 texture = ExtResource("2_neopm")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
@@ -141,7 +143,10 @@ custom_data_layer_2/name = "opened_tile"
 custom_data_layer_2/type = 6
 custom_data_layer_3/name = "dungeon_entrance"
 custom_data_layer_3/type = 1
-sources/1 = SubResource("TileSetAtlasSource_r0gmu")
+sources/1 = SubResource("TileSetAtlasSource_uksyj")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0mymv"]
+size = Vector2(16, 20)
 
 [node name="Level1" type="Node2D" unique_id=1164376741]
 script = ExtResource("1_r0gmu")
@@ -166,26 +171,36 @@ anchor_mode = 0
 script = ExtResource("4_ryhof")
 player = NodePath("../PlayerDungeon")
 
+[node name="ExitArea" type="Area2D" parent="." unique_id=1945399787]
+script = ExtResource("19_uksyj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea" unique_id=1337039512]
+position = Vector2(72, 10)
+shape = SubResource("RectangleShape2D_0mymv")
+
 [node name="Keys" type="Node2D" parent="." unique_id=2070155554]
 
-[node name="Key1" parent="Keys" unique_id=2015663561 instance=ExtResource("5_neopm")]
+[node name="Key1" parent="Keys" unique_id=2015663561 node_paths=PackedStringArray("tilemap") instance=ExtResource("5_neopm")]
 position = Vector2(-111, 216)
+tilemap = NodePath("../../DungeonTilemap")
 
 [node name="Torches" type="Node2D" parent="." unique_id=340209533]
 
-[node name="EntranceTorch" parent="Torches" unique_id=345507219 groups=["light_sources"] instance=ExtResource("6_gblsj")]
+[node name="EntranceTorch" parent="Torches" unique_id=345507219 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("6_gblsj")]
 position = Vector2(72, -6)
 light_radius = 20.0
 light_central_radius_ratio = 1.15
 light_outer_radius_ratio = 0.0
 is_sprite_visible = false
+tilemap = NodePath("../../DungeonTilemap")
 
-[node name="Torch1" parent="Torches" unique_id=976909529 groups=["light_sources"] instance=ExtResource("6_gblsj")]
+[node name="Torch1" parent="Torches" unique_id=976909529 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("6_gblsj")]
 position = Vector2(25, 331)
 light_radius = 10.0
 light_central_radius_ratio = 1.15
 light_outer_radius_ratio = 2.0
 is_sprite_visible = true
+tilemap = NodePath("../../DungeonTilemap")
 
 [node name="DigSpots" type="Node2D" parent="." unique_id=1376168475]
 
@@ -198,3 +213,21 @@ tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(104, 520)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Signs" type="Node2D" parent="." unique_id=560674007]
+
+[node name="Sign1" parent="Signs" unique_id=1704938251 instance=ExtResource("22_4dlj5")]
+position = Vector2(29, 72)
+lines = ["Welcome, explorer!", "It's been a while since your last crawl,so we've prepared this path as a reminder.", "Lesson 1: use the D-Pad (WASD) to move around the ruins."]
+
+[node name="Sign2" parent="Signs" unique_id=1525943991 instance=ExtResource("22_4dlj5")]
+position = Vector2(108, 216)
+lines = ["Oh, time for another lesson... number 2!", "This door seems locked. What could help? A key, maybe? Let's go find it!", "Oh right, you should be able to pick it up pressing A (X)."]
+
+[node name="Sign3" parent="Signs" unique_id=1312508534 instance=ExtResource("22_4dlj5")]
+position = Vector2(60, 344)
+lines = ["Your torch is your only light, and it won't last forever.", "Press A (X) to pick up abandoned torches and gain more time.", "Trust me, you don't want to see this place in the dark..."]
+
+[node name="Sign4" parent="Signs" unique_id=538047770 instance=ExtResource("22_4dlj5")]
+position = Vector2(92, 488)
+lines = ["Look, digging sites!", "Dig here to find rare treasures.Once you've collected enough, you can leave this place.", "How? Just reach a door with light on the other side.", "One last thing: you can only dig while your torch is off."]
