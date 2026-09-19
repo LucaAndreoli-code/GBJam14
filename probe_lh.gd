@@ -1,0 +1,12 @@
+extends Node2D
+
+func _ready() -> void:
+	var box: GBTextBox = (load("res://scenes/ui/gb_text_box.tscn") as PackedScene).instantiate()
+	add_child(box)
+	var l: GBLabel = box.get_node("GBLabel")
+	var f: Font = l.get_theme_font("font")
+	print("PROBE default_line_spacing=", l.get_theme_constant("line_spacing"), " font_height=", f.get_height(8), " line_height=", l.get_line_height())
+	for sp in [3, 4, 5, 6, 7, 8, 9, 10]:
+		l.add_theme_constant_override("line_spacing", sp)
+		print("PROBE spacing=", sp, " line_height=", l.get_line_height(), " lines_in_40px=", int(40.0 / l.get_line_height()), " lines_in_27px=", int(27.0 / l.get_line_height()))
+	get_tree().quit()

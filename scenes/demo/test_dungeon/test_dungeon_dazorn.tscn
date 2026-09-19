@@ -14,6 +14,7 @@
 [ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="7_b3mqq"]
 [ext_resource type="PackedScene" uid="uid://d3rkgvya1ilj3" path="res://entities/dungeon/key/key_interactable.tscn" id="7_mbwg8"]
 [ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="8_cj7yi"]
+[ext_resource type="PackedScene" uid="uid://c8snk3xqv1wr4" path="res://entities/dungeon/sign/sign_interactable.tscn" id="8_sign"]
 [ext_resource type="PackedScene" uid="uid://mou8qfukr7v4" path="res://entities/dungeon/dig/dig_interactable.tscn" id="8_vrokx"]
 [ext_resource type="Resource" uid="uid://b7i1qbasb3ypo" path="res://entities/treasures/medium/necklace.tres" id="9_yf7r3"]
 [ext_resource type="Resource" uid="uid://ckkkhrqm6p1sp" path="res://entities/treasures/medium/statuette.tres" id="10_q3lar"]
@@ -212,3 +213,9 @@ tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(104, 232)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Signs" type="Node2D" parent="." unique_id=1704938260]
+
+[node name="SignInteractable" parent="Signs" unique_id=1704938261 instance=ExtResource("8_sign")]
+position = Vector2(56, 40)
+lines = PackedStringArray("Le palle sono sembre arse, l\'arsura di queste e\' imponente.", "PORCODDIOOOO")
