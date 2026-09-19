@@ -22,6 +22,7 @@ var _treasures_pool: Array[TreasureInfo] = []
 
 var _collected_points: int = 0
 var _total_points: int = 0
+var _exit_door_opened: bool = false
 
 func get_title_font() -> Font:
 	return _title_font
@@ -127,6 +128,17 @@ func get_collected_points() -> int:
 
 func get_total_points() -> int:
 	return _total_points
+
+func is_exit_door_opened() -> bool:
+	return _exit_door_opened
+
+# One-way and emitted from here, so the door announces itself exactly once per run even though
+# the dungeon scene is rebuilt on every return from a digging run.
+func set_exit_door_opened() -> void:
+	if _exit_door_opened:
+		return
+	_exit_door_opened = true
+	SignalBus.exit_door_opened.emit()
 
 func is_interactable_dug(cell: Vector2i) -> bool:
 	if not _dug_interactables.has(cell):

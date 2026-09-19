@@ -40,4 +40,7 @@ signal keys_changed(amount: int)
 ## pool is worth in total.
 signal points_changed(collected: int, total: int)
 
+## Fired once when the dungeon's exit door unlocks.
+signal exit_door_opened()
+
 @warning_ignore_restore("unused_signal")

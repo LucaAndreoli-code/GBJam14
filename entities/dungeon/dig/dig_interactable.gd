@@ -1,3 +1,4 @@
+class_name DigInteractable
 extends DungeonInteractable
 
 const TILESET_SOURCE_ID: int = 1
@@ -21,6 +22,12 @@ func _ready() -> void:
 ## the A prompt goes off with it, see PlayerDungeonController._toggle_interact_hud().
 func can_interact(_player: PlayerDungeonController) -> bool:
 	return GameState.get_torch().countdown > 0
+
+## Asked by DungeonManager to know whether the level has any digging left.
+func is_dug() -> bool:
+	if not tilemap:
+		return false
+	return GameState.is_interactable_dug(_get_tilemap_cell())
 
 func interact(_player: PlayerDungeonController) -> void:
 	if not tilemap or not scene_root:
