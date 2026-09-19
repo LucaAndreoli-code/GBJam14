@@ -33,8 +33,6 @@ func _ready() -> void:
 	GameState.get_seed()
 	_setup_treasures()
 	_setup_torch()
-	# torch_ended fires once, and it can fire inside the pit: the dungeon rebuilt after that
-	# would never hear it, so a dead torch on entry arms the countdown here instead.
 	if GameState.get_torch().countdown == 0:
 		_gameover_timer = gameover_duration_seconds
 		_is_gameover_mode = true
@@ -48,8 +46,6 @@ func _ready() -> void:
 	SignalBus.input_enabled.connect(_on_input_enabled)
 	SignalBus.torch_refill.connect(_on_torch_refill)
 	_init_hud()
-	# Last, once the HUD is up: the player and the HUD start from their own defaults, and a spent
-	# torch never ticks again, see TorchTimer.broadcast().
 	_torch.broadcast()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -68,8 +64,6 @@ func on_scene_entered(payload: Dictionary) -> void:
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
-	if payload.has("collected_treasures"):
-		GameState.add_treasures_to_collection(payload.get("collected_treasures", {}))
 	SceneManager.get_main_scene().toggle_bottom_bar(true)
 	SignalBus.visibility_shader_toggled.emit(true)
 

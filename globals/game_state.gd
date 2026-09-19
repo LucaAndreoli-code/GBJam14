@@ -19,6 +19,9 @@ var _minimap: MinimapUtils.Data = MinimapUtils.Data.new()
 var _treasures_pool_generated: bool = false
 var _treasures_pool: Array[TreasureInfo] = []
 
+var _collected_points: int = 0
+var _total_points: int = 0
+
 func get_title_font() -> Font:
 	return _title_font
 
@@ -96,11 +99,21 @@ func get_collected_treasures() -> Dictionary[TreasureInfo, int]:
 	return _collected_treasures
 
 func add_treasures_to_collection(value: Array[TreasureInfo]) -> void:
+	if value.is_empty():
+		return
 	for t in value:
 		if _collected_treasures.has(t):
 			_collected_treasures[t] += 1
 		else:
 			_collected_treasures[t] = 1
+		_collected_points += TreasureUtils.get_treasure_points(t)
+	SignalBus.points_changed.emit(_collected_points, _total_points)
+
+func get_collected_points() -> int:
+	return _collected_points
+
+func get_total_points() -> int:
+	return _total_points
 
 func is_interactable_dug(cell: Vector2i) -> bool:
 	if not _dug_interactables.has(cell):
@@ -128,3 +141,8 @@ func get_treasures_pool() -> Array[TreasureInfo]:
 func set_treasures_pool(value: Array[TreasureInfo]) -> void:
 	_treasures_pool = value
 	_treasures_pool_generated = true
+	# Read here, while the pool is still whole: every digging run pops treasures out of it.
+	_total_points = 0
+	for t in _treasures_pool:
+		_total_points += TreasureUtils.get_treasure_points(t)
+	SignalBus.points_changed.emit(_collected_points, _total_points)

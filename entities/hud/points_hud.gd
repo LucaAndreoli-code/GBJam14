@@ -13,7 +13,10 @@ func _ready() -> void:
 	size = SIZE
 	position = POSITION
 	_build_ui()
-	#SignalBus.keys_changed.connect(_on_keys_changed)
+	SignalBus.points_changed.connect(_on_points_changed)
+
+func _on_points_changed(collected: int, total: int) -> void:
+	_label.text = _format(collected, total)
 
 func _build_ui():
 	var container := HBoxContainer.new()
@@ -30,6 +33,9 @@ func _build_ui():
 	_label.add_theme_font_size_override("font_size", 8)
 	_label.add_theme_color_override("font_color", Palette.SRC_DARKEST)
 	_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_label.text = "%03d:%03d" % [0, 999]
+	_label.text = _format(GameState.get_collected_points(), GameState.get_total_points())
 	container.add_child(_label)
 	add_child(container)
+
+func _format(collected: int, total: int) -> String:
+	return "%03d:%03d" % [collected, total]

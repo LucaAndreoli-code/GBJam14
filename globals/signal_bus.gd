@@ -30,4 +30,8 @@ signal torch_refill(source: Node2D)
 ## Fired when the keys' counter changes
 signal keys_changed(amount: int)
 
+## Fired when the treasure points change: what has been banked so far, and what the level's
+## pool is worth in total.
+signal points_changed(collected: int, total: int)
+
 @warning_ignore_restore("unused_signal")

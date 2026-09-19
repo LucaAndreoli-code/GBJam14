@@ -96,8 +96,6 @@ func _ready() -> void:
 	# pass would swallow the dig field too, and that has to stay readable.
 	SignalBus.visibility_shader_toggled.emit(false)
 	_mount_hud()
-	# Last, once the HUD is up: DigTorch and the HUD start from their own defaults, and a spent
-	# torch never ticks again, see TorchTimer.broadcast().
 	_torch.broadcast()
 	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
@@ -208,7 +206,8 @@ func get_collected_count() -> int:
 func get_treasure_count() -> int:
 	return _run_treasures.size()
 
-## Returns the resources of the treasures picked up so far, for the dungeon to bank
+## Returns the resources of the treasures picked up so far. Banking is not its job: every
+## pickup goes straight into GameState, see _on_treasure_collected().
 func get_collected_treasures() -> Array[TreasureInfo]:
 	return _collected_infos
 
@@ -362,6 +361,10 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	_collected += 1
 	var info := treasure.get_info()
 	_collected_infos.append(info)
+	# Banked on the spot rather than on the way out: the points strip is mounted down here too,
+	# and the run has no way of losing what it already dug up.
+	var banked: Array[TreasureInfo] = [info]
+	GameState.add_treasures_to_collection(banked)
 	if _hud != null:
 		_hud.set_progress(_collected, get_treasure_count())
 	treasure_collected.emit(info, _collected, get_treasure_count())
@@ -432,8 +435,6 @@ func _swap_back_to_dungeon() -> void:
 		return
 	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
 	var payload := {
-		"player_position": player_pos,
-		# What the run actually brought home, so the dungeon can bank it
-		"collected_treasures": _collected_infos
+		"player_position": player_pos
 	}
 	SceneManager.go_to(scene_path, payload)
