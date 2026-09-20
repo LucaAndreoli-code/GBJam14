@@ -90,7 +90,6 @@ func _confirm_level() -> void:
 			return
 		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
-			GameState.clear_session_intros()
 			if GameState.is_first_play():
 				GameState.set_first_play(false)
 				SceneManager.go_to(HOW_TO_PLAY_SCENE_PATH, {
