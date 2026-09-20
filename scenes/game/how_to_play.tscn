@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://lcd4yjxpl1xo"]
+
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="1_hjdt8"]
+[ext_resource type="Script" uid="uid://ccjvnn16fib04" path="res://scripts/scenes/how_to_play_manager.gd" id="1_xmisq"]
+[ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="2_xmisq"]
+[ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="3_2t043"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="5_digg8"]
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="6_6dklt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkc3o"]
+atlas = ExtResource("2_xmisq")
+region = Rect2(8, 0, 8, 8)
+
+[node name="HowToPlay" type="Control" unique_id=931836973]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_xmisq")
+
+[node name="Container" type="Control" parent="." unique_id=792956675]
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 150.0
+offset_bottom = 134.0
+
+[node name="Label" type="Label" parent="Container" unique_id=81089962]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("1_hjdt8")
+theme_override_font_sizes/font_size = 8
+text = "MANUAL"
+
+[node name="AHint" type="HBoxContainer" parent="Container" unique_id=956665606]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -41.0
+offset_bottom = 8.0
+grow_horizontal = 0
+
+[node name="Icon" type="TextureRect" parent="Container/AHint" unique_id=1602955975]
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_fkc3o")
+
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=1739096213]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_2t043")
+theme_override_font_sizes/font_size = 8
+text = "Continue"
+
+[node name="MapContainer" type="RichTextLabel" parent="Container" unique_id=1979089588]
+custom_maximum_size = Vector2(144, 116)
+layout_mode = 0
+offset_top = 12.0
+offset_right = 144.0
+offset_bottom = 128.0
+theme_override_fonts/normal_font = ExtResource("5_digg8")
+theme_override_font_sizes/normal_font_size = 8
+text = "Welcome back to the field, explorer.
+Move with the D-PAD (WASD), and dig with it in the digging grounds.
+Press A (X) to take what you find, or to ping the sonar underground.
+SELECT opens your map and START lets you rest a bit.
+Your torch burns on its own, so don't waste it. Oh, and try not to stay in the dark for too long!
+Bring back the treasures, then find a lit door and get out.
+
+Good luck. The Empire is watching."
+
+[node name="Frame" type="TextureRect" parent="." unique_id=1556499829]
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("6_6dklt")

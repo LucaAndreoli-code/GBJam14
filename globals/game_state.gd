@@ -6,6 +6,7 @@ var _little_font: Font
 
 var _seed: int = 0
 var _just_started: bool = true
+var _first_play: bool = true
 var _paused: bool = false
 var _input_enabled: bool = true
 
@@ -68,6 +69,14 @@ func set_just_started(value: bool) -> void:
 	if _just_started == value:
 		return
 	_just_started = value
+
+func is_first_play() -> bool:
+	return _first_play
+
+func set_first_play(value: bool) -> void:
+	if _first_play == value:
+		return
+	_first_play = value
 
 func is_paused() -> bool:
 	return _paused

@@ -1,6 +1,7 @@
 extends Node2D
 
 const TITLE_SCREEN_SCENE_PATH: String = "res://scenes/game/title_screen.tscn"
+const HOW_TO_PLAY_SCENE_PATH: String = "res://scenes/game/how_to_play.tscn"
 const LEVEL_ICON_TEXTURE: Texture2D = preload("res://assets/sprites/ui/level_selection_level_item.png")
 const LEVEL_ICON_TEXTURE_REGION: Rect2 = Rect2(0.0, 0.0, 24.0, 24.0)
 const LEVEL_SELECTED_ICON_TEXTURE_REGION: Rect2 = Rect2(24.0, 0.0, 24.0, 24.0)
@@ -84,4 +85,10 @@ func _confirm_level() -> void:
 			return
 		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
-			SceneManager.go_to(level.level_scene.resource_path)
+			if GameState.is_first_play():
+				GameState.set_first_play(false)
+				SceneManager.go_to(HOW_TO_PLAY_SCENE_PATH, {
+					"next_scene_path": level.level_scene.resource_path
+				})
+			else:
+				SceneManager.go_to(level.level_scene.resource_path)
