@@ -14,7 +14,7 @@ func interact(_player: PlayerDungeonController) -> void:
 	if tilemap:
 		GameState.add_taken_key(get_level_key(), _get_tilemap_cell())
 	_player.add_key()
-	AudioManager.play_sfx(AudioManager.key_pickup_sound)
+	AudioManager.play_sfx(AudioManager.key_pickup_sound, -8.0)
 	queue_free()
 
 func _get_tilemap_cell() -> Vector2i:

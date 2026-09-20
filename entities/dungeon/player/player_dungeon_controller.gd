@@ -35,6 +35,11 @@ var _last_axis: Axis = Axis.NONE
 var _facing: Vector2i = Vector2i.DOWN
 var _can_move: bool = true
 var _is_input_enabled: bool = true
+var _step_distance: float = 0.0
+const FOOTSTEP_DISTANCE := 8.0
+var _wall_bump_timer: float = 0.0
+const WALL_BUMP_COOLDOWN := 0.25
+var _torch_out_played: bool = false
 
 func _ready() -> void:
 	_animator = PlayerDungeonAnimator.new(_anim_player)
@@ -51,6 +56,8 @@ func _process(_delta: float) -> void:
 	_animator.animate()
 
 func _physics_process(delta: float) -> void:
+	_wall_bump_timer = maxf(_wall_bump_timer - delta, 0.0)
+	
 	if not _can_move:
 		velocity = Vector2.ZERO
 		move_and_slide()
@@ -72,8 +79,17 @@ func _physics_process(delta: float) -> void:
 		var has_slid: bool = _try_corner_correction(input, delta, steps_to_move)
 		if has_slid:
 			velocity = Vector2.ZERO
+		elif _wall_bump_timer <= 0.0:
+			AudioManager.play_sfx(AudioManager.bump_sound, -12.0)
+			_wall_bump_timer = WALL_BUMP_COOLDOWN
 	move_and_slide()
 	global_position = global_position.round()
+	if steps_to_move != Vector2.ZERO:
+		_step_distance += steps_to_move.length()
+
+	if _step_distance >= FOOTSTEP_DISTANCE:
+		AudioManager.play_sfx(AudioManager.footstep_sound, -12.0)
+		_step_distance = 0.0
 	_animator.update(input != Vector2.ZERO and _can_move, _torch_remaining > 0, _facing)
 
 func _input(event: InputEvent) -> void:
@@ -95,6 +111,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	var door = _get_facing_key_door()
 	if door != null:
 		_open_door(door)
+		AudioManager.play_sfx(AudioManager.unlock_door_sound, -6.0) 
 		GameState.set_keys(keys - 1)
 		var lines: PackedStringArray = ["The door unlocked!"]
 		SignalBus.dialogue_requested.emit(lines)
@@ -118,6 +135,7 @@ func set_dungeon_tilemap(tilemap: TileMapLayer) -> void:
 	_dungeon = tilemap
 
 func pick_torch() -> void:
+	_torch_out_played = false
 	SignalBus.torch_refill.emit(self)
 	var lines: PackedStringArray = ["Torch refilled!"]
 	SignalBus.dialogue_requested.emit(lines)
@@ -135,6 +153,10 @@ func _on_input_enabled(is_enabled: bool) -> void:
 func _on_torch_tick(remaining: int, light_value: float) -> void:
 	_torch_remaining = remaining
 	_torch_light_value = light_value
+
+	if remaining <= 0 and not _torch_out_played:
+		_torch_out_played = true
+		AudioManager.play_sfx(AudioManager.torch_out_sound, -4.0)
 
 func _get_directional_input() -> Vector2:
 	var input := Vector2(
