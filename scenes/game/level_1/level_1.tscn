@@ -231,7 +231,7 @@ tilemap = NodePath("../../DungeonTilemap")
 
 [node name="Sign1" parent="Signs" unique_id=1704938251 instance=ExtResource("22_4dlj5")]
 position = Vector2(29, 72)
-lines = ["Welcome, explorer!", "It's been a while since your last crawl, so we've left these signs as a reminder.", "Lesson 1: use the D-Pad (WASD) to move around the ruins."]
+lines = ["Welcome, Sugi!", "It's been a while since your last crawl, so we've left these signs as a reminder.", "Lesson 1: use the D-Pad (WASD) to move around the ruins.", "Remember: the mission only counts if you make it back out."]
 
 [node name="Sign2" parent="Signs" unique_id=1525943991 instance=ExtResource("22_4dlj5")]
 position = Vector2(108, 216)
@@ -243,4 +243,4 @@ lines = ["Your torch is your only light, and it won't last forever.", "Press A (
 
 [node name="Sign4" parent="Signs" unique_id=538047770 instance=ExtResource("22_4dlj5")]
 position = Vector2(92, 488)
-lines = ["Look, digging sites!", "Dig here to find rare treasures. Once you've collected enough, you can leave this place.", "How? Just reach a door with light on the other side.", "One last thing: you can only dig while your torch is off."]
+lines = ["Look, digging sites!", "Dig here to find rare treasures. Once you've collected enough, you can leave this place.", "How? Just reach a door with light on the other side.", "One last thing: you can only dig while your torch is ON."]
