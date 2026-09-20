@@ -44,6 +44,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("btn_a"):
 		var item := menu_items[_item_selected]
 		if item and not _is_item_disabled(item):
+			AudioManager.play_sfx(AudioManager.ui_select_sound, -8.0)
 			if has_method(item.action):
 				call(item.action)
 			get_viewport().set_input_as_handled()
@@ -102,6 +103,7 @@ func _move_list_selection(dy: int) -> void:
 		return
 	_item_selected = index
 	_refresh_ui()
+	AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)
 
 func _open() -> void:
 	GameState.set_paused(true)
@@ -139,4 +141,5 @@ func _open_settings() -> void:
 	SceneManager.go_to(SETTINGS_SCENE_PATH, payload)
 
 func _exit_game() -> void:
+	AudioManager.stop_music()
 	SceneManager.go_to(LEVEL_SEL_SCENE_PATH)

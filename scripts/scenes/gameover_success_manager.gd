@@ -38,6 +38,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func on_scene_entered(payload: Dictionary) -> void:
 	_payload = payload
 	_is_gameover = payload.get("is_gameover", false)
+	if not _is_gameover:
+		AudioManager.stop_music()
+		AudioManager.play_sfx(AudioManager.winstinger, -2.0)
 	_required_points = GameState.get_total_points()
 	_collected_points = GameState.get_collected_points()
 	var treasures := GameState.get_collected_treasures()

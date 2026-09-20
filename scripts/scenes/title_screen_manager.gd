@@ -23,6 +23,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not _is_input_enabled:
 		return
 	if event.is_action_pressed("btn_a"):
+		AudioManager.play_sfx(AudioManager.ui_select_sound, -8.0)
 		if _item_selected == 0:
 			SceneManager.go_to(LEVEL_SEL_SCENE_PATH)
 		elif _item_selected == 1:
@@ -82,3 +83,4 @@ func _move_list_selection(dy: int) -> void:
 		return
 	_item_selected = index
 	_refresh_ui()
+	AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)

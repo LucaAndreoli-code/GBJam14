@@ -57,6 +57,7 @@ func _change_selected_item_value(dx: int) -> void:
 			var new_index := index + dx
 			if new_index >= 0 and new_index < palette_names.size():
 				Palette.switch_to_palette(palette_names[new_index])
+	AudioManager.play_sfx(AudioManager.zui_move_sound, -10.0)
 
 func _move_list_selection(dy: int) -> void:
 	var count := _menu.get_child_count()
@@ -67,6 +68,7 @@ func _move_list_selection(dy: int) -> void:
 		return
 	_item_selected = index
 	_refresh_ui()
+	AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)
 
 func _refresh_ui() -> void:
 	for index in _menu.get_child_count():
