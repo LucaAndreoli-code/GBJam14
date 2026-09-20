@@ -3,9 +3,9 @@ extends Node
 var leveltheme: AudioStream = preload("res://assets/audio/Music/LevelTheme_NoTail.mp3")
 var minigametheme: AudioStream = preload("res://assets/audio/Music/Minigame_160BPM.mp3")
 var losestinger: AudioStream = preload("res://assets/audio/Music/LoseStinger.wav")
-var winstinger: AudioStream = preload("res://assets/audio/Music/WinStinger.wav")
+var winstinger: AudioStream = preload("res://assets/audio/Music/WinStinger.mp3")
 var titletheme: AudioStream = preload("res://assets/audio/Music/TitleScreen_Draft1.wav")
-
+var level_selection_theme: AudioStream = preload ("res://assets/audio/Music/MapScreen_Phrygian.mp3")
 var cave_sound: AudioStream = preload("res://assets/audio/SFX/CaveIn.wav")
 var dig_sound: AudioStream = preload("res://assets/audio/SFX/Dig.wav")
 var discovery_sound: AudioStream = preload("res://assets/audio/SFX/Discovery.wav")
@@ -14,9 +14,11 @@ var bump_sound: AudioStream = preload("res://assets/audio/SFX/Bump.wav")
 var key_pickup_sound: AudioStream = preload("res://assets/audio/SFX/KeyPickup.wav")
 var torch_out_sound: AudioStream = preload("res://assets/audio/SFX/TorchOut.wav")
 var unlock_door_sound: AudioStream = preload("res://assets/audio/SFX/UnlockDoor.wav")
-
+var text_sound: AudioStream = preload("res://assets/audio/SFX/Text.wav")
+var ui_move_sound: AudioStream = preload("res://assets/audio/SFX/UI_Move.wav")
+var ui_select_sound: AudioStream = preload("res://assets/audio/SFX/UI_Select.wav")
 var sfx_players: Array[AudioStreamPlayer] = []
-var max_players := 14
+var max_players := 18
 
 var music_player: AudioStreamPlayer
 

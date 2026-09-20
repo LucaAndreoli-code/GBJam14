@@ -185,9 +185,12 @@ func _on_text_finished() -> void:
 	_choice.visible = true
 
 func _set_answer(accepted: bool) -> void:
+	if _answer != accepted and _choosing:
+		AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)
 	_answer = accepted
 	_cursor.position.x = CURSOR_YES_X if accepted else CURSOR_NO_X
-
+	
 func _pick(accepted: bool) -> void:
+	AudioManager.play_sfx(AudioManager.ui_select_sound, -8.0)
 	_answer = accepted
 	close()

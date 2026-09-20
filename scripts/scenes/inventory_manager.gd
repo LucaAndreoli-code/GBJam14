@@ -95,6 +95,7 @@ func _move_grid_selection(dx: int, dy: int) -> void:
 	_cell_selected = index
 	_refresh_grid()
 	_update_info()
+	AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)
 
 func _refresh_grid() -> void:
 	for i in _grid.get_child_count():

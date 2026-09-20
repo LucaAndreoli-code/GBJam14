@@ -212,6 +212,7 @@ func _start_typing(line: String) -> void:
 func _reveal_next() -> void:
 	var index := _revealed
 	_revealed += 1
+	AudioManager.play_sfx(AudioManager.text_sound, -14.0)
 	visible_characters = _prefix + _revealed
 	character_printed.emit(text[_prefix + index], index)
 

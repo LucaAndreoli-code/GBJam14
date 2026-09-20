@@ -13,9 +13,10 @@ var _current_room: Vector2i
 func _ready() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
+
+
 	_view.resized.connect(_recenter)
 	_build()
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("btn_b"):
 		_exit()

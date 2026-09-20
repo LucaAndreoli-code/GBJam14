@@ -22,6 +22,10 @@ func _ready() -> void:
 	# main.tscn's initial_scene.
 	GameState.reset_run()
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
+
+	AudioManager.stop_music()
+	AudioManager.play_music(AudioManager.level_selection_theme, -7.0)
+
 	_refresh_ui()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -76,6 +80,7 @@ func _move_list_selection(dy: int) -> void:
 		return
 	_item_selected = index
 	_refresh_ui()
+	AudioManager.play_sfx(AudioManager.ui_move_sound, -10.0)
 
 func _confirm_level() -> void:
 	var levels_count := _levels_container.get_child_count()
@@ -85,6 +90,7 @@ func _confirm_level() -> void:
 			return
 		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
+			GameState.clear_session_intros()
 			if GameState.is_first_play():
 				GameState.set_first_play(false)
 				SceneManager.go_to(HOW_TO_PLAY_SCENE_PATH, {
