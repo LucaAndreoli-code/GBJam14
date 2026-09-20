@@ -56,6 +56,7 @@ func _refresh_ui() -> void:
 			if _selection_icon:
 				_selection_icon.position = tex_rect.global_position
 				_selection_icon.position.x += tex_rect.size.x / 2
+				_selection_icon.position.y += 2
 			var level := (node as LevelSelectionItem).level_info
 			if level:
 				_level_title_label.text = level.title

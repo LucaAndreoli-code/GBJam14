@@ -2,11 +2,13 @@ class_name SceneIntroDialogue
 extends Node2D
 
 ## One entry per text box page, authored in the level scene.
-@export var lines: PackedStringArray = []
+@export_multiline var lines: PackedStringArray = []
 ## The "already seen" key. Left empty, the containing scene's scene_file_path is used, so two
 ## copies of the same level share one intro. Set it to hold more than one intro in a scene, or
 ## to share a single intro across different scenes.
 @export var intro_key: String = ""
+
+@export var must_play_once: bool = true
 
 func _ready() -> void:
 	if lines.is_empty():
@@ -20,7 +22,7 @@ func _on_scene_changed(scene: Node) -> void:
 		return
 	SceneManager.scene_changed.disconnect(_on_scene_changed)
 	var key := intro_key if not intro_key.is_empty() else scene.scene_file_path
-	if GameState.is_scene_intro_seen(key):
+	if must_play_once and GameState.is_scene_intro_seen(key):
 		return
 	# Marked before the request goes out: the intro is spent even if the scene mounts no text box.
 	GameState.mark_scene_intro_seen(key)
