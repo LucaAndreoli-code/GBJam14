@@ -22,6 +22,8 @@ var music_player: AudioStreamPlayer
 
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	# Music player
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
