@@ -201,10 +201,6 @@ shape = SubResource("RectangleShape2D_0mymv")
 position = Vector2(-111, 216)
 tilemap = NodePath("../../DungeonTilemap")
 
-[node name="Key2" parent="Keys" unique_id=1262509954 node_paths=PackedStringArray("tilemap") instance=ExtResource("5_neopm")]
-position = Vector2(-111, 216)
-tilemap = NodePath("../../DungeonTilemap")
-
 [node name="Torches" type="Node2D" parent="." unique_id=340209533]
 
 [node name="EntranceTorch" parent="Torches" unique_id=345507219 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("6_gblsj")]
