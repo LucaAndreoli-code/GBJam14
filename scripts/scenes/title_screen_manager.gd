@@ -10,6 +10,7 @@ const SETTINGS_SCENE_PATH: String = "res://scenes/game/game_settings.tscn"
 @onready var _menu: VBoxContainer = $Container/Menu
 @onready var _hints: Control = $Hints
 
+var _music_player: AudioStreamPlayer2D
 var _item_selected: int = 0
 var _is_input_enabled: bool = false
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	await get_tree().create_timer(1.5).timeout
+	_music_player = SceneManager.get_main_scene().get_music_player()
 	_splash_screen_anim.play("default")
 	_splash_screen_anim.animation_finished.connect(_on_splash_screen_finished)
 
@@ -42,6 +44,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_splash_screen_finished():
 	_splash_screen.visible = false
+	# Force the track to start at 0 seconds to play the intro
+	_music_player.play(0.0)
 	var logo_move_tween := create_tween()
 	logo_move_tween.tween_property(_logo, "global_position", Vector2(10.0, 1.0), 1.0)
 	await logo_move_tween.finished

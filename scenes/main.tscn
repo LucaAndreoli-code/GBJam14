@@ -113,6 +113,5 @@ grow_vertical = 2
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
 stream = ExtResource("3_o6xl0")
-autoplay = true
 
 [node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]
