@@ -9,9 +9,9 @@ var _parent_payload: Dictionary
 var _item_selected: int = 0
 
 func _ready() -> void:
-	#GameState.set_paused(false)
-	#SignalBus.visibility_shader_toggled.emit(false)
-	#SceneManager.get_main_scene().toggle_bottom_bar(false)
+	GameState.set_paused(false)
+	SignalBus.visibility_shader_toggled.emit(false)
+	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	_music_slider.set_value(GameState.get_music_level())
 	_sfx_slider.set_value(GameState.get_sfx_level())
 	_refresh_ui()
