@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_em3dd")
-title = "Level 3"
+title = "003: The Deep Halls"
 short_text = "If you've made it this far, you must like our game. Enjoy what's left of it :)"
 level_scene = ExtResource("1_220ds")
 digging_spots = 4

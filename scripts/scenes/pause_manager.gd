@@ -2,6 +2,7 @@ class_name PauseMenuManager
 extends Node2D
 
 const INVENTORY_SCENE_PATH: String = "res://scenes/game/inventory.tscn"
+const LEVEL_SEL_SCENE_PATH: String = "res://scenes/game/level_selection.tscn"
 
 ## Owns the whole pause toggle: a scene gets pause simply by mounting this menu, and a scene that
 ## does not mount it - the map, the inventory - stays unpausable. The menu needs no process_mode of
@@ -96,6 +97,7 @@ func _move_list_selection(dy: int) -> void:
 		return
 	var item := menu_items[index]
 	if _is_item_disabled(item):
+		_move_list_selection(dy + sign(dy))
 		return
 	_item_selected = index
 	_refresh_ui()
@@ -123,3 +125,6 @@ func _open_inventory() -> void:
 		"player_position": _player.global_position
 	}
 	SceneManager.go_to(INVENTORY_SCENE_PATH, payload)
+
+func _exit_game() -> void:
+	SceneManager.go_to(LEVEL_SEL_SCENE_PATH)

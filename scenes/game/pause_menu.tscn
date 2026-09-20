@@ -30,7 +30,6 @@ metadata/_custom_type_script = "uid://dpantyfyknx4r"
 script = ExtResource("2_cech8")
 text = "Exit"
 action = &"_exit_game"
-disabled = true
 metadata/_custom_type_script = "uid://dpantyfyknx4r"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kc8i1"]

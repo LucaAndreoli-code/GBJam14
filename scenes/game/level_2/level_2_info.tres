@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_5knju")
-title = "Level 2"
+title = "002: Lower Galleries"
 short_text = "This level let you explore more the game's mechanics."
 level_scene = ExtResource("1_2smnd")
 digging_spots = 4
