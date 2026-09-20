@@ -21,6 +21,8 @@ func _ready() -> void:
 	# this is the single place the world state has to be wiped. Harmless on boot: this scene is
 	# main.tscn's initial_scene.
 	GameState.reset_run()
+	GameState.set_paused(false)
+	SignalBus.visibility_shader_toggled.emit(false)
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 
 	AudioManager.stop_music()
