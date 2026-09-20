@@ -93,7 +93,8 @@ func _confirm_level() -> void:
 			if GameState.is_first_play():
 				GameState.set_first_play(false)
 				SceneManager.go_to(HOW_TO_PLAY_SCENE_PATH, {
-					"next_scene_path": level.level_scene.resource_path
+					"next_scene_path": level.level_scene.resource_path,
+					"hard_reset": true
 				})
 			else:
-				SceneManager.go_to(level.level_scene.resource_path)
+				SceneManager.go_to(level.level_scene.resource_path, { "hard_reset": true })
