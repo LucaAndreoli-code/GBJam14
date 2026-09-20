@@ -58,7 +58,7 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("3_nq4mu")
 theme_override_font_sizes/font_size = 8
-text = "Treasures"
+text = "TREASURES"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1613933850]
 layout_mode = 1

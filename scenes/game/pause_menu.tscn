@@ -60,7 +60,7 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("2_1gnl8")
 theme_override_font_sizes/font_size = 8
-text = "Rest Menu"
+text = "REST MENU"
 
 [node name="BHint" type="HBoxContainer" parent="Frame/Container" unique_id=1704648732]
 layout_mode = 1

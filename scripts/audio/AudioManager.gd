@@ -25,7 +25,7 @@ var music_player: AudioStreamPlayer
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
-
+	
 	# Music player
 	music_player = AudioStreamPlayer.new()
 	music_player.bus = "Music"
@@ -39,7 +39,7 @@ func _ready():
 		sfx_players.append(player)
 
 	# Volume settings
-	SignalBus.music_level_changed.connect(_on_volume_level_changed)
+	SignalBus.music_level_changed.connect(_on_music_level_changed)
 	SignalBus.sfx_level_changed.connect(_on_sfx_level_changed)
 
 
@@ -69,7 +69,7 @@ func play_sfx(sound: AudioStream, volume_db: float = 0.0) -> void:
 			return
 
 
-func _on_volume_level_changed(level: float) -> void:
+func _on_music_level_changed(level: float) -> void:
 	var bus := AudioServer.get_bus_index("Master")
 	AudioServer.set_bus_volume_db(bus, linear_to_db(level))
 

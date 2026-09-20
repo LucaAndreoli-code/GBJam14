@@ -421,13 +421,13 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_lehe1")
 theme_override_font_sizes/font_size = 16
-text = "New game"
+text = "NEW GAME"
 
 [node name="Label2" type="Label" parent="Container/Menu" unique_id=1962540497]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_lehe1")
 theme_override_font_sizes/font_size = 16
-text = "Settings"
+text = "SETTINGS"
 
 [node name="Hints" type="VBoxContainer" parent="." unique_id=2125054197]
 visible = false

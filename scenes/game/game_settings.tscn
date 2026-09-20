@@ -82,7 +82,7 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("3_dfijo")
 theme_override_font_sizes/font_size = 8
-text = "Settings"
+text = "SETTINGS"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=629625761]
 layout_mode = 0

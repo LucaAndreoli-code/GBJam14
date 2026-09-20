@@ -31,7 +31,7 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("1_fodlk")
 theme_override_font_sizes/font_size = 8
-text = "Map"
+text = "MAP"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1256200367]
 layout_mode = 0

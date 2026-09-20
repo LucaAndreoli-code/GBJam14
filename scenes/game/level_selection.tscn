@@ -106,7 +106,7 @@ offset_bottom = 8.0
 theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("2_5etf1")
 theme_override_font_sizes/font_size = 8
-text = "Levels"
+text = "LEVELS"
 
 [node name="BHint" type="HBoxContainer" parent="Container" unique_id=1836299033]
 layout_mode = 1

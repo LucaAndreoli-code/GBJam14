@@ -61,11 +61,11 @@ func _update_ui():
 	var enough_points := _collected_points >= _required_points
 	var completion_rate: float = (float(_collected_points) / float(_required_points)) * 100
 	if _is_gameover:
-		_frame_title.text = "Lost in the dark"
+		_frame_title.text = "LOST IN THE DARK"
 		_treasure_t.visible = false
 		_treasure_i.visible = false
 	else:
-		_frame_title.text = "Contract fulfilled" if enough_points else "Contract unfulfilled"
+		_frame_title.text = "CONTRACT DONE" if enough_points else "CONTRACT FAILED"
 		_treasure_s_v_label.text = "%02d" % _treasure_s_collected
 		_treasure_m_v_label.text = "%02d" % _treasure_m_collected
 		_treasure_b_v_label.text = "%02d" % _treasure_b_collected
