@@ -247,3 +247,7 @@ lines = ["Your torch is your only light, and it won't last forever.", "Press A (
 [node name="Sign4" parent="Signs" unique_id=538047770 instance=ExtResource("22_4dlj5")]
 position = Vector2(92, 488)
 lines = ["Look, digging sites!", "Dig here to find rare treasures. Once you've collected enough, you can leave this place.", "How? Just reach a door with light on the other side.", "One last thing: you can only dig while your torch is ON."]
+
+[node name="Sign5" parent="Signs" unique_id=1430076574 instance=ExtResource("22_4dlj5")]
+position = Vector2(90, 33)
+lines = ["Hey, explorer. Don't bother pulling.", "I tried until I starved. Turns out it opens once you're carrying enough treasures.", "Not all of them, thankfully. Wish someone had told me sooner..."]

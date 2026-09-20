@@ -76,7 +76,8 @@ func _exit_tree() -> void:
 		_text_box.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
-	AudioManager.play_music(AudioManager.leveltheme)
+	var reset_track: bool = payload.get("hard_reset", false)
+	AudioManager.play_music(AudioManager.leveltheme, 0.0, reset_track)
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()

@@ -43,9 +43,12 @@ func _ready():
 	SignalBus.sfx_level_changed.connect(_on_sfx_level_changed)
 
 
-func play_music(sound: AudioStream, from_position: float = 0.0):
+func play_music(sound: AudioStream, from_position: float = 0.0, force_restart: bool = false):
 	if sound == null:
 		push_error("AudioManager: Tried to play null music!")
+		return
+
+	if not force_restart and music_player.stream == sound and music_player.playing:
 		return
 
 	music_player.stream = sound
