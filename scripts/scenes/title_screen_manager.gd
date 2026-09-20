@@ -9,6 +9,7 @@ const SETTINGS_SCENE_PATH: String = "res://scenes/game/game_settings.tscn"
 @onready var _character: AnimatedSprite2D = $CharAnimated
 @onready var _menu: VBoxContainer = $Container/Menu
 @onready var _hints: Control = $Hints
+
 var _item_selected: int = 0
 var _is_input_enabled: bool = false
 
@@ -16,7 +17,6 @@ func _ready() -> void:
 	SignalBus.visibility_shader_toggled.emit(false)
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	await get_tree().create_timer(1.5).timeout
-	_music_player = SceneManager.get_main_scene().get_music_player()
 	if GameState.is_just_started():
 		GameState.set_just_started(false)
 		_splash_screen_anim.play("default")

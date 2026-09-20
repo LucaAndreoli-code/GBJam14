@@ -22,6 +22,7 @@ shader_parameter/fade_step = 0
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sugp2"]
 shader = ExtResource("5_tbgi4")
 shader_parameter/viewport_size = Vector2(160, 144)
+shader_parameter/is_enabled = true
 shader_parameter/lights = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/lights_count = 0
 shader_parameter/ratios = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0)
@@ -110,9 +111,11 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Music" type="Node" parent="." unique_id=113485293]
+process_mode = 3
 
 [node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
 process_mode = 3
 stream = ExtResource("3_o6xl0")
 
-[node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]
+[node name="Listener" type="AudioListener2D" parent="Music" unique_id=1293750249]
+process_mode = 3
