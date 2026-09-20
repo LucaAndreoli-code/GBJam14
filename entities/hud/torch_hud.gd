@@ -2,12 +2,18 @@ class_name  TorchHUD
 extends Control
 
 const UI_ICONS_SHEET: Texture2D = preload("res://assets/sprites/ui/ui_icons.png")
-const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 40.0, 16.0, 16.0)
+const TORCH_TEXTURE_REGION: Rect2 = Rect2(16.0, 16.0, 16.0, 16.0)
+const TORCH_OFF_TEXTURE_REGION: Rect2 = Rect2(32.0, 16.0, 16.0, 16.0)
 const SIZE: Vector2 = Vector2(40.0, 16.0)
 const POSITION: Vector2 = Vector2(0.0, 128.0)
 
 var _container: HBoxContainer
 var _label: Label
+var _icon: TextureRect
+# Starts at -1 so a scene run on its own still shows "---" until a tick seeds it
+var _torch_remaining: int = -1
+var _gameover_remaining: int = 0
+var _is_gameover: bool = false
 
 func _init() -> void:
 	_build_ui()
@@ -17,24 +23,41 @@ func _ready() -> void:
 	size = SIZE
 	position = POSITION
 	SignalBus.torch_tick.connect(_on_torch_tick)
+	SignalBus.gameover_tick.connect(_on_gameover_tick)
 
 func _on_torch_tick(remaining: int, _light_value: float) -> void:
-	_update_label_text(remaining)
+	_torch_remaining = remaining
+	_refresh()
+
+func _on_gameover_tick(remaining: int, is_active: bool) -> void:
+	_gameover_remaining = remaining
+	_is_gameover = is_active
+	_refresh()
+
+# In gameover mode the torch reads 000 and stays there, which the unlit icon already says.
+# The slot lends its label to the countdown that is actually running.
+func _refresh() -> void:
+	var is_lit := not _is_gameover and _torch_remaining > 0
+	_update_label_text(_gameover_remaining if _is_gameover else _torch_remaining)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = UI_ICONS_SHEET
+	atlas.region = TORCH_TEXTURE_REGION if is_lit else TORCH_OFF_TEXTURE_REGION
+	_icon.texture = atlas
 
 func _build_ui() -> void:
 	_container = HBoxContainer.new()
 	_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_container.add_theme_constant_override("separation", 0)
-	var icon := TextureRect.new()
+	_icon = TextureRect.new()
 	var atlas := AtlasTexture.new()
 	atlas.atlas = UI_ICONS_SHEET
 	atlas.region = TORCH_TEXTURE_REGION
-	icon.texture = atlas
-	icon.stretch_mode = TextureRect.STRETCH_KEEP
-	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_icon.texture = atlas
+	_icon.stretch_mode = TextureRect.STRETCH_KEEP
+	_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_make_label()
-	_container.add_child(icon)
+	_container.add_child(_icon)
 	_container.add_child(_label)
 	add_child(_container)
 

@@ -96,6 +96,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if door != null:
 		_open_door(door)
 		GameState.set_keys(keys - 1)
+		var lines: PackedStringArray = ["The door unlocked!"]
+		SignalBus.dialogue_requested.emit(lines)
 
 func _exit_tree() -> void:
 	if is_instance_valid(_interact_hud):
@@ -117,10 +119,14 @@ func set_dungeon_tilemap(tilemap: TileMapLayer) -> void:
 
 func pick_torch() -> void:
 	SignalBus.torch_refill.emit(self)
+	var lines: PackedStringArray = ["Torch refilled!"]
+	SignalBus.dialogue_requested.emit(lines)
 
 func add_key() -> void:
 	var amount := GameState.get_keys()
 	GameState.set_keys(amount + 1)
+	var lines: PackedStringArray = ["Got a key!"]
+	SignalBus.dialogue_requested.emit(lines)
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
@@ -195,10 +201,14 @@ func _get_facing_key_door() -> Variant:
 		return null
 	return cell
 
+# Both halves are recorded as they are swapped: the pairing is known here and nowhere else, so
+# DungeonManager._reapply_opened_doors() never has to re-derive it after a scene reload.
 func _open_door(door: Vector2i) -> void:
+	var level_key := _get_level_key()
 	var source_id := _dungeon.get_cell_source_id(door)
 	var data := _dungeon.get_cell_tile_data(door)
 	_dungeon.set_cell(door, source_id, data.get_custom_data("opened_tile"))
+	GameState.add_opened_door(level_key, door)
 	var cell := door + _facing
 	while true:
 		data = _dungeon.get_cell_tile_data(cell)
@@ -207,5 +217,10 @@ func _open_door(door: Vector2i) -> void:
 		if data.get_custom_data("locked_door"):
 			source_id = _dungeon.get_cell_source_id(cell)
 			_dungeon.set_cell(cell, source_id, data.get_custom_data("opened_tile"))
+			GameState.add_opened_door(level_key, cell)
 			return
 		cell += _facing
+
+## Mirrors DungeonInteractable.get_level_key(): owner is the dungeon root.
+func _get_level_key() -> String:
+	return owner.scene_file_path if owner else ""

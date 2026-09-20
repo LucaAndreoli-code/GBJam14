@@ -5,14 +5,24 @@ extends Control
 ## points. Every child feeds off GameState and SignalBus alone, so the set works wherever it is
 ## mounted - the dungeon scene and the digging minigame both hang it off the hud_container group.
 
+var _top_bar: TopBarHUD
 var _torch: TorchHUD
 var _keys: KeysHUD
 var _points: PointsHUD
 
-func _init() -> void:
-	_torch = TorchHUD.new()
-	_keys = KeysHUD.new()
-	_points = PointsHUD.new()
+func _init(
+	top_bar_hud: bool = true, \
+	torch_hud: bool = true, \
+	keys_hud: bool = true, \
+	points_hud: bool = true) -> void:
+	if top_bar_hud:
+		_top_bar = TopBarHUD.new()
+	if torch_hud:
+		_torch = TorchHUD.new()
+	if keys_hud:
+		_keys = KeysHUD.new()
+	if points_hud:
+		_points = PointsHUD.new()
 
 func _ready() -> void:
 	name = "StatusHUD"
@@ -20,6 +30,7 @@ func _ready() -> void:
 	# the bottom strip, see their POSITION consts.
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_top_bar)
 	add_child(_torch)
 	add_child(_keys)
 	add_child(_points)

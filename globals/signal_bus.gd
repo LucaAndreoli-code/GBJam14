@@ -15,6 +15,12 @@ signal game_paused(is_paused: bool)
 ## Fired when the game's input is enabled or not.
 signal input_enabled(is_enabled: bool)
 
+## Fired when the game's volume level has been changed.
+signal music_level_changed(level: float)
+
+## Fired when the game's SFXs level has been changed.
+signal sfx_level_changed(level: float)
+
 ## Fired each game's tick.
 signal game_tick(delta: float, game_time: float)
 
@@ -27,7 +33,26 @@ signal torch_tick(remaining: int, light_value: float)
 ## Fired when a torch refill is requested.
 signal torch_refill(source: Node2D)
 
+## Fired when the gameover countdown changes: the seconds left and whether it is running.
+signal gameover_tick(remaining: int, is_active: bool)
+
+## Fired once when the gameover countdown runs out.
+signal gameover_triggered()
+
 ## Fired when the keys' counter changes
 signal keys_changed(amount: int)
+
+## Fired when the treasure points change: what has been banked so far, and what the level's
+## pool is worth in total.
+signal points_changed(collected: int, total: int)
+
+## Fired once when the dungeon's exit door unlocks.
+signal exit_door_opened()
+
+## Fired once the player crosses the exit door.
+signal exit_door_crossed()
+
+## Fired when an entity asks the current scene to show a dialogue box, one array entry per page.
+signal dialogue_requested(lines: PackedStringArray)
 
 @warning_ignore_restore("unused_signal")

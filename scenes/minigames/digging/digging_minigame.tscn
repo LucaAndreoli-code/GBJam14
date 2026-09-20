@@ -15,6 +15,7 @@
 [ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="13_goblet"]
 [ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="14_book"]
 [ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="15_sword"]
+[ext_resource type="Script" uid="uid://lhjpnnmfek43" path="res://scripts/game/scene_intro_dialogue.gd" id="16_uc182"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(16, 11)
@@ -66,8 +67,9 @@ metadata/_custom_type_script = "uid://gv83vdj3ao7v"
 position = Vector2(80, 16)
 texture = ExtResource("3_wm07t")
 script = ExtResource("9_surf")
-central_radius_ratio = 1.0
-outer_radius_ratio = 1.3
+core_radius_ratio = 0.35
+central_radius_ratio = 2.1
+outer_radius_ratio = 8.0
 
 [node name="DigField" parent="." unique_id=1462086664 instance=ExtResource("3_field")]
 
@@ -120,8 +122,15 @@ position = Vector2(80, 142)
 shape = SubResource("RectangleShape2D_4h42e")
 
 [node name="Torch" type="AnimatedSprite2D" parent="." unique_id=924777929 groups=["light_sources"]]
-position = Vector2(91, 20)
+position = Vector2(91, 17)
 sprite_frames = SubResource("SpriteFrames_4h42e")
 autoplay = "default"
+offset = Vector2(0, 3)
 script = ExtResource("8_torch")
 torch_light_radius = 40.0
+
+[node name="SceneIntro" type="Node2D" parent="." unique_id=1840034697]
+script = ExtResource("16_uc182")
+lines = ["Here we are, Sugi!
+Digging time!", "Every wall here crumbles: use the D-Pad (WASD) to dig in any direction.", "Press A (X) to use the sonar. Buried treasures will light up for a moment.", "Wait a bit before the next ping... it needs to recharge!", "Oh... be careful, your torch keeps burning down here too.", "If you're short on time, grab what you can, then head back to the hole to climb out."]
+metadata/_custom_type_script = "uid://lhjpnnmfek43"

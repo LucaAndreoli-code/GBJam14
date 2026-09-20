@@ -1,17 +1,19 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://c6h0xagiftxr"]
 
-[ext_resource type="Script" path="res://entities/digging/treasure/treasure.gd" id="1_treasure"]
+[ext_resource type="Script" uid="uid://kyl3gwigrt17" path="res://entities/digging/treasure/treasure.gd" id="1_treasure"]
 
-[node name="Treasure" type="Area2D"]
+[node name="Treasure" type="Area2D" unique_id=1765949820]
+visible = false
 collision_layer = 4
 collision_mask = 2
 monitoring = false
-visible = false
 script = ExtResource("1_treasure")
+pickup_step = 0.09999999999999999
+pickup_time = 0.8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=408567942]
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=231474176]
 
-[node name="Silhouette" type="Sprite2D" parent="."]
+[node name="Silhouette" type="Sprite2D" parent="." unique_id=2116428711]
 visible = false

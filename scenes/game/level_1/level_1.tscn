@@ -1,0 +1,246 @@
+[gd_scene format=4 uid="uid://br672vt6q1wsh"]
+
+[ext_resource type="Script" uid="uid://gv83vdj3ao7v" path="res://scripts/core/game_time.gd" id="1_bk1qd"]
+[ext_resource type="Script" uid="uid://dv4mka4odeeqs" path="res://scripts/game/dungeon_manager.gd" id="1_r0gmu"]
+[ext_resource type="Texture2D" uid="uid://dm3j2amxf5848" path="res://assets/tilesets/dungeon_tileset.png" id="2_neopm"]
+[ext_resource type="Script" uid="uid://cxkokkqglvqt6" path="res://entities/treasures/treasure_info.gd" id="2_rfw5n"]
+[ext_resource type="Resource" uid="uid://cegd36fetqbhp" path="res://entities/treasures/small/coin.tres" id="3_4dlj5"]
+[ext_resource type="PackedScene" uid="uid://bh82ko1slmy55" path="res://entities/dungeon/player/player_dungeon.tscn" id="3_gblsj"]
+[ext_resource type="Script" uid="uid://brslu3yjsif13" path="res://entities/dungeon/camera/camera_dungeon.gd" id="4_ryhof"]
+[ext_resource type="Resource" uid="uid://cd50ddvh0rx4n" path="res://entities/treasures/small/broach.tres" id="4_uksyj"]
+[ext_resource type="Resource" uid="uid://bvjjfdqx7lypu" path="res://entities/treasures/small/ring.tres" id="5_garbb"]
+[ext_resource type="PackedScene" uid="uid://d3rkgvya1ilj3" path="res://entities/dungeon/key/key_interactable.tscn" id="5_neopm"]
+[ext_resource type="Resource" uid="uid://d0o8euefw4jf1" path="res://entities/treasures/small/pipe.tres" id="6_4l87u"]
+[ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/dungeon/torch/torch_interactable.tscn" id="6_gblsj"]
+[ext_resource type="Resource" uid="uid://d3i87b4xvfbfk" path="res://entities/treasures/medium/goblet.tres" id="7_dl85d"]
+[ext_resource type="PackedScene" uid="uid://mou8qfukr7v4" path="res://entities/dungeon/dig/dig_interactable.tscn" id="7_ryhof"]
+[ext_resource type="Resource" uid="uid://cuuqikjqlxu1u" path="res://entities/treasures/medium/book.tres" id="8_vbsy0"]
+[ext_resource type="Resource" uid="uid://b7i1qbasb3ypo" path="res://entities/treasures/medium/necklace.tres" id="9_hc8h7"]
+[ext_resource type="Resource" uid="uid://ckkkhrqm6p1sp" path="res://entities/treasures/medium/statuette.tres" id="10_dxkae"]
+[ext_resource type="Resource" uid="uid://b6sub528mq6a1" path="res://entities/treasures/large/mirror.tres" id="11_wwv35"]
+[ext_resource type="Resource" uid="uid://bija40k4ua1ac" path="res://entities/treasures/large/reliquary.tres" id="12_3clxb"]
+[ext_resource type="Resource" uid="uid://k18nerwxk87j" path="res://entities/treasures/large/painting.tres" id="13_8b3d6"]
+[ext_resource type="Resource" uid="uid://ddvn527tivwwy" path="res://entities/treasures/large/sword.tres" id="14_3hyjb"]
+[ext_resource type="Script" uid="uid://lhjpnnmfek43" path="res://scripts/game/scene_intro_dialogue.gd" id="15_garbb"]
+[ext_resource type="Script" uid="uid://nw3qtks4jhds" path="res://scripts/core/exit_area_manager.gd" id="19_uksyj"]
+[ext_resource type="PackedScene" uid="uid://c8snk3xqv1wr4" path="res://entities/dungeon/sign/sign_interactable.tscn" id="22_4dlj5"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uksyj"]
+texture = ExtResource("2_neopm")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+6:0/0 = 0
+6:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+7:0/0 = 0
+7:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+7:1/0 = 0
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:3/0 = 0
+1:3/0 = 0
+1:3/0/custom_data_0 = true
+2:3/0 = 0
+2:3/0/custom_data_0 = true
+3:3/0 = 0
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+5:3/0 = 0
+5:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+6:3/0 = 0
+6:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+0:4/next_alternative_id = 2
+0:4/0 = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+0:4/0/custom_data_1 = true
+0:4/0/custom_data_2 = Vector2i(1, 4)
+0:4/1 = 1
+0:4/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:4/1/custom_data_2 = Vector2i(1, 4)
+0:4/1/custom_data_3 = true
+1:4/0 = 0
+1:4/0/custom_data_0 = true
+2:4/next_alternative_id = 2
+2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+2:4/0/custom_data_1 = true
+2:4/0/custom_data_2 = Vector2i(3, 4)
+2:4/1 = 1
+2:4/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:4/1/custom_data_2 = Vector2i(3, 4)
+2:4/1/custom_data_3 = true
+3:4/0 = 0
+3:4/0/custom_data_0 = true
+4:4/next_alternative_id = 2
+4:4/0 = 0
+4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+4:4/0/custom_data_1 = true
+4:4/0/custom_data_2 = Vector2i(5, 4)
+4:4/1 = 1
+4:4/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+4:4/1/custom_data_2 = Vector2i(5, 4)
+4:4/1/custom_data_3 = true
+5:4/0 = 0
+5:4/0/custom_data_0 = true
+6:4/next_alternative_id = 2
+6:4/0 = 0
+6:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, -8, 8, 8, 8, 8, -8)
+6:4/0/custom_data_1 = true
+6:4/0/custom_data_2 = Vector2i(7, 4)
+6:4/1 = 1
+6:4/1/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:4/1/custom_data_2 = Vector2i(7, 4)
+6:4/1/custom_data_3 = true
+7:4/0 = 0
+7:4/0/custom_data_0 = true
+
+[sub_resource type="TileSet" id="TileSet_1t2px"]
+physics_layer_0/collision_layer = 1
+custom_data_layer_0/name = "walkable"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "locked_door"
+custom_data_layer_1/type = 1
+custom_data_layer_2/name = "opened_tile"
+custom_data_layer_2/type = 6
+custom_data_layer_3/name = "dungeon_entrance"
+custom_data_layer_3/type = 1
+sources/1 = SubResource("TileSetAtlasSource_uksyj")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0mymv"]
+size = Vector2(16, 20)
+
+[node name="Level1" type="Node2D" unique_id=1164376741]
+script = ExtResource("1_r0gmu")
+level_minimum_points = 50
+level_target_points = 100
+available_treasures = Array[ExtResource("2_rfw5n")]([ExtResource("3_4dlj5"), ExtResource("4_uksyj"), ExtResource("5_garbb"), ExtResource("6_4l87u"), ExtResource("7_dl85d"), ExtResource("8_vbsy0"), ExtResource("9_hc8h7"), ExtResource("10_dxkae"), ExtResource("11_wwv35"), ExtResource("12_3clxb"), ExtResource("13_8b3d6"), ExtResource("14_3hyjb")])
+
+[node name="SceneIntro" type="Node2D" parent="." unique_id=1488628879]
+script = ExtResource("15_garbb")
+lines = ["IMPERIAL DISPATCH
+Site: Outer Ruins
+Assignment: recover lost treasures.", "Our scouts found a small section
+close to the surface.
+Start there, Sugi.", "Conditions: dark, but stable.
+Torches were left by those before you.", "Take your time and learn the ways
+of the ruins. Deeper ones await."]
+must_play_once = false
+metadata/_custom_type_script = "uid://lhjpnnmfek43"
+
+[node name="GameTime" type="Node2D" parent="." unique_id=1217055201]
+script = ExtResource("1_bk1qd")
+metadata/_custom_type_script = "uid://gv83vdj3ao7v"
+
+[node name="DungeonTilemap" type="TileMapLayer" parent="." unique_id=416682408]
+tile_map_data = PackedByteArray("AAAAAAEAAQAAAAAAAAABAAEAAQABAAIAAAACAAEAAQABAAIAAAADAAEAAQAEAAEAAAAEAAEAAQAAAAQAAQAFAAEAAQAFAAEAAAAGAAEAAQABAAIAAAAFAAIAAQABAAMAAAAEAAIAAQABAAMAAAADAAIAAQABAAMAAAACAAIAAQABAAMAAAABAAIAAQABAAMAAAAAAAIAAQAAAAIAAAAGAAIAAQABAAMAAAAHAAIAAQABAAMAAAAIAAIAAQABAAMAAAAJAAIAAQACAAIAAAAIAAQAAQABAAMAAAAHAAQAAQABAAMAAAAGAAQAAQABAAMAAAAFAAQAAQABAAMAAAAEAAQAAQABAAMAAAADAAQAAQABAAMAAAACAAQAAQABAAMAAAABAAQAAQABAAMAAAAAAAQAAQAAAAIAAAABAAMAAQABAAMAAAACAAMAAQABAAMAAAADAAMAAQABAAMAAAAEAAMAAQABAAMAAAAFAAMAAQABAAMAAAAHAAEAAQABAAIAAAAIAAEAAQABAAIAAAAJAAEAAQABAAAAAAAIAAMAAQABAAMAAAAHAAMAAQABAAMAAAAAAAMAAQAAAAIAAAAGAAMAAQABAAMAAAAFAAUAAQABAAMAAAAEAAUAAQABAAMAAAADAAUAAQABAAMAAAAGAAUAAQABAAMAAAAHAAUAAQABAAMAAAAIAAUAAQABAAMAAAAIAAYAAQABAAMAAAAHAAYAAQABAAMAAAAGAAYAAQABAAMAAAAFAAYAAQABAAMAAAAEAAYAAQABAAMAAAADAAYAAQABAAMAAAACAAYAAQABAAMAAAABAAYAAQABAAMAAAAAAAYAAQAAAAIAAAAAAAUAAQAAAAIAAAABAAUAAQABAAMAAAACAAUAAQABAAMAAAAGAAcAAQADAAIAAAAHAAcAAQADAAIAAAAJAAcAAQABAAEAAAAIAAcAAQADAAIAAAABAAcAAQAGAAIAAAAAAAcAAQAAAAEAAAD//wgAAQAAAAMAAAAAAAoAAQAAAAAAAAAAAAsAAQAAAAIAAAAAAAwAAQAFAAIAAAAAAA0AAQABAAMAAAAAAA4AAQAFAAMAAAAAAA8AAQAAAAIAAAABAAoAAQAEAAEAAAABAAsAAQABAAMAAAABAAwAAQABAAMAAAABAA0AAQABAAMAAAABAA4AAQABAAMAAAABAA8AAQABAAMAAAACAAsAAQABAAMAAAACAAwAAQABAAMAAAACAA0AAQABAAMAAAACAA4AAQABAAMAAAACAA8AAQABAAMAAAADAAsAAQABAAMAAAADAAwAAQABAAMAAAADAA0AAQABAAMAAAADAA4AAQABAAMAAAADAA8AAQABAAMAAAAEAAsAAQABAAMAAAAEAAwAAQABAAMAAAAEAA0AAQABAAMAAAAEAA4AAQABAAMAAAAEAA8AAQABAAMAAAAFAAsAAQABAAMAAAAFAAwAAQABAAMAAAAFAA0AAQABAAMAAAAFAA4AAQABAAMAAAAFAA8AAQABAAMAAAAGAAoAAQABAAIAAAAGAAsAAQABAAMAAAAGAAwAAQABAAMAAAAGAA0AAQABAAMAAAAGAA4AAQABAAMAAAAGAA8AAQABAAMAAAAHAAoAAQABAAIAAAAHAAsAAQABAAMAAAAHAAwAAQABAAMAAAAHAA0AAQABAAMAAAAHAA4AAQABAAMAAAAHAA8AAQABAAMAAAAIAAoAAQABAAIAAAAIAAsAAQABAAMAAAAIAAwAAQABAAMAAAAIAA0AAQABAAMAAAAIAA4AAQABAAMAAAAIAA8AAQABAAMAAAAJAAoAAQABAAAAAAAJAAsAAQACAAIAAAAJAAwAAQACAAIAAAAJAA0AAQACAAIAAAAJAA4AAQACAAIAAAAJAA8AAQACAAIAAAAAABAAAQAAAAEAAAABABAAAQADAAIAAAACABAAAQADAAIAAAAGABAAAQAGAAIAAAAHABAAAQAEAAQAAAAIABAAAQAHAAIAAAAJABAAAQABAAEAAAADAAAAAQAEAAAAAAAFAAAAAQAFAAAAAAAEAAAAAQABAAMAAAAAABMAAQAAAAAAAAAAABQAAQAAAAIAAAAAABUAAQAAAAIAAAAAABYAAQAAAAIAAAAAABcAAQAAAAIAAAAAABgAAQAAAAIAAAAAABkAAQAAAAEAAAABABMAAQABAAIAAAABABQAAQABAAMAAAABABUAAQABAAMAAAABABYAAQABAAMAAAABABcAAQABAAMAAAABABgAAQABAAMAAAABABkAAQADAAIAAAACABMAAQABAAIAAAACABQAAQABAAMAAAACABUAAQABAAMAAAACABYAAQABAAMAAAACABcAAQABAAMAAAACABgAAQABAAMAAAADABQAAQABAAMAAAADABUAAQABAAMAAAADABYAAQABAAMAAAADABcAAQABAAMAAAADABgAAQABAAMAAAAEABQAAQABAAMAAAAEABUAAQABAAMAAAAEABYAAQABAAMAAAAEABcAAQABAAMAAAAEABgAAQABAAMAAAAFABQAAQABAAMAAAAFABUAAQABAAMAAAAFABYAAQABAAMAAAAFABcAAQABAAMAAAAFABgAAQABAAMAAAAGABMAAQAEAAEAAAAGABQAAQABAAMAAAAGABUAAQABAAMAAAAGABYAAQABAAMAAAAGABcAAQABAAMAAAAGABgAAQABAAMAAAAGABkAAQADAAIAAAAHABMAAQAAAAQAAAAHABQAAQABAAMAAAAHABUAAQABAAMAAAAHABYAAQABAAMAAAAHABcAAQABAAMAAAAHABgAAQABAAMAAAAHABkAAQADAAIAAAAIABMAAQAFAAEAAAAIABQAAQABAAMAAAAIABUAAQABAAMAAAAIABYAAQABAAMAAAAIABcAAQABAAMAAAAIABgAAQABAAMAAAAIABkAAQADAAIAAAAJABMAAQABAAAAAAAJABQAAQACAAIAAAAJABUAAQACAAIAAAAJABYAAQACAAIAAAAJABcAAQACAAIAAAAJABgAAQACAAIAAAAJABkAAQABAAEAAAAJAAMAAQACAAIAAAAJAAQAAQACAAIAAAAJAAUAAQACAAIAAAAJAAYAAQACAAIAAAAAABwAAQAAAAAAAAAAAB0AAQAAAAIAAAAAAB4AAQAAAAIAAAAAAB8AAQAAAAIAAAAAACAAAQAAAAIAAAAAACEAAQAAAAIAAAAAACIAAQAAAAEAAAABABwAAQABAAIAAAABAB0AAQABAAMAAAABAB4AAQABAAMAAAABAB8AAQABAAMAAAABACAAAQABAAMAAAABACEAAQABAAMAAAABACIAAQADAAIAAAACAB0AAQABAAMAAAACAB4AAQABAAMAAAACAB8AAQACAAMAAAACACAAAQABAAMAAAACACEAAQABAAMAAAACACIAAQADAAIAAAADAB0AAQABAAMAAAADAB4AAQABAAMAAAADAB8AAQABAAMAAAADACAAAQABAAMAAAADACEAAQABAAMAAAADACIAAQADAAIAAAAEAB0AAQABAAMAAAAEAB4AAQABAAMAAAAEAB8AAQABAAMAAAAEACAAAQABAAMAAAAEACEAAQABAAMAAAAEACIAAQADAAIAAAAFAB0AAQABAAMAAAAFAB4AAQABAAMAAAAFAB8AAQABAAMAAAAFACAAAQABAAMAAAAFACEAAQABAAMAAAAFACIAAQADAAIAAAAGABwAAQABAAIAAAAGAB0AAQABAAMAAAAGAB4AAQABAAMAAAAGAB8AAQABAAMAAAAGACAAAQACAAMAAAAGACEAAQABAAMAAAAGACIAAQADAAIAAAAHABwAAQABAAIAAAAHAB0AAQABAAMAAAAHAB4AAQABAAMAAAAHAB8AAQABAAMAAAAHACAAAQABAAMAAAAHACEAAQABAAMAAAAHACIAAQADAAIAAAAIABwAAQABAAIAAAAIAB0AAQABAAMAAAAIAB4AAQABAAMAAAAIAB8AAQABAAMAAAAIACAAAQABAAMAAAAIACEAAQABAAMAAAAIACIAAQADAAIAAAAJABwAAQABAAAAAAAJAB0AAQACAAIAAAAJAB4AAQACAAIAAAAJAB8AAQACAAIAAAAJACAAAQACAAIAAAAJACEAAQACAAIAAAAJACIAAQABAAEAAAAGABEAAQAGAAMAAAAGABIAAQAEAAAAAAAHABEAAQABAAMAAAAHABIAAQABAAMAAAAIABEAAQAHAAMAAAAIABIAAQAFAAAAAAACAAcAAQABAAMAAAACAAgAAQABAAMAAAACAAkAAQABAAMAAAACAAoAAQABAAMAAAADAAcAAQAHAAIAAAADAAgAAQAHAAMAAAADAAkAAQAFAAAAAAADAAoAAQAFAAEAAAABAAgAAQAGAAMAAAABAAkAAQAEAAAAAAADABkAAQAGAAIAAAADABoAAQAGAAMAAAADABsAAQAEAAAAAAADABwAAQAEAAEAAAAEABkAAQABAAMAAAAEABoAAQABAAMAAAAEABsAAQABAAMAAAAEABwAAQABAAMAAAAFABkAAQAHAAIAAAAFABoAAQAHAAMAAAAFABsAAQAFAAAAAAAFABwAAQAFAAEAAAACABkAAQADAAIAAAADABAAAQADAAIAAAAEABAAAQADAAIAAAAFABAAAQADAAIAAAAEAAcAAQADAAIAAAAFAAcAAQADAAIAAAAEAAoAAQABAAIAAAAFAAoAAQABAAIAAAADABMAAQABAAIAAAAEABMAAQABAAIAAAAFABMAAQABAAIAAAACABwAAQABAAIAAAD0/woAAQAAAAAAAAD0/wsAAQAAAAIAAAD0/wwAAQAAAAIAAAD0/w0AAQAAAAIAAAD0/w4AAQAAAAIAAAD0/w8AAQAAAAIAAAD0/xAAAQAAAAEAAAD1/woAAQABAAIAAAD1/wsAAQABAAMAAAD1/wwAAQABAAMAAAD1/w0AAQABAAMAAAD1/w4AAQABAAMAAAD1/w8AAQABAAMAAAD1/xAAAQADAAIAAAD2/woAAQABAAIAAAD2/wsAAQABAAMAAAD2/wwAAQABAAMAAAD2/w0AAQABAAMAAAD2/w4AAQABAAMAAAD2/w8AAQABAAMAAAD2/xAAAQADAAIAAAD3/woAAQABAAIAAAD3/wsAAQABAAMAAAD3/wwAAQABAAMAAAD3/w0AAQABAAMAAAD3/w4AAQABAAMAAAD3/w8AAQABAAMAAAD3/xAAAQADAAIAAAD4/woAAQABAAIAAAD4/wsAAQABAAMAAAD4/wwAAQABAAMAAAD4/w0AAQABAAMAAAD4/w4AAQABAAMAAAD4/w8AAQABAAMAAAD4/xAAAQADAAIAAAD5/woAAQABAAIAAAD5/wsAAQABAAMAAAD5/wwAAQABAAMAAAD5/w0AAQABAAMAAAD5/w4AAQABAAMAAAD5/w8AAQABAAMAAAD5/xAAAQADAAIAAAD6/woAAQABAAIAAAD6/wsAAQABAAMAAAD6/wwAAQABAAMAAAD6/w0AAQABAAMAAAD6/w4AAQABAAMAAAD6/w8AAQABAAMAAAD6/xAAAQADAAIAAAD7/woAAQABAAIAAAD7/wsAAQABAAMAAAD7/wwAAQABAAMAAAD7/w0AAQABAAMAAAD7/w4AAQABAAMAAAD7/w8AAQABAAMAAAD7/xAAAQADAAIAAAD8/woAAQABAAIAAAD8/wsAAQABAAMAAAD8/wwAAQABAAMAAAD8/w0AAQABAAMAAAD8/w4AAQABAAMAAAD8/w8AAQABAAMAAAD8/xAAAQADAAIAAAD9/woAAQABAAAAAAD9/wsAAQACAAIAAAD9/wwAAQAGAAAAAAD9/w0AAQABAAMAAAD9/w4AAQAGAAEAAAD9/w8AAQACAAIAAAD9/xAAAQABAAEAAAD+/wwAAQAHAAAAAAD+/w0AAQABAAMAAAD+/w4AAQAHAAEAAAD//wwAAQAEAAIAAAD//w0AAQABAAMAAAD//w4AAQAEAAMAAAA=")
+tile_set = SubResource("TileSet_1t2px")
+
+[node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("3_gblsj")]
+position = Vector2(81, 72)
+torch_light_radius = 20.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=793488398 node_paths=PackedStringArray("player")]
+anchor_mode = 0
+script = ExtResource("4_ryhof")
+player = NodePath("../PlayerDungeon")
+
+[node name="ExitArea" type="Area2D" parent="." unique_id=1945399787]
+script = ExtResource("19_uksyj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea" unique_id=1337039512]
+position = Vector2(72, 10)
+shape = SubResource("RectangleShape2D_0mymv")
+
+[node name="Keys" type="Node2D" parent="." unique_id=2070155554]
+
+[node name="Key1" parent="Keys" unique_id=2015663561 node_paths=PackedStringArray("tilemap") instance=ExtResource("5_neopm")]
+position = Vector2(-111, 216)
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Torches" type="Node2D" parent="." unique_id=340209533]
+
+[node name="EntranceTorch" parent="Torches" unique_id=345507219 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("6_gblsj")]
+position = Vector2(72, -6)
+light_radius = 20.0
+light_central_radius_ratio = 1.15
+light_outer_radius_ratio = 0.0
+is_sprite_visible = false
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Torch1" parent="Torches" unique_id=976909529 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("6_gblsj")]
+position = Vector2(25, 331)
+light_radius = 10.0
+light_central_radius_ratio = 1.15
+light_outer_radius_ratio = 2.0
+is_sprite_visible = true
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="DigSpots" type="Node2D" parent="." unique_id=1376168475]
+
+[node name="Spot1" parent="DigSpots" unique_id=320448274 node_paths=PackedStringArray("scene_root", "tilemap") groups=["level_digging_spots"] instance=ExtResource("7_ryhof")]
+position = Vector2(40, 504)
+scene_root = NodePath("../..")
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Spot2" parent="DigSpots" unique_id=1346704918 node_paths=PackedStringArray("scene_root", "tilemap") groups=["level_digging_spots"] instance=ExtResource("7_ryhof")]
+position = Vector2(104, 520)
+scene_root = NodePath("../..")
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Signs" type="Node2D" parent="." unique_id=560674007]
+
+[node name="Sign1" parent="Signs" unique_id=1704938251 instance=ExtResource("22_4dlj5")]
+position = Vector2(29, 72)
+lines = ["Welcome, Sugi!", "It's been a while since your last crawl, so we've left these signs as a reminder.", "Lesson 1: use the D-Pad (WASD) to move around the ruins.", "Remember: the mission only counts if you make it back out."]
+
+[node name="Sign2" parent="Signs" unique_id=1525943991 instance=ExtResource("22_4dlj5")]
+position = Vector2(108, 216)
+lines = ["Time for another lesson... number 2!", "This door seems locked. What could help? A key, maybe? Let's go find it!", "Once you do, press A (X) to pick it up."]
+
+[node name="Sign3" parent="Signs" unique_id=1312508534 instance=ExtResource("22_4dlj5")]
+position = Vector2(60, 344)
+lines = ["Your torch is your only light, and it won't last forever.", "Press A (X) to pick up abandoned torches and gain more time.", "Trust me, you don't want to see this place in the dark..."]
+
+[node name="Sign4" parent="Signs" unique_id=538047770 instance=ExtResource("22_4dlj5")]
+position = Vector2(92, 488)
+lines = ["Look, digging sites!", "Dig here to find rare treasures. Once you've collected enough, you can leave this place.", "How? Just reach a door with light on the other side.", "One last thing: you can only dig while your torch is ON."]

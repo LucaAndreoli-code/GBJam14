@@ -13,6 +13,11 @@ signal sonar_pinged(cooldown: float)
 
 const TREASURE_SCENE := preload("res://entities/digging/treasure/treasure.tscn")
 const PAUSE_MENU_SCENE: PackedScene = preload("res://scenes/game/pause_menu.tscn")
+const CONFIRM_BOX_SCENE: PackedScene = preload("res://scenes/ui/gb_text_box.tscn")
+
+# Clear of the bottom bar, which nothing switches off for the run: main.tscn keeps that
+# strip at y 128, and the box is 48px tall.
+const CONFIRM_BOX_POSITION := Vector2(0.0, 76.0)
 
 # Attempts per region before giving up on placing that treasure
 const PLACEMENT_ATTEMPTS := 24
@@ -35,6 +40,8 @@ const SONAR_ACTION := "btn_a"
 @export var sonar_flash_time: float = 1.5
 ## Torch seconds used only when the minigame is entered without coming from the dungeon
 @export var torch_duration_seconds: int = 120
+## Gameover seconds used only when the minigame is entered without coming from the dungeon
+@export var gameover_duration_seconds: int = 60
 
 @onready var _game_time: GameTime = $GameTime
 @onready var _field: DigField = $DigField
@@ -53,17 +60,31 @@ var _sonar_left: float = 0.0
 var _sonar_origin: Vector2 = Vector2.ZERO
 var _sonar_pending: Array[Treasure] = []
 var _is_input_enabled: bool = true
+# The sonar polls Input, which knows nothing about the confirm box having eaten a press,
+# so the btn_a that answers the exit question would ping on that same frame. The flag
+# covers exactly that frame, see _process().
+var _swallow_sonar_press: bool = false
 var _hud: DigHUD
 var _status_hud: StatusHUD
 var _pause_menu: Node
+var _confirm_box: GBTextBox
 var _started: bool = false
+# The run can ask to leave more than once: the last pickup waits out its flicker before
+# swapping, and the exit stays walkable for those frames. Only the first ask counts.
+var _leaving: bool = false
+# Tells the two things the confirm box is used for apart: dialogue_finished fires for a
+# question as well, and that path is owned by _on_leave_choice().
+var _dialogue_open: bool = false
 var _torch: TorchTimer
+var _gameover: GameoverTimer
 var _dungeon_payload: Dictionary
 
 func _ready() -> void:
 	# Read once as well as listening: the signal only fires on a change
 	_is_input_enabled = GameState.is_input_enabled()
 	SignalBus.input_enabled.connect(_on_input_enabled)
+	SignalBus.dialogue_requested.connect(_on_dialogue_requested)
+	SignalBus.game_paused.connect(_on_game_paused)
 	_field.cells_carved.connect(_on_cells_carved)
 	_exit.player_returned.connect(_on_player_returned)
 	_exit.set_player(_player)
@@ -77,11 +98,18 @@ func _ready() -> void:
 	# The dungeon's TorchTimer died with the dungeon scene, so the countdown needs its own
 	# owner here or it would freeze for the whole minigame. It resumes from GameState.
 	_setup_torch()
+	_setup_gameover()
 	_torch = TorchTimer.new()
+	_torch.torch_ended.connect(_on_torch_ended)
+	# The gameover countdown keeps running down here: the torch can die with the exit
+	# question up, and GameState is the only thing that carries it across the swap.
+	_gameover = GameoverTimer.new()
 	# The darkness here lives on the Surface sprite alone, see dig_surface.gd: the full screen
 	# pass would swallow the dig field too, and that has to stay readable.
 	SignalBus.visibility_shader_toggled.emit(false)
 	_mount_hud()
+	_torch.broadcast()
+	_gameover.broadcast()
 	# Deferred so a scene entered without a payload still gets a layout: SceneManager calls
 	# on_scene_entered() after _ready(), so generating here would burn a seed the caller is
 	# about to replace. Whichever path runs first wins, the other is a no-op.
@@ -94,6 +122,8 @@ func _exit_tree() -> void:
 		_status_hud.queue_free()
 	if is_instance_valid(_pause_menu):
 		_pause_menu.queue_free()
+	if is_instance_valid(_confirm_box):
+		_confirm_box.queue_free()
 
 # Builds the layout the seed describes. Guarded because both _ready() and
 # on_scene_entered() ask for it and only the first one may run.
@@ -102,6 +132,11 @@ func _start_run() -> void:
 		return
 	_started = true
 	_rng.seed = GameState.get_seed()
+	# DigField filled itself on _ready(), before the seed was known: repainting here is what
+	# makes the same seed scatter the same debris twice.
+	_field.fill(_rng)
+	# The refill put back the dirt the pocket had taken out
+	_open_start_pocket()
 	_resolve_treasures()
 	_reserve_start_pocket()
 	_spawn_treasures()
@@ -128,6 +163,15 @@ func _setup_torch() -> void:
 		torch_data.countdown = torch_duration_seconds
 		GameState.set_torch(torch_data)
 
+# Mirrors DungeonManager._setup_gameover(): whoever gets there first wins.
+func _setup_gameover() -> void:
+	var data := GameState.get_gameover()
+	if data.duration == 0:
+		var gameover_data := GameoverTimer.Data.new()
+		gameover_data.duration = gameover_duration_seconds
+		gameover_data.countdown = gameover_duration_seconds
+		GameState.set_gameover(gameover_data)
+
 # The strip lives in main.tscn, outside this scene, so it is found by group rather
 # than by path. Running the minigame on its own leaves the group empty, which is why
 # every later call has to tolerate a null HUD.
@@ -140,23 +184,46 @@ func _mount_hud() -> void:
 	_hud.set_progress(_collected, get_treasure_count())
 	# The dungeon HUD died with the dungeon scene, so the run mounts its own copy: the torch
 	# keeps burning down here and the player has to see it.
-	_status_hud = StatusHUD.new()
+	_status_hud = StatusHUD.new(false)
 	container.add_child(_status_hud)
 	# Mounted last, so the paused screen covers everything else. The menu owns the
 	# btn_start / btn_b toggle on its own, see pause_manager.gd.
 	_pause_menu = PAUSE_MENU_SCENE.instantiate()
 	container.add_child(_pause_menu)
+	# No inventory halfway down a dig: the run never calls setup(), so the menu has neither a
+	# player nor a scene to come back to, see PauseMenuManager._open_inventory().
+	(_pause_menu as PauseMenuManager).set_action_disabled(&"_open_inventory", true)
+	# After the pause menu on purpose: _unhandled_input walks the tree bottom up, so the
+	# box sees btn_start first and can keep the paused screen off a live question.
+	_confirm_box = CONFIRM_BOX_SCENE.instantiate()
+	_confirm_box.position = CONFIRM_BOX_POSITION
+	container.add_child(_confirm_box)
+	_confirm_box.choice_made.connect(_on_leave_choice)
+	# Same box serves the exit question and any plain dialogue, see _on_dialogue_requested()
+	_confirm_box.dialogue_finished.connect(_on_dialogue_finished)
 
 func _process(delta: float) -> void:
 	_sonar_left = maxf(_sonar_left - delta, 0.0)
-	if _is_input_enabled and _sonar_left <= 0.0 and Input.is_action_just_pressed(SONAR_ACTION):
+	var can_ping := _is_input_enabled and not _swallow_sonar_press and _sonar_left <= 0.0
+	if can_ping and Input.is_action_just_pressed(SONAR_ACTION):
 		_fire_sonar()
+	# Cleared right here rather than deferred: the message queue can flush before _process
+	# and would let the very press the flag exists for through.
+	_swallow_sonar_press = false
 	_advance_sonar_wave()
 	if _hud != null:
 		_hud.set_cooldown_ratio(get_sonar_cooldown_ratio())
 
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
+
+# Resume is answered with btn_a, and the scene starts processing again on that very frame: the
+# polled sonar would read the same press, exactly like it does after the exit question, see
+# _on_leave_choice().
+func _on_game_paused(is_paused: bool) -> void:
+	if is_paused:
+		return
+	_swallow_sonar_press = true
 
 ## Called by SceneManager when this scene is entered, see scene_manager.gd
 func on_scene_entered(payload: Dictionary) -> void:
@@ -174,7 +241,8 @@ func get_collected_count() -> int:
 func get_treasure_count() -> int:
 	return _run_treasures.size()
 
-## Returns the resources of the treasures picked up so far, for the dungeon to bank
+## Returns the resources of the treasures picked up so far. Banking is not its job: every
+## pickup goes straight into GameState, see _on_treasure_collected().
 func get_collected_treasures() -> Array[TreasureInfo]:
 	return _collected_infos
 
@@ -328,29 +396,93 @@ func _on_treasure_collected(treasure: Treasure) -> void:
 	_collected += 1
 	var info := treasure.get_info()
 	_collected_infos.append(info)
+	# Banked on the spot rather than on the way out: the points strip is mounted down here too,
+	# and the run has no way of losing what it already dug up.
+	var banked: Array[TreasureInfo] = [info]
+	GameState.add_treasures_to_collection(banked)
 	if _hud != null:
 		_hud.set_progress(_collected, get_treasure_count())
 	treasure_collected.emit(info, _collected, get_treasure_count())
 	if _collected >= get_treasure_count():
 		all_treasures_collected.emit()
-		_swap_back_to_dungeon()
+		# The swap pauses the whole tree, so starting it now would freeze the flicker on the
+		# last treasure, the one pickup the player is most likely to be watching. Input goes
+		# off meanwhile, and _swap_back_to_dungeon() puts it back.
+		GameState.set_input_enabled(false)
+		treasure.pickup_finished.connect(_swap_back_to_dungeon, CONNECT_ONE_SHOT)
 
-# The only way out of the run: the pit has no other exit. Stepping back into the start
-# pocket is final - input goes off here and DigExit disarms itself, so there is no way
-# back down into the field.
+# The only way out of the run: the pit has no other exit. Everything dug up means leaving
+# on the spot; anything still buried gets the player asked first. Input goes off either
+# way, so nobody walks around behind the question.
 func _on_player_returned() -> void:
 	GameState.set_input_enabled(false)
 	if _collected >= get_treasure_count():
 		_swap_back_to_dungeon()
 		return
-	# TODO: show the informative text ("you are leaving N treasures behind") through
-	#       GBTextBox, scenes/ui/gb_text_box.tscn, mounted in the ui_container group.
-	#       That UI lives on another branch, so the flow stops here for now: once the box
-	#       is wired, its dialogue_finished has to end on _swap_back_to_dungeon().
-	push_warning("Exit reached with %d/%d treasures" % [_collected, get_treasure_count()])
+	# Null when the run found no HUD to mount into, see _mount_hud(): there is nothing to
+	# ask with, so the exit stays as final as it was before the question existed.
+	if _confirm_box == null:
+		push_warning("Exit reached with %d/%d treasures" % [_collected, get_treasure_count()])
+		_swap_back_to_dungeon()
+		return
+	var left := get_treasure_count() - _collected
+	var subject := "treasure" if left == 1 else "treasures"
+	_confirm_box.show_confirm(PackedStringArray([
+		"You're leaving %d %s behind. Climb out anyway?" % [left, subject]
+	]))
+
+# The box lives in main.tscn's HUD, outside this scene, so the run drives it through the bus
+# instead of the caller reaching for it. Mirrors DungeonManager._on_dialogue_requested().
+func _on_dialogue_requested(lines: PackedStringArray) -> void:
+	if _confirm_box == null or _confirm_box.is_open():
+		return
+	_dialogue_open = true
+	GameState.set_input_enabled(false)
+	# Nobody burns torch seconds reading. Both countdowns hang off GameTime's second tick,
+	# see TorchTimer._on_game_second_tick() and GameoverTimer._on_game_second_tick(), so the
+	# clock itself is what goes off - stopping only the torch would let the gameover run on.
+	_game_time.set_process(false)
+	_confirm_box.show_dialogue(lines)
+
+func _on_dialogue_finished() -> void:
+	# A closing question fires this too, and that one is answered by _on_leave_choice()
+	if not _dialogue_open:
+		return
+	_dialogue_open = false
+	_game_time.set_process(true)
+	# The press that closed the box is spent, and the polled sonar is about to read it again
+	_swallow_sonar_press = true
+	GameState.set_input_enabled(true)
+
+func _on_leave_choice(accepted: bool) -> void:
+	# Either way the press that answered is spent, and gameplay is about to hear about it
+	# again through the polled Input state
+	_swallow_sonar_press = true
+	# The torch can die with the question up: the run is already leaving, the answer is moot
+	if _leaving:
+		return
+	if accepted:
+		_swap_back_to_dungeon()
+		return
+	# Staying: the exit has to be walked out of and back into before it asks again
+	_exit.rearm()
+	GameState.set_input_enabled(true)
+
+# No torch, no run: the pit goes dark and the player is put back in the dungeon with
+# whatever they already dug up. Mirrors DungeonManager._on_torch_ended(), which is the only
+# other listener TorchTimer has.
+func _on_torch_ended() -> void:
+	# The swap goes first, so _leaving is up before the question below is taken down: a
+	# close() answers choice_made, and that answer must not rearm an exit the run is
+	# already leaving through.
 	_swap_back_to_dungeon()
+	if _confirm_box != null and _confirm_box.is_open():
+		_confirm_box.close()
 
 func _swap_back_to_dungeon() -> void:
+	if _leaving:
+		return
+	_leaving = true
 	# GameState is an autoload and SceneManager never touches the input flag, so leaving it
 	# off here would hand the dungeon a frozen player
 	GameState.set_input_enabled(true)
@@ -361,8 +493,6 @@ func _swap_back_to_dungeon() -> void:
 		return
 	var player_pos: Vector2 = _dungeon_payload.get("player_position", Vector2.ZERO)
 	var payload := {
-		"player_position": player_pos,
-		# What the run actually brought home, so the dungeon can bank it
-		"collected_treasures": _collected_infos
+		"player_position": player_pos
 	}
 	SceneManager.go_to(scene_path, payload)

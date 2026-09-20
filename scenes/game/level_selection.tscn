@@ -1,0 +1,308 @@
+[gd_scene format=3 uid="uid://brlei0juwbko8"]
+
+[ext_resource type="Script" uid="uid://ddfgeusjr4v27" path="res://scripts/scenes/level_selection_manager.gd" id="1_5etf1"]
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_bfpls"]
+[ext_resource type="Script" uid="uid://qpn5we7qgoys" path="res://scripts/ui/level_selection_item.gd" id="2_0vt1s"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_5etf1"]
+[ext_resource type="Texture2D" uid="uid://c4sy2muwpruk1" path="res://assets/sprites/ui/level_selection_background.png" id="4_5etf1"]
+[ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="4_bxyb5"]
+[ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="5_amf2j"]
+[ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="9_amf2j"]
+[ext_resource type="Texture2D" uid="uid://cux4l4tewxysu" path="res://assets/sprites/ui/level_selection_level_item.png" id="10_0vt1s"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="10_uwyhh"]
+[ext_resource type="Texture2D" uid="uid://dtfdsy1rkw1h6" path="res://assets/sprites/ui/level_selected_icon.png" id="11_bxyb5"]
+[ext_resource type="Texture2D" uid="uid://h5gt8sakogsi" path="res://assets/sprites/ui/ui_mini_icons.png" id="11_cqdyp"]
+[ext_resource type="Resource" uid="uid://tmbu8wl5ns4l" path="res://scenes/game/level_1/level_1_info.tres" id="14_cqdyp"]
+[ext_resource type="Resource" uid="uid://6wg6hhajn1uq" path="res://scenes/game/level_2/level_2_info.tres" id="14_tfdxc"]
+[ext_resource type="Resource" uid="uid://dcprupx8tpbr3" path="res://scenes/game/level_3/level_3_info.tres" id="15_tfdxc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amf2j"]
+atlas = ExtResource("11_bxyb5")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwyhh"]
+atlas = ExtResource("11_bxyb5")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8cxyx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_amf2j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwyhh")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 7.5
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3au1a"]
+atlas = ExtResource("4_bxyb5")
+region = Rect2(24, 0, 23, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgx0i"]
+atlas = ExtResource("4_bxyb5")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bxyb5"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cxyx"]
+atlas = ExtResource("11_cqdyp")
+region = Rect2(0, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cqdyp"]
+atlas = ExtResource("11_cqdyp")
+region = Rect2(8, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfdxc"]
+atlas = ExtResource("11_cqdyp")
+region = Rect2(16, 8, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfpls"]
+atlas = ExtResource("4_bxyb5")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0mymv"]
+atlas = ExtResource("10_0vt1s")
+region = Rect2(0, 0, 24, 24)
+
+[node name="LevelSelection" type="Node2D" unique_id=862186502]
+script = ExtResource("1_5etf1")
+
+[node name="Background" type="TextureRect" parent="." unique_id=440465663]
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("4_5etf1")
+
+[node name="Frame" type="TextureRect" parent="." unique_id=1768626988]
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("1_bfpls")
+
+[node name="SelectionIcon" type="AnimatedSprite2D" parent="." unique_id=68722961]
+sprite_frames = SubResource("SpriteFrames_8cxyx")
+autoplay = "default"
+
+[node name="Container" type="Control" parent="." unique_id=195648198]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 152.0
+offset_bottom = 134.0
+
+[node name="Label" type="Label" parent="Container" unique_id=1888111467]
+layout_mode = 1
+offset_right = 72.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("2_5etf1")
+theme_override_font_sizes/font_size = 8
+text = "Levels"
+
+[node name="BHint" type="HBoxContainer" parent="Container" unique_id=1836299033]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -53.0
+offset_bottom = 8.0
+grow_horizontal = 0
+
+[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=525337032]
+custom_maximum_size = Vector2(23, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_3au1a")
+stretch_mode = 2
+
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=2145433296]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_amf2j")
+theme_override_font_sizes/font_size = 8
+text = "Go back"
+
+[node name="DpadHint" type="HBoxContainer" parent="Container" unique_id=1259326809]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 102.0
+offset_top = -56.0
+offset_right = 144.0
+offset_bottom = -48.0
+grow_vertical = 0
+
+[node name="Icon" type="TextureRect" parent="Container/DpadHint" unique_id=769138635]
+layout_mode = 2
+texture = SubResource("AtlasTexture_qgx0i")
+
+[node name="Hint" type="Label" parent="Container/DpadHint" unique_id=2042202573]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_amf2j")
+theme_override_font_sizes/font_size = 8
+text = "Navigate"
+
+[node name="LevelInfo" type="Panel" parent="Container" unique_id=1460801962]
+layout_mode = 0
+offset_top = 12.0
+offset_right = 144.0
+offset_bottom = 68.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bxyb5")
+
+[node name="Control" type="Control" parent="Container/LevelInfo" unique_id=1736499860]
+anchors_preset = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 139.0
+offset_bottom = 53.0
+
+[node name="LevelTitle" type="Label" parent="Container/LevelInfo/Control" unique_id=162725256]
+layout_mode = 1
+offset_right = 44.0
+offset_bottom = 11.0
+theme_override_fonts/font = ExtResource("9_amf2j")
+theme_override_font_sizes/font_size = 16
+text = "Test level"
+
+[node name="LevelText" type="Label" parent="Container/LevelInfo/Control" unique_id=1430538466]
+custom_maximum_size = Vector2(132, 20)
+layout_mode = 1
+offset_left = 4.0
+offset_top = 14.0
+offset_right = 136.0
+offset_bottom = 33.0
+theme_override_fonts/font = ExtResource("10_uwyhh")
+theme_override_font_sizes/font_size = 8
+text = "I'm a test level, because I have a medium long-sized text, near 70 chars."
+autowrap_mode = 2
+
+[node name="LevelStats" type="HBoxContainer" parent="Container/LevelInfo/Control" unique_id=993309774]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -70.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/separation = 4
+
+[node name="Shovel" type="HBoxContainer" parent="Container/LevelInfo/Control/LevelStats" unique_id=1441876569]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Container/LevelInfo/Control/LevelStats/Shovel" unique_id=2035529422]
+layout_mode = 2
+texture = SubResource("AtlasTexture_8cxyx")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="Container/LevelInfo/Control/LevelStats/Shovel" unique_id=1257249837]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("10_uwyhh")
+theme_override_font_sizes/font_size = 8
+text = "x0"
+
+[node name="Key" type="HBoxContainer" parent="Container/LevelInfo/Control/LevelStats" unique_id=1346395056]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Container/LevelInfo/Control/LevelStats/Key" unique_id=1673422429]
+layout_mode = 2
+texture = SubResource("AtlasTexture_cqdyp")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="Container/LevelInfo/Control/LevelStats/Key" unique_id=651855958]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("10_uwyhh")
+theme_override_font_sizes/font_size = 8
+text = "x0"
+
+[node name="Torch" type="HBoxContainer" parent="Container/LevelInfo/Control/LevelStats" unique_id=1097990762]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Container/LevelInfo/Control/LevelStats/Torch" unique_id=988136887]
+layout_mode = 2
+texture = SubResource("AtlasTexture_tfdxc")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="Container/LevelInfo/Control/LevelStats/Torch" unique_id=382302497]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("10_uwyhh")
+theme_override_font_sizes/font_size = 8
+text = "x0"
+
+[node name="AHint" type="HBoxContainer" parent="Container" unique_id=596154111]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -56.0
+offset_right = 38.0
+offset_bottom = -48.0
+grow_vertical = 0
+
+[node name="Icon" type="TextureRect" parent="Container/AHint" unique_id=1220679460]
+layout_mode = 2
+texture = SubResource("AtlasTexture_bfpls")
+
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=113039781]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_amf2j")
+theme_override_font_sizes/font_size = 8
+text = "Confirm"
+
+[node name="Levels" type="Control" parent="Container" unique_id=1189034896]
+anchors_preset = 0
+offset_left = 142.0
+offset_right = 142.0
+offset_bottom = 8.0
+
+[node name="Level" type="TextureRect" parent="Container/Levels" unique_id=1466525173]
+layout_mode = 0
+offset_left = -94.0
+offset_top = 75.0
+offset_right = -70.0
+offset_bottom = 99.0
+pivot_offset = Vector2(39, 21)
+texture = SubResource("AtlasTexture_0mymv")
+stretch_mode = 2
+script = ExtResource("2_0vt1s")
+level_info = ExtResource("14_cqdyp")
+
+[node name="Level2" type="TextureRect" parent="Container/Levels" unique_id=1319212318]
+layout_mode = 0
+offset_left = -38.0
+offset_top = 83.0
+offset_right = -14.0
+offset_bottom = 107.0
+pivot_offset = Vector2(39, 21)
+texture = SubResource("AtlasTexture_0mymv")
+stretch_mode = 2
+script = ExtResource("2_0vt1s")
+level_info = ExtResource("14_tfdxc")
+
+[node name="Level3" type="TextureRect" parent="Container/Levels" unique_id=500192121]
+layout_mode = 0
+offset_left = -126.0
+offset_top = 99.0
+offset_right = -102.0
+offset_bottom = 123.0
+pivot_offset = Vector2(39, 21)
+texture = SubResource("AtlasTexture_0mymv")
+stretch_mode = 2
+script = ExtResource("2_0vt1s")
+level_info = ExtResource("15_tfdxc")

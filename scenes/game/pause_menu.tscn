@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cv4mp7oq7adu7" path="res://scripts/scenes/pause_manager.gd" id="1_0n058"]
 [ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_1gnl8"]
-[ext_resource type="Script" uid="uid://dpantyfyknx4r" path="res://scenes/ui/pause_menu_item.gd" id="2_cech8"]
-[ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="3_lalf1"]
+[ext_resource type="Script" uid="uid://dpantyfyknx4r" path="res://scripts/ui/pause_menu_item.gd" id="2_cech8"]
 [ext_resource type="Texture2D" uid="uid://c8v37piis07jg" path="res://assets/sprites/ui/ui_pause_menu_frame.png" id="4_1gnl8"]
 [ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="5_aaarr"]
 [ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="6_cech8"]
@@ -24,14 +23,12 @@ metadata/_custom_type_script = "uid://dpantyfyknx4r"
 script = ExtResource("2_cech8")
 text = "Settings"
 action = &"_open_settings"
-disabled = true
 metadata/_custom_type_script = "uid://dpantyfyknx4r"
 
 [sub_resource type="Resource" id="Resource_ghwel"]
 script = ExtResource("2_cech8")
 text = "Exit"
 action = &"_exit_game"
-disabled = true
 metadata/_custom_type_script = "uid://dpantyfyknx4r"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kc8i1"]
@@ -56,7 +53,7 @@ offset_top = 8.0
 offset_right = 84.0
 offset_bottom = 120.0
 
-[node name="Label" type="Label" parent="Frame/Container" unique_id=1398434156]
+[node name="Label" type="Label" parent="Frame/Container" unique_id=2078614981]
 layout_mode = 1
 offset_right = 72.0
 offset_bottom = 8.0
@@ -64,8 +61,6 @@ theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
 theme_override_fonts/font = ExtResource("2_1gnl8")
 theme_override_font_sizes/font_size = 8
 text = "Rest Menu"
-script = ExtResource("3_lalf1")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="BHint" type="HBoxContainer" parent="Frame/Container" unique_id=1704648732]
 layout_mode = 1
@@ -81,13 +76,11 @@ custom_maximum_size = Vector2(8, 8)
 layout_mode = 2
 texture = SubResource("AtlasTexture_kc8i1")
 
-[node name="Hint" type="Label" parent="Frame/Container/BHint" unique_id=1588239325]
+[node name="Hint" type="Label" parent="Frame/Container/BHint" unique_id=478245353]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("6_cech8")
 theme_override_font_sizes/font_size = 8
 text = "Close"
-script = ExtResource("3_lalf1")
-metadata/_custom_type_script = "uid://cidt6x11067q0"
 
 [node name="Menu" type="Control" parent="Frame/Container" unique_id=1560947071]
 anchors_preset = 0

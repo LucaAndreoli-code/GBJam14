@@ -19,10 +19,13 @@ const LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE = "get_light_radius"
 ## Flicker of the halo, matching VisibilityContainer in main.tscn
 @export_range(0.0, 10.0, 0.1) var flicker_speed: float = 5.5
 @export_range(0.0, 2.0, 0.1) var flicker_amplitude: float = 0.6
+## Where the brightest core ends, as a fraction of the source radius: it sits inside the
+## inner band, so it stays below 1.0 while the two ratios below stay above it.
+@export_range(0.0, 1.0, 0.05) var core_radius_ratio: float = 0.5
 ## Where the central band ends and where the halo ends, as multiples of the source radius.
 ## The defaults reproduce the dungeon's falloff; the reference art closes the dark ring nearer 1.5.
 @export_range(1.0, 3.0, 0.05) var central_radius_ratio: float = 1.15
-@export_range(1.0, 4.0, 0.05) var outer_radius_ratio: float = 2.0
+@export_range(1.0, 8.0, 0.05) var outer_radius_ratio: float = 2.0
 
 var _material: ShaderMaterial
 
@@ -31,6 +34,7 @@ func _ready() -> void:
 	_material.shader = TORCH_GLOW_SHADER
 	_material.set_shader_parameter("viewport_size", Vector2(texture.get_size()))
 	# Constant at runtime, so they are pushed once rather than every frame
+	_material.set_shader_parameter("core_radius_ratio", core_radius_ratio)
 	_material.set_shader_parameter("central_radius_ratio", central_radius_ratio)
 	_material.set_shader_parameter("outer_radius_ratio", outer_radius_ratio)
 	material = _material
@@ -43,10 +47,13 @@ func _process(_delta: float) -> void:
 		if not source.has_method(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE):
 			continue
 		var source_pos := _to_texture_pixels((source as Node2D).global_position)
-		var source_radius: float = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
+		# Only the inner radius is read here: the band multipliers in y and z are per source for
+		# ScreenVisibilityManager, while torch_glow.gdshader takes its own three as scalar uniforms.
+		var source_radius: Vector3 = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
 		# Offset per instance, so two torches never pulse in unison
 		var source_offset := float(source.get_instance_id() % 100 / 10.0)
-		lights.append(Vector3(source_pos.x, source_pos.y, _calc_flickering(source_radius, source_offset)))
+		lights.append(Vector3(source_pos.x, source_pos.y,
+				_calc_flickering(source_radius.x, source_offset)))
 		if lights.size() == MAX_LIGHTS:
 			break
 	_material.set_shader_parameter("lights", lights)

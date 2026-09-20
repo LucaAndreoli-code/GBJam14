@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c8snk3xqv1wr4"]
+
+[ext_resource type="Script" uid="uid://bqdxd4jc6mvea" path="res://entities/dungeon/sign/sign_interactable.gd" id="1_sign"]
+[ext_resource type="Texture2D" uid="uid://bdgb67l0ffrvj" path="res://assets/sprites/sign.png" id="2_sign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reach"]
+size = Vector2(10, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_solid"]
+size = Vector2(12, 12)
+
+[node name="SignInteractable" type="Area2D" unique_id=1704938251]
+script = ExtResource("1_sign")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1704938252]
+shape = SubResource("RectangleShape2D_reach")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1704938253]
+texture = ExtResource("2_sign")
+
+[node name="Solid" type="StaticBody2D" parent="." unique_id=1704938254]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Solid" unique_id=1704938255]
+shape = SubResource("RectangleShape2D_solid")

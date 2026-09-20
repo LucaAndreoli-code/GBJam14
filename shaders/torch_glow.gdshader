@@ -13,15 +13,19 @@ shader_type canvas_item;
 // 2 => Light color
 // 3 => Lightest color
 // The rows represents the distance from the light point.
-// Unlike visibility.gdshader the first row RAISES the indices: in the heart of the flame the
+// Unlike visibility.gdshader the first rows RAISE the indices: in the heart of the flame the
 // wall has to turn the lit color of the palette instead of staying as it was authored.
-const int RAMP[16] = {
+const int RAMP[20] = {
+	2, 3, 3, 3,		// Core of the flame: everything but the mortar burns to the lightest shade
 	1, 2, 3, 3,		// Inside the flame: no black left, bricks lit
 	0, 1, 2, 3,		// Identity: the art as it is drawn
-	0, 1, 1, 2,		// Dimmed
+	0, 0, 1, 2,		// Dimmed
 	0, 0, 0, 0		// Past the light: flat dark
 };
 
+// Where the core ends, as a FRACTION of the source radius: it sits inside the inner band,
+// so this one is below 1.0 while the two ratios below are above it.
+uniform float core_radius_ratio : hint_range(0.0, 1.0) = 0.5;
 // Where the central band ends and where the halo ends, as multiples of the source radius
 uniform float central_radius_ratio = 1.15;
 uniform float outer_radius_ratio = 2.0;
@@ -46,7 +50,7 @@ void fragment() {
 		vec2 pixel_pos = UV * viewport_size;
 
 		// Starts fully dark, each source can only brighten it
-		int light_level = 3;
+		int light_level = 4;
 
 		for (int i = 0; i < lights_count; i++) {
 			vec3 light = lights[i];
@@ -55,18 +59,22 @@ void fragment() {
 			float dist = length(pixel_pos - light_pos);
 
 			float inner_radius = light.z;
+			float core_radius = inner_radius * core_radius_ratio;
 			float central_radius = inner_radius * central_radius_ratio;
 			float outer_radius = inner_radius * outer_radius_ratio;
 
-			int local_level = 3;
-			if (dist < inner_radius) {
+			int local_level = 4;
+			if (dist < core_radius) {
 				local_level = 0;
 			}
-			else if (dist < central_radius) {
+			else if (dist < inner_radius) {
 				local_level = 1;
 			}
-			else if (dist < outer_radius) {
+			else if (dist < central_radius) {
 				local_level = 2;
+			}
+			else if (dist < outer_radius) {
+				local_level = 3;
 			}
 
 			// Best lit wins, so the order of the sources doesn't matter

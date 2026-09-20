@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LevelInfo" format=3 uid="uid://6wg6hhajn1uq"]
+
+[ext_resource type="PackedScene" uid="uid://4kicmtwjn3su" path="res://scenes/game/level_2/level_2.tscn" id="1_2smnd"]
+[ext_resource type="Script" uid="uid://d2y617d3c5l1r" path="res://scripts/ui/level_info.gd" id="1_5knju"]
+
+[resource]
+script = ExtResource("1_5knju")
+title = "002: Lower Galleries"
+short_text = "This level let you explore more the game's mechanics."
+level_scene = ExtResource("1_2smnd")
+digging_spots = 4
+keys = 1
+torches = 2
+metadata/_custom_type_script = "uid://d2y617d3c5l1r"

@@ -13,12 +13,19 @@ shader_type canvas_item;
 uniform float charge : hint_range(0.0, 1.0) = 1.0;
 // How many shades the uncharged part drops. 1 dims it, 3 blacks it out.
 uniform int shade_drop : hint_range(0, 3) = 1;
+// The icon can be a region of a shared atlas, and then UV spans that region inside the
+// atlas rather than 0..1: these map the region's vertical span back onto 0..1 so the fill
+// level means the same thing either way. The defaults cover a whole texture.
+uniform float region_v_min = 0.0;
+uniform float region_v_size = 1.0;
 
 void fragment() {
 	vec4 src = texture(TEXTURE, UV);
-	// UV.y is 0 at the top, and the fill rises from the bottom, so what is left empty
-	// is whatever sits above it.
-	if (UV.y < 1.0 - charge) {
+	// Sampling stays on the raw UV: only the threshold needs the region's own coordinate.
+	float v = (UV.y - region_v_min) / region_v_size;
+	// v is 0 at the top of the icon, and the fill rises from the bottom, so what is left
+	// empty is whatever sits above it.
+	if (v < 1.0 - charge) {
 		int idx = max(int(round(src.r * 3.0)) - shade_drop, 0);
 		src.rgb = vec3(float(idx) / 3.0);
 	}

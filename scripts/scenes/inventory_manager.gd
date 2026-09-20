@@ -13,10 +13,7 @@ const FRAME_SELECTED: Rect2i = Rect2i(24, 0, 24, 24)
 
 var _parent_payload: Dictionary
 var _cell_selected: int = 0
-var _treasures_count: Dictionary[int, int] = {
-	#10: 1,
-	#12: 2,
-}
+var _treasures_count: Dictionary[int, int] = {}
 
 func _ready() -> void:
 	GameState.set_paused(false)

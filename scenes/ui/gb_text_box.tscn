@@ -3,26 +3,87 @@
 [ext_resource type="Script" uid="uid://di1o56guh7t51" path="res://scripts/ui/gb_text_box.gd" id="1_box"]
 [ext_resource type="Script" uid="uid://cidt6x11067q0" path="res://scripts/ui/gb_label.gd" id="2_label"]
 [ext_resource type="FontFile" uid="uid://xy3utj368w3d" path="res://assets/fonts/gameboysoft.ttf" id="3_font"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="3_ubn01"]
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="4_frame"]
+[ext_resource type="Texture2D" uid="uid://bvv65lm7knx5d" path="res://assets/sprites/ui/player_interact_a_button.png" id="5_more"]
 
 [node name="GBTextBox" type="Node2D" unique_id=868091926]
 script = ExtResource("1_box")
+text_bottom_linear = 32.0
 
 [node name="Background" type="ColorRect" parent="." unique_id=1931660434]
-offset_right = 152.0
-offset_bottom = 48.0
+offset_right = 160.0
+offset_bottom = 52.0
 mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
 [node name="GBLabel" type="Label" parent="." unique_id=1910742563]
-custom_maximum_size = Vector2(144, 64)
-offset_left = 3.0
-offset_top = 4.0
-offset_right = 149.0
-offset_bottom = 45.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_font")
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 152.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_ubn01")
 theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
 clip_text = true
 script = ExtResource("2_label")
 auto_start = false
 skip_enabled = false
+
+[node name="Frame" type="NinePatchRect" parent="." unique_id=1238811111]
+offset_right = 160.0
+offset_bottom = 52.0
+texture = ExtResource("4_frame")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="Choice" type="Control" parent="." unique_id=1382334124]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Cursor" type="Label" parent="Choice" unique_id=807653416]
+layout_mode = 0
+offset_left = 118.0
+offset_top = 34.0
+offset_right = 126.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 8
+text = ">"
+
+[node name="YesLabel" type="Label" parent="Choice" unique_id=238268047]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 35.0
+offset_right = 115.0
+offset_bottom = 47.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_ubn01")
+theme_override_font_sizes/font_size = 8
+text = "YES"
+
+[node name="NoLabel" type="Label" parent="Choice" unique_id=1391998094]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 35.0
+offset_right = 146.0
+offset_bottom = 47.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_ubn01")
+theme_override_font_sizes/font_size = 8
+text = "NO"
+
+[node name="MorePrompt" type="TextureRect" parent="." unique_id=1704938270]
+offset_left = 148.0
+offset_top = 42.0
+offset_right = 156.0
+offset_bottom = 50.0
+mouse_filter = 2
+texture = ExtResource("5_more")

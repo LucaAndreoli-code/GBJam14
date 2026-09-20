@@ -28,17 +28,23 @@ var darkest := Color.from_rgba8(7, 24, 33)
 var _loaded: Dictionary = {}
 var _fade_step: int = 0
 var _is_fading: bool = false
+var _active_name: String = "main"
 
 # On ready it sets the clear color and load palettes from folder
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	RenderingServer.set_default_clear_color(SRC_DARKEST)
 	_load_gpl_files_from_folder("res://assets/palettes")
+	switch_to_palette(_active_name)
 
 ## Returns the active palette colors as an indexed array.
 ## The order is from lightest to darkest
 func get_active_palette() -> Array[Color]:
 	return [lightest, light, dark, darkest]
+
+## Returns the active palette name.
+func get_active_palette_name() -> String:
+	return _active_name
 
 ## Returns all the loaded palettes' names
 func get_all_palette_names() -> Array[String]:
@@ -59,6 +65,7 @@ func switch_to_palette(palette_name: String) -> bool:
 	light = palette[1]
 	dark = palette[2]
 	darkest = palette[3]
+	_active_name = palette_name
 	palette_changed.emit(get_active_palette())
 	return true
 

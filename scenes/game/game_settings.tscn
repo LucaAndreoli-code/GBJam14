@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://ctf5xb47psvii"]
+
+[ext_resource type="Script" uid="uid://8q881j12o68n" path="res://scripts/scenes/game_settings_manager.gd" id="1_bd66t"]
+[ext_resource type="Texture2D" uid="uid://bfavy2c4vjxbq" path="res://assets/sprites/sheets/title_screen_background_sheet.png" id="1_ccjkl"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="3_dfijo"]
+[ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="4_33uon"]
+[ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="5_bd66t"]
+[ext_resource type="Texture2D" uid="uid://dearf6vslut7o" path="res://assets/sprites/ui/settings_ui_icons.png" id="5_dfijo"]
+[ext_resource type="PackedScene" uid="uid://ck1u27ptpdbrm" path="res://scenes/ui/setting_slider.tscn" id="6_33uon"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3t1qn"]
+atlas = ExtResource("1_ccjkl")
+region = Rect2(0, 0, 128, 112)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idahx"]
+atlas = ExtResource("1_ccjkl")
+region = Rect2(128, 0, 128, 112)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bis2x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3t1qn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idahx")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 7.5
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r20ym"]
+atlas = ExtResource("4_33uon")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o55vn"]
+atlas = ExtResource("5_dfijo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_33uon"]
+atlas = ExtResource("5_dfijo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bd66t"]
+atlas = ExtResource("5_dfijo")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_seovi"]
+atlas = ExtResource("5_dfijo")
+region = Rect2(16, 16, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tejiu"]
+atlas = ExtResource("4_33uon")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32hqx"]
+atlas = ExtResource("4_33uon")
+region = Rect2(80, 0, 8, 8)
+
+[node name="GameSettings" type="Node2D" unique_id=691299763]
+script = ExtResource("1_bd66t")
+
+[node name="CharAnimated" type="AnimatedSprite2D" parent="." unique_id=430295840]
+position = Vector2(50, 32)
+sprite_frames = SubResource("SpriteFrames_bis2x")
+autoplay = "default"
+centered = false
+
+[node name="Container" type="Control" parent="." unique_id=333900580]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 150.0
+offset_bottom = 134.0
+
+[node name="Label" type="Label" parent="Container" unique_id=359349817]
+layout_mode = 0
+offset_right = 72.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("3_dfijo")
+theme_override_font_sizes/font_size = 8
+text = "Settings"
+
+[node name="BHint" type="HBoxContainer" parent="Container" unique_id=629625761]
+layout_mode = 0
+offset_left = 104.0
+offset_right = 142.0
+offset_bottom = 8.0
+
+[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1761656815]
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_r20ym")
+
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=1553309781]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bd66t")
+theme_override_font_sizes/font_size = 8
+text = "Go back"
+
+[node name="Menu" type="VBoxContainer" parent="Container" unique_id=1586955173]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 32.0
+offset_right = 55.0
+offset_bottom = 88.0
+
+[node name="MusicSetting" type="HBoxContainer" parent="Container/Menu" unique_id=1434723765]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Container/Menu/MusicSetting" unique_id=1449164231]
+self_modulate = Color(0.33333334, 0.33333334, 0.33333334, 1)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_o55vn")
+
+[node name="SettingSlider" parent="Container/Menu/MusicSetting" unique_id=1876439288 instance=ExtResource("6_33uon")]
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+initial_value = 1.0
+
+[node name="SfxSetting" type="HBoxContainer" parent="Container/Menu" unique_id=560489391]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Container/Menu/SfxSetting" unique_id=892269858]
+self_modulate = Color(0.33333334, 0.33333334, 0.33333334, 1)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_33uon")
+
+[node name="SettingSlider" parent="Container/Menu/SfxSetting" unique_id=1590749547 instance=ExtResource("6_33uon")]
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+initial_value = 1.0
+
+[node name="PaletteSetting" type="HBoxContainer" parent="Container/Menu" unique_id=740756158]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Icon" type="TextureRect" parent="Container/Menu/PaletteSetting" unique_id=1706668581]
+self_modulate = Color(0.33333334, 0.33333334, 0.33333334, 1)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_bd66t")
+
+[node name="Preview" type="TextureRect" parent="Container/Menu/PaletteSetting" unique_id=275096487]
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_seovi")
+
+[node name="Hints" type="VBoxContainer" parent="Container" unique_id=431541353]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -20.0
+offset_right = 42.0
+grow_vertical = 0
+
+[node name="DpadHint2" type="HBoxContainer" parent="Container/Hints" unique_id=1353786939]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Container/Hints/DpadHint2" unique_id=1993404666]
+layout_mode = 2
+texture = SubResource("AtlasTexture_tejiu")
+
+[node name="Hint" type="Label" parent="Container/Hints/DpadHint2" unique_id=729353755]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bd66t")
+theme_override_font_sizes/font_size = 8
+text = "Navigate"
+
+[node name="DpadHint" type="HBoxContainer" parent="Container/Hints" unique_id=250650108]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Container/Hints/DpadHint" unique_id=807576663]
+layout_mode = 2
+texture = SubResource("AtlasTexture_32hqx")
+
+[node name="Hint" type="Label" parent="Container/Hints/DpadHint" unique_id=1157943093]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bd66t")
+theme_override_font_sizes/font_size = 8
+text = "Change"

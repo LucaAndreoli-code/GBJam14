@@ -1,0 +1,263 @@
+[gd_scene format=3 uid="uid://d3voaqsodpcr4"]
+
+[ext_resource type="Texture2D" uid="uid://cxjh6imwesvh2" path="res://assets/sprites/ui/ui_background.png" id="1_37fnd"]
+[ext_resource type="Script" uid="uid://o3at6pxfxnqs" path="res://scripts/scenes/gameover_success_manager.gd" id="1_v0ipw"]
+[ext_resource type="FontVariation" uid="uid://sslpbtkvq0a1" path="res://assets/fonts/title_font.tres" id="2_3w8a8"]
+[ext_resource type="FontVariation" uid="uid://cgiqwq2c4epwb" path="res://assets/fonts/text_font.tres" id="5_fd4ci"]
+[ext_resource type="FontVariation" uid="uid://b8myl1h0crk4t" path="res://assets/fonts/little_font.tres" id="6_ihndi"]
+[ext_resource type="Texture2D" uid="uid://cqltaxb8gfsmm" path="res://assets/sprites/ui/ui_navigation_buttons.png" id="7_b4466"]
+[ext_resource type="FontFile" uid="uid://bw6ncqin2gkpv" path="res://assets/fonts/Pixuf.ttf" id="8_qex75"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_taqsa"]
+atlas = ExtResource("7_b4466")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b4466"]
+atlas = ExtResource("7_b4466")
+region = Rect2(8, 0, 8, 8)
+
+[node name="Gameover" type="Node2D" unique_id=1127617407]
+script = ExtResource("1_v0ipw")
+
+[node name="Frame" type="TextureRect" parent="." unique_id=1030883206]
+offset_right = 160.0
+offset_bottom = 144.0
+texture = ExtResource("1_37fnd")
+
+[node name="Container" type="Control" parent="." unique_id=1149693888]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 152.0
+offset_bottom = 136.0
+
+[node name="Label" type="Label" parent="Container" unique_id=144500561]
+layout_mode = 1
+offset_right = 72.0
+offset_bottom = 8.0
+theme_override_colors/font_color = Color(0.6666667, 0.6666667, 0.6666667, 1)
+theme_override_fonts/font = ExtResource("2_3w8a8")
+theme_override_font_sizes/font_size = 8
+text = "You lose!"
+
+[node name="PointsTitle" type="Control" parent="Container" unique_id=464216859]
+anchors_preset = 0
+offset_top = 12.0
+offset_right = 142.0
+offset_bottom = 23.0
+
+[node name="ColorRect" type="ColorRect" parent="Container/PointsTitle" unique_id=1975286383]
+layout_mode = 0
+offset_right = 142.0
+offset_bottom = 11.0
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="Title" type="Label" parent="Container/PointsTitle/ColorRect" unique_id=1507329375]
+layout_mode = 0
+offset_left = 3.0
+offset_right = 32.0
+offset_bottom = 11.0
+theme_override_fonts/font = ExtResource("5_fd4ci")
+text = "Points"
+
+[node name="PointsInfo" type="VBoxContainer" parent="Container" unique_id=1745038928]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 25.0
+offset_right = 142.0
+offset_bottom = 45.0
+
+[node name="RequiredCollected" type="HSplitContainer" parent="Container/PointsInfo" unique_id=1057805641]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/PointsInfo/RequiredCollected" unique_id=135475798]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Collected / Required:"
+
+[node name="Value" type="Label" parent="Container/PointsInfo/RequiredCollected" unique_id=434868745]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="CompletionRate" type="HSplitContainer" parent="Container/PointsInfo" unique_id=119936898]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/PointsInfo/CompletionRate" unique_id=486471037]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Completion rate:"
+
+[node name="Value" type="Label" parent="Container/PointsInfo/CompletionRate" unique_id=2135030894]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "100%"
+horizontal_alignment = 2
+
+[node name="TreasuresTitle" type="Control" parent="Container" unique_id=1555765101]
+anchors_preset = 0
+offset_top = 47.0
+offset_right = 142.0
+offset_bottom = 58.0
+
+[node name="ColorRect" type="ColorRect" parent="Container/TreasuresTitle" unique_id=617308313]
+layout_mode = 0
+offset_right = 142.0
+offset_bottom = 11.0
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="Title" type="Label" parent="Container/TreasuresTitle/ColorRect" unique_id=1333608249]
+layout_mode = 0
+offset_left = 3.0
+offset_right = 32.0
+offset_bottom = 11.0
+theme_override_fonts/font = ExtResource("5_fd4ci")
+text = "Treasures collected"
+
+[node name="TreasuresInfo" type="VBoxContainer" parent="Container" unique_id=1727623456]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 60.0
+offset_right = 142.0
+offset_bottom = 92.0
+
+[node name="Small" type="HSplitContainer" parent="Container/TreasuresInfo" unique_id=1493954815]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/TreasuresInfo/Small" unique_id=417430052]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Small:"
+
+[node name="Value" type="Label" parent="Container/TreasuresInfo/Small" unique_id=1044448620]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "5"
+horizontal_alignment = 2
+
+[node name="Medium" type="HSplitContainer" parent="Container/TreasuresInfo" unique_id=1278447355]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/TreasuresInfo/Medium" unique_id=457793971]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Medium:"
+
+[node name="Value" type="Label" parent="Container/TreasuresInfo/Medium" unique_id=881588817]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "5"
+horizontal_alignment = 2
+
+[node name="Big" type="HSplitContainer" parent="Container/TreasuresInfo" unique_id=493927919]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/TreasuresInfo/Big" unique_id=1790470810]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Big:"
+
+[node name="Value" type="Label" parent="Container/TreasuresInfo/Big" unique_id=1845989517]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "5"
+horizontal_alignment = 2
+
+[node name="OthersTitle" type="Control" parent="Container" unique_id=921051357]
+visible = false
+anchors_preset = 0
+offset_top = 94.0
+offset_right = 142.0
+offset_bottom = 105.0
+
+[node name="ColorRect" type="ColorRect" parent="Container/OthersTitle" unique_id=306573200]
+layout_mode = 0
+offset_right = 142.0
+offset_bottom = 11.0
+color = Color(0.33333334, 0.33333334, 0.33333334, 1)
+
+[node name="Title" type="Label" parent="Container/OthersTitle/ColorRect" unique_id=382898600]
+layout_mode = 0
+offset_left = 3.0
+offset_right = 32.0
+offset_bottom = 11.0
+theme_override_fonts/font = ExtResource("5_fd4ci")
+text = "Others"
+
+[node name="OthersInfo" type="VBoxContainer" parent="Container" unique_id=1027554472]
+visible = false
+layout_mode = 0
+offset_left = 6.0
+offset_top = 107.0
+offset_right = 142.0
+offset_bottom = 115.0
+
+[node name="Small" type="HSplitContainer" parent="Container/OthersInfo" unique_id=236772991]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Container/OthersInfo/Small" unique_id=1615882045]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "Ancient notes found:"
+
+[node name="Value" type="Label" parent="Container/OthersInfo/Small" unique_id=809465319]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_ihndi")
+theme_override_font_sizes/font_size = 8
+text = "0 / 2"
+horizontal_alignment = 2
+
+[node name="BHint" type="HBoxContainer" parent="Container" unique_id=1460459616]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 38.0
+grow_vertical = 0
+
+[node name="Icon" type="TextureRect" parent="Container/BHint" unique_id=1812385963]
+custom_maximum_size = Vector2(8, 8)
+layout_mode = 2
+texture = SubResource("AtlasTexture_taqsa")
+
+[node name="Hint" type="Label" parent="Container/BHint" unique_id=296296034]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qex75")
+theme_override_font_sizes/font_size = 8
+text = "Back to levels"
+
+[node name="AHint" type="HBoxContainer" parent="Container" unique_id=1199279602]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Icon" type="TextureRect" parent="Container/AHint" unique_id=1317172443]
+layout_mode = 2
+texture = SubResource("AtlasTexture_b4466")
+
+[node name="Hint" type="Label" parent="Container/AHint" unique_id=738497594]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("8_qex75")
+theme_override_font_sizes/font_size = 8
+text = "Retry level"
