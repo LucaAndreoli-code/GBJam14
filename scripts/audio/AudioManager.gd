@@ -37,7 +37,7 @@ func _ready():
 		sfx_players.append(player)
 
 	# Volume settings
-	SignalBus.volume_level_changed.connect(_on_volume_level_changed)
+	SignalBus.music_level_changed.connect(_on_volume_level_changed)
 	SignalBus.sfx_level_changed.connect(_on_sfx_level_changed)
 
 

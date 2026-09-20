@@ -9,8 +9,8 @@ var _just_started: bool = true
 var _paused: bool = false
 var _input_enabled: bool = true
 
-var _music_level: float = 0.6
-var _sfx_level: float = 0.6
+var _music_level: float = 0.0
+var _sfx_level: float = 0.0
 
 var _time: GameTime.Data = GameTime.Data.new()
 var _torch: TorchTimer.Data = TorchTimer.Data.new()

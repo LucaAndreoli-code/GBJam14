@@ -11,6 +11,8 @@ extends Control
 
 func _ready() -> void:
 	GameState.set_fonts(title_font, text_font, little_font)
+	GameState.set_music_level(0.6)
+	GameState.set_sfx_level(0.6)
 	SceneManager.register_viewport(self, _game_viewport)
 	if initial_scene == null:
 		push_warning("No initial scene set on Main!")
