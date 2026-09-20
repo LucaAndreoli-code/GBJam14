@@ -8,6 +8,9 @@ var _seed: int = 0
 var _paused: bool = false
 var _input_enabled: bool = true
 
+var _music_level: float = 1.0
+var _sfx_level: float = 1.0
+
 var _time: GameTime.Data = GameTime.Data.new()
 var _torch: TorchTimer.Data = TorchTimer.Data.new()
 var _gameover: GameoverTimer.Data = GameoverTimer.Data.new()
@@ -23,6 +26,7 @@ var _taken_keys: Dictionary[String, Dictionary] = {}
 var _opened_doors: Dictionary[String, Dictionary] = {}
 
 var _seen_scene_intros: Dictionary[String, bool] = {}
+var _seen_session_intros: Dictionary[String, bool] = {}
 
 var _minimap: MinimapUtils.Data = MinimapUtils.Data.new()
 var _treasures_pool_generated: bool = false
@@ -73,6 +77,22 @@ func set_input_enabled(value: bool) -> void:
 		return
 	_input_enabled = value
 	SignalBus.input_enabled.emit(_input_enabled)
+
+func get_music_level() -> float:
+	return _music_level
+
+func set_music_level(value: float) -> void:
+	if value != _music_level:
+		_music_level = value
+		SignalBus.music_level_changed.emit(_music_level)
+
+func get_sfx_level() -> float:
+	return _sfx_level
+
+func set_sfx_level(value: float) -> void:
+	if value != _sfx_level:
+		_sfx_level = value
+		SignalBus.sfx_level_changed.emit(_sfx_level)
 
 func get_time() -> GameTime.Data:
 	return _time
@@ -193,6 +213,15 @@ func is_scene_intro_seen(intro_key: String) -> bool:
 
 func mark_scene_intro_seen(intro_key: String) -> void:
 	_seen_scene_intros[intro_key] = true
+
+func is_session_intro_seen(key: String) -> bool:
+	return _seen_session_intros.has(key)
+
+func mark_session_intro_seen(key: String) -> void:
+	_seen_session_intros[key] = true
+
+func clear_session_intros() -> void:
+	_seen_session_intros.clear()
 
 func get_minimap() -> MinimapUtils.Data:
 	return _minimap

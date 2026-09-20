@@ -157,6 +157,14 @@ available_treasures = Array[ExtResource("2_53l2r")]([ExtResource("3_ag86x"), Ext
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=450059248]
 script = ExtResource("15_53l2r")
+lines = ["IMPERIAL DISPATCH
+Site: The Deep Halls
+Assignment: recover lost treasures.", "The heart of the lost kingdom.
+Our scouts turned back at the entrance.", "Conditions: unstable.
+We can't promise the way in
+will still be there.", "Whoever left those torches
+never came back to tell us.", "Good luck, Sugi.
+You will need it."]
 must_play_once = false
 metadata/_custom_type_script = "uid://lhjpnnmfek43"
 

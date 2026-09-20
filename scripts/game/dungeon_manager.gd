@@ -38,7 +38,6 @@ var _exit_cells: Array[Vector2i] = []
 var _is_input_enabled: bool = true
 
 func _ready() -> void:
-	Palette.switch_to_palette("main")
 	GameState.get_seed()
 	_setup_treasures()
 	_setup_torch()

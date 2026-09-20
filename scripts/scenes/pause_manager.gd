@@ -2,6 +2,7 @@ class_name PauseMenuManager
 extends Node2D
 
 const INVENTORY_SCENE_PATH: String = "res://scenes/game/inventory.tscn"
+const SETTINGS_SCENE_PATH: String = "res://scenes/game/game_settings.tscn"
 const LEVEL_SEL_SCENE_PATH: String = "res://scenes/game/level_selection.tscn"
 
 ## Owns the whole pause toggle: a scene gets pause simply by mounting this menu, and a scene that
@@ -125,6 +126,17 @@ func _open_inventory() -> void:
 		"player_position": _player.global_position
 	}
 	SceneManager.go_to(INVENTORY_SCENE_PATH, payload)
+
+func _open_settings() -> void:
+	# Only a scene that called setup() has somewhere to go back to, see DungeonManager._init_hud()
+	if _player == null or _scene_path.is_empty():
+		push_warning("Settings asked for from a scene that never called setup()")
+		return
+	var payload := {
+		"scene_path": _scene_path,
+		"player_position": _player.global_position
+	}
+	SceneManager.go_to(SETTINGS_SCENE_PATH, payload)
 
 func _exit_game() -> void:
 	SceneManager.go_to(LEVEL_SEL_SCENE_PATH)

@@ -15,6 +15,12 @@ signal game_paused(is_paused: bool)
 ## Fired when the game's input is enabled or not.
 signal input_enabled(is_enabled: bool)
 
+## Fired when the game's volume level has been changed.
+signal music_level_changed(level: float)
+
+## Fired when the game's SFXs level has been changed.
+signal sfx_level_changed(level: float)
+
 ## Fired each game's tick.
 signal game_tick(delta: float, game_time: float)
 

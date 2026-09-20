@@ -1,12 +1,14 @@
 extends Node2D
 
 const LEVEL_SEL_SCENE_PATH: String = "res://scenes/game/level_selection.tscn"
+const SETTINGS_SCENE_PATH: String = "res://scenes/game/game_settings.tscn"
 
 @onready var _splash_screen: Control = $SplashScreen
 @onready var _splash_screen_anim: AnimatedSprite2D = $SplashScreen/Animation
 @onready var _logo: Sprite2D = $Logo
 @onready var _character: AnimatedSprite2D = $CharAnimated
 @onready var _menu: VBoxContainer = $Container/Menu
+@onready var _hints: Control = $Hints
 
 var _item_selected: int = 0
 var _is_input_enabled: bool = false
@@ -25,7 +27,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _item_selected == 0:
 			SceneManager.go_to(LEVEL_SEL_SCENE_PATH)
 		elif _item_selected == 1:
-			pass
+			SceneManager.go_to(SETTINGS_SCENE_PATH, { "scene_path": scene_file_path })
+		get_viewport().set_input_as_handled()
 		return
 	var dy := 0
 	if event.is_action_pressed("dpad_down"):
@@ -34,6 +37,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		dy = -1
 	if dy == 0:
 		return
+	get_viewport().set_input_as_handled()
 	_move_list_selection(dy)
 
 func _on_splash_screen_finished():
@@ -56,6 +60,7 @@ func _on_splash_screen_finished():
 	char_move_tween.tween_property(_character, "global_position", Vector2(60.0, 32.0), 1.0)
 	await char_move_tween.finished
 	_menu.visible = true
+	_hints.visible = true
 	_refresh_ui()
 	_is_input_enabled = true
 

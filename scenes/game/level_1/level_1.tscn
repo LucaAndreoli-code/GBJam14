@@ -157,6 +157,13 @@ available_treasures = Array[ExtResource("2_rfw5n")]([ExtResource("3_4dlj5"), Ext
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=1488628879]
 script = ExtResource("15_garbb")
+lines = ["IMPERIAL DISPATCH
+Site: Outer Ruins
+Assignment: recover lost treasures.", "Our scouts found a small section
+close to the surface.
+Start there, Sugi.", "Conditions: dark, but stable.
+Torches were left by those before you.", "Take your time and learn the ways
+of the ruins. Deeper ones await."]
 must_play_once = false
 metadata/_custom_type_script = "uid://lhjpnnmfek43"
 

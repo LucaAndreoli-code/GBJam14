@@ -23,7 +23,6 @@ metadata/_custom_type_script = "uid://dpantyfyknx4r"
 script = ExtResource("2_cech8")
 text = "Settings"
 action = &"_open_settings"
-disabled = true
 metadata/_custom_type_script = "uid://dpantyfyknx4r"
 
 [sub_resource type="Resource" id="Resource_ghwel"]

@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://ck1u27ptpdbrm"]
+
+[ext_resource type="Script" uid="uid://cb8pmmh7xtd7l" path="res://scripts/ui/setting_slider.gd" id="1_q3p31"]
+[ext_resource type="Texture2D" uid="uid://q1sqcjxrrgvt" path="res://assets/sprites/ui/settings_slider_ui.png" id="2_2womw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3p31"]
+atlas = ExtResource("2_2womw")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2womw"]
+atlas = ExtResource("2_2womw")
+region = Rect2(8, 0, 8, 8)
+
+[node name="SettingSlider" type="HBoxContainer" unique_id=1590749547]
+theme_override_constants/separation = 0
+script = ExtResource("1_q3p31")
+
+[node name="Templates" type="Control" parent="." unique_id=587433620]
+visible = false
+layout_mode = 2
+
+[node name="EmptyCell" type="TextureRect" parent="Templates" unique_id=1528886572]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+texture = SubResource("AtlasTexture_q3p31")
+stretch_mode = 2
+
+[node name="FullCell" type="TextureRect" parent="Templates" unique_id=1411430759]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_2womw")
+stretch_mode = 2

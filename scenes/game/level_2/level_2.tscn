@@ -155,6 +155,12 @@ available_treasures = Array[ExtResource("2_y45g7")]([ExtResource("3_hnl6a"), Ext
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=1346607143]
 script = ExtResource("15_ou232")
+lines = ["IMPERIAL DISPATCH
+Site: Lower Galleries
+Assignment: recover lost treasures.", "Your first findings pleased the Empire.
+Our scouts found a way further down.", "Conditions: wider halls, more rooms.
+Easy to lose your way down there.", "Mind your torch, Sugi.
+The dark is patient."]
 must_play_once = false
 metadata/_custom_type_script = "uid://lhjpnnmfek43"
 

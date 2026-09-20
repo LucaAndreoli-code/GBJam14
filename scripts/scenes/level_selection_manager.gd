@@ -1,5 +1,6 @@
 extends Node2D
 
+const TITLE_SCREEN_SCENE_PATH: String = "res://scenes/game/title_screen.tscn"
 const LEVEL_ICON_TEXTURE: Texture2D = preload("res://assets/sprites/ui/level_selection_level_item.png")
 const LEVEL_ICON_TEXTURE_REGION: Rect2 = Rect2(0.0, 0.0, 24.0, 24.0)
 const LEVEL_SELECTED_ICON_TEXTURE_REGION: Rect2 = Rect2(24.0, 0.0, 24.0, 24.0)
@@ -28,7 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("btn_b"):
-		#_close()
+		SceneManager.go_to(TITLE_SCREEN_SCENE_PATH)
 		get_viewport().set_input_as_handled()
 		return
 	var dy := 0
@@ -83,4 +84,5 @@ func _confirm_level() -> void:
 			return
 		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
+			GameState.clear_session_intros()
 			SceneManager.go_to(level.level_scene.resource_path)

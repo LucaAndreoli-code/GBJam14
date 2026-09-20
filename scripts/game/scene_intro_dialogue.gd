@@ -22,8 +22,13 @@ func _on_scene_changed(scene: Node) -> void:
 		return
 	SceneManager.scene_changed.disconnect(_on_scene_changed)
 	var key := intro_key if not intro_key.is_empty() else scene.scene_file_path
-	if must_play_once and GameState.is_scene_intro_seen(key):
-		return
-	# Marked before the request goes out: the intro is spent even if the scene mounts no text box.
-	GameState.mark_scene_intro_seen(key)
+	if must_play_once:
+		if GameState.is_scene_intro_seen(key):
+			return
+		# Marked before the request goes out: the intro is spent even if the scene mounts no text box.
+		GameState.mark_scene_intro_seen(key)
+	else:
+		if GameState.is_session_intro_seen(key):
+			return
+		GameState.mark_session_intro_seen(key)
 	SignalBus.dialogue_requested.emit(lines)

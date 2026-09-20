@@ -44,7 +44,7 @@ region = Rect2(24, 0, 23, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qgx0i"]
 atlas = ExtResource("4_bxyb5")
-region = Rect2(0, 0, 8, 8)
+region = Rect2(72, 0, 8, 8)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bxyb5"]
 bg_color = Color(0, 0, 0, 1)
