@@ -31,6 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not _is_input_enabled:
 		return
 	if event.is_action_pressed("btn_a"):
+		GameState.reset_run()
 		SceneManager.go_to(_payload.get("scene_path"))
 	elif event.is_action_pressed("btn_b"):
 		SceneManager.go_to(LEVEL_SEL_SCENE_PATH)

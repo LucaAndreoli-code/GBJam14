@@ -5,11 +5,12 @@ var _text_font: Font
 var _little_font: Font
 
 var _seed: int = 0
+var _just_started: bool = true
 var _paused: bool = false
 var _input_enabled: bool = true
 
-var _music_level: float = 1.0
-var _sfx_level: float = 1.0
+var _music_level: float = 0.6
+var _sfx_level: float = 0.6
 
 var _time: GameTime.Data = GameTime.Data.new()
 var _torch: TorchTimer.Data = TorchTimer.Data.new()
@@ -59,6 +60,14 @@ func get_seed() -> int:
 func set_seed(value: int) -> void:
 	_seed = value
 	seed(_seed)
+
+func is_just_started() -> bool:
+	return _just_started
+
+func set_just_started(value: bool) -> void:
+	if _just_started == value:
+		return
+	_just_started = value
 
 func is_paused() -> bool:
 	return _paused
@@ -267,3 +276,4 @@ func reset_run() -> void:
 	_collected_points = 0
 	_total_points = 0
 	_exit_door_opened = false
+	clear_session_intros()

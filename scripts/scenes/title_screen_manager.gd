@@ -19,8 +19,12 @@ func _ready() -> void:
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 	await get_tree().create_timer(1.5).timeout
 	_music_player = SceneManager.get_main_scene().get_music_player()
-	_splash_screen_anim.play("default")
-	_splash_screen_anim.animation_finished.connect(_on_splash_screen_finished)
+	if GameState.is_just_started():
+		GameState.set_just_started(false)
+		_splash_screen_anim.play("default")
+		_splash_screen_anim.animation_finished.connect(_on_splash_screen_finished)
+	else:
+		_on_splash_screen_finished()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _is_input_enabled:

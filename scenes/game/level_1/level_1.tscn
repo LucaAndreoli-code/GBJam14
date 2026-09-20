@@ -153,6 +153,8 @@ size = Vector2(16, 20)
 script = ExtResource("1_r0gmu")
 level_minimum_points = 50
 level_target_points = 100
+torch_duration_seconds = 60
+gameover_duration_seconds = 30
 available_treasures = Array[ExtResource("2_rfw5n")]([ExtResource("3_4dlj5"), ExtResource("4_uksyj"), ExtResource("5_garbb"), ExtResource("6_4l87u"), ExtResource("7_dl85d"), ExtResource("8_vbsy0"), ExtResource("9_hc8h7"), ExtResource("10_dxkae"), ExtResource("11_wwv35"), ExtResource("12_3clxb"), ExtResource("13_8b3d6"), ExtResource("14_3hyjb")])
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=1488628879]
@@ -177,7 +179,9 @@ tile_set = SubResource("TileSet_1t2px")
 
 [node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("3_gblsj")]
 position = Vector2(81, 72)
+movement_speed = 45.0
 torch_light_radius = 20.0
+light_outer_radius_ratio = 3.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=793488398 node_paths=PackedStringArray("player")]
 anchor_mode = 0
@@ -194,6 +198,10 @@ shape = SubResource("RectangleShape2D_0mymv")
 [node name="Keys" type="Node2D" parent="." unique_id=2070155554]
 
 [node name="Key1" parent="Keys" unique_id=2015663561 node_paths=PackedStringArray("tilemap") instance=ExtResource("5_neopm")]
+position = Vector2(-111, 216)
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Key2" parent="Keys" unique_id=1262509954 node_paths=PackedStringArray("tilemap") instance=ExtResource("5_neopm")]
 position = Vector2(-111, 216)
 tilemap = NodePath("../../DungeonTilemap")
 
@@ -234,7 +242,7 @@ position = Vector2(29, 72)
 lines = ["Welcome, Sugi!", "It's been a while since your last crawl, so we've left these signs as a reminder.", "Lesson 1: use the D-Pad (WASD) to move around the ruins.", "Remember: the mission only counts if you make it back out."]
 
 [node name="Sign2" parent="Signs" unique_id=1525943991 instance=ExtResource("22_4dlj5")]
-position = Vector2(108, 216)
+position = Vector2(119, 231)
 lines = ["Time for another lesson... number 2!", "This door seems locked. What could help? A key, maybe? Let's go find it!", "Once you do, press A (X) to pick it up."]
 
 [node name="Sign3" parent="Signs" unique_id=1312508534 instance=ExtResource("22_4dlj5")]

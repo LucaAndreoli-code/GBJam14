@@ -151,6 +151,8 @@ size = Vector2(20, 16)
 [node name="Level2" type="Node2D" unique_id=1746341596]
 script = ExtResource("1_lc0ce")
 level_minimum_points = 50
+torch_duration_seconds = 60
+gameover_duration_seconds = 30
 available_treasures = Array[ExtResource("2_y45g7")]([ExtResource("3_hnl6a"), ExtResource("4_m8ocw"), ExtResource("5_8y11q"), ExtResource("6_yl7hy"), ExtResource("7_ou232"), ExtResource("8_sq58g"), ExtResource("9_yv3bd"), ExtResource("10_o6lap"), ExtResource("11_k32hg"), ExtResource("12_x2635"), ExtResource("13_3al7d"), ExtResource("14_dhfgn")])
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=1346607143]
@@ -174,7 +176,9 @@ tile_set = SubResource("TileSet_o8743")
 
 [node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("3_h4wax")]
 position = Vector2(81, 72)
+movement_speed = 45.0
 torch_light_radius = 20.0
+light_outer_radius_ratio = 3.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1995829982 node_paths=PackedStringArray("player")]
 anchor_mode = 0

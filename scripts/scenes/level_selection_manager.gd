@@ -84,5 +84,4 @@ func _confirm_level() -> void:
 			return
 		var level := (node as LevelSelectionItem).level_info
 		if level and level.level_scene != null:
-			GameState.clear_session_intros()
 			SceneManager.go_to(level.level_scene.resource_path)

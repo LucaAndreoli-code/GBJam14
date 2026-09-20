@@ -153,6 +153,8 @@ size = Vector2(16, 20)
 script = ExtResource("1_mhpvl")
 level_minimum_points = 250
 level_target_points = 500
+torch_duration_seconds = 60
+gameover_duration_seconds = 30
 available_treasures = Array[ExtResource("2_53l2r")]([ExtResource("3_ag86x"), ExtResource("4_8sh8l"), ExtResource("5_kb7vv"), ExtResource("6_nfrew"), ExtResource("7_xa6kf"), ExtResource("8_ycrrm"), ExtResource("9_i23g4"), ExtResource("10_flous"), ExtResource("11_i28rq"), ExtResource("12_cyw6a"), ExtResource("13_qqu2w"), ExtResource("14_gvqa1")])
 
 [node name="SceneIntro" type="Node2D" parent="." unique_id=450059248]
@@ -178,7 +180,9 @@ tile_set = SubResource("TileSet_rxwyb")
 
 [node name="PlayerDungeon" parent="." unique_id=39549468 groups=["light_sources"] instance=ExtResource("3_8lg4u")]
 position = Vector2(81, 72)
+movement_speed = 45.0
 torch_light_radius = 20.0
+light_outer_radius_ratio = 3.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=46150511 node_paths=PackedStringArray("player")]
 anchor_mode = 0
@@ -248,6 +252,14 @@ tilemap = NodePath("../../DungeonTilemap")
 
 [node name="Torch4" parent="Torches" unique_id=1721684547 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("23_ycrrm")]
 position = Vector2(-133, 651)
+light_radius = 10.0
+light_central_radius_ratio = 1.15
+light_outer_radius_ratio = 2.0
+is_sprite_visible = true
+tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Torch5" parent="Torches" unique_id=1115517362 node_paths=PackedStringArray("tilemap") groups=["light_sources"] instance=ExtResource("23_ycrrm")]
+position = Vector2(125, 650)
 light_radius = 10.0
 light_central_radius_ratio = 1.15
 light_outer_radius_ratio = 2.0

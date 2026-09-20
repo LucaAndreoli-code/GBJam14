@@ -4,8 +4,9 @@ extends SubViewportContainer
 @export_range(0.0, 2.0, 0.1) var flicker_amplitude: float = 0.5
 @export var is_enabled_on_start: bool = true
 
-const LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE = "get_light_radius"
-const LIGHT_SOURCE_DARKNESS_METHOD_SIGNATURE = "force_darkness"
+const LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE: String = "get_light_radius"
+const LIGHT_SOURCE_DARKNESS_METHOD_SIGNATURE: String = "force_darkness"
+const MAX_LIGHTS: int = 8
 
 var _is_enabled: bool
 
@@ -29,9 +30,15 @@ func _process(_delta: float) -> void:
 			[LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE, source.name])
 			continue
 		var source_node := source as Node2D
-		var canvas_xform := source.get_viewport().get_canvas_transform()
+		var source_viewport := source.get_viewport()
+		var canvas_xform := source_viewport.get_canvas_transform()
 		var source_pos : Vector2 = (canvas_xform * source_node.global_position).round()
 		var source_radius: Vector3 = source.call(LIGHT_SOURCE_RADIUS_METHOD_SIGNATURE)
+		var max_ring := maxf(1.0, maxf(source_radius.y, source_radius.z))
+		var max_radius := (source_radius.x + flicker_amplitude) * max_ring
+		var light_rect := Rect2(source_pos - Vector2.ONE * max_radius, Vector2.ONE * max_radius * 2.0)
+		if not source_viewport.get_visible_rect().intersects(light_rect):
+			continue
 		var is_dark: bool = source.has_method(LIGHT_SOURCE_DARKNESS_METHOD_SIGNATURE) \
 				and source.call(LIGHT_SOURCE_DARKNESS_METHOD_SIGNATURE)
 		var light_radius: float
@@ -55,8 +62,11 @@ func _apply(lights: Array[Vector4], ratios: Array[Vector2]) -> void:
 	if material == null:
 		push_error("No material found on VisibilityContainer: visibility not applied")
 		return
-	if not _is_enabled:
-		lights = []
+	if lights.size() > MAX_LIGHTS:
+		push_warning("Too many lights sources in viewport: %d over %d" % [lights.size(), MAX_LIGHTS])
+		lights = lights.slice(0, MAX_LIGHTS)
+		ratios = ratios.slice(0, MAX_LIGHTS)
+	material.set_shader_parameter("is_enabled", _is_enabled)
 	material.set_shader_parameter("lights", lights)
 	material.set_shader_parameter("lights_count", lights.size())
 	material.set_shader_parameter("ratios", ratios)

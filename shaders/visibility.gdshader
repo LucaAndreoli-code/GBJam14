@@ -1,5 +1,7 @@
 shader_type canvas_item;
 
+const int MAX_LIGHTS = 8;
+
 // "Matrix" to say which color index should be for each palette index-color
 // Each column represents a palette's color (darkest to lightest, left to right)
 // The value in a column represents which color index should be used from the palette:
@@ -17,17 +19,16 @@ const int RAMP[16] = {
 
 // The size of the viewport, in pixels
 uniform vec2 viewport_size = vec2(160.0, 144.0);
-
+uniform bool is_enabled = true;
 // Light sources: xy is the position in viewport pixels, z is the base radius.
-uniform vec4 lights[4];
+uniform vec4 lights[MAX_LIGHTS];
 uniform int lights_count;
-uniform vec2 ratios[4];
+uniform vec2 ratios[MAX_LIGHTS];
 
 void fragment() {
 	vec4 src = texture(TEXTURE, UV);
 	
-	// No sources means no visibility system at all
-	if (lights_count == 0) {
+	if (!is_enabled) {
 		COLOR = src;
 	}
 	else {
@@ -38,7 +39,8 @@ void fragment() {
 		int light_level = 3;
 		bool best_is_dark = false;
 
-		for (int i = 0; i < lights_count; i++) {
+		int count = min(lights_count, MAX_LIGHTS);
+		for (int i = 0; i < count; i++) {
 			vec4 light = lights[i];
 			vec2 ratio = ratios[i];
 			
