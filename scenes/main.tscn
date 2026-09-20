@@ -109,4 +109,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Music" type="Node" parent="." unique_id=113485293]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="Music" unique_id=2090870554]
+process_mode = 3
+stream = ExtResource("3_o6xl0")
+
 [node name="Listener" type="AudioListener2D" parent="." unique_id=1293750249]
