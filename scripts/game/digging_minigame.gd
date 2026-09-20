@@ -375,9 +375,12 @@ func _place_treasure(info: TreasureInfo, origin_cell: Vector2i, footprint: Vecto
 # and the set of cells just removed is no longer enough on its own: what decides a reveal
 # is whether the whole footprint is clear, not whether this carve touched it.
 func _on_cells_carved(_cells: Array[Vector2i]) -> void:
+	if not _cells.is_empty():
+		AudioManager.play_sfx(AudioManager.dig_sound, -10.0)
 	var still_buried: Array[Treasure] = []
 	for treasure in _buried:
 		if _is_dug_out(treasure):
+			AudioManager.play_sfx(AudioManager.discovery_sound, -8.0)
 			treasure.reveal()
 		else:
 			still_buried.append(treasure)

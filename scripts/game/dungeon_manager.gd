@@ -76,6 +76,7 @@ func _exit_tree() -> void:
 		_text_box.queue_free()
 
 func on_scene_entered(payload: Dictionary) -> void:
+	AudioManager.play_music(AudioManager.leveltheme)
 	if payload.has("player_position"):
 		_player.global_position = payload.get("player_position", Vector2.ZERO)
 		_camera.snap_to_player()
@@ -87,6 +88,8 @@ func on_scene_entered(payload: Dictionary) -> void:
 	_refresh_exit_door()
 
 func start_digging_minigame() -> void:
+	AudioManager.play_music(AudioManager.minigametheme)
+	
 	SignalBus.visibility_shader_toggled.emit(false)
 	var treasure_count := randi_range(minigame_session_min_treasures, minigame_session_max_treasures)
 	var minigame_treasures := GameState.get_treasures_pool()
