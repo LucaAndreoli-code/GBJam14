@@ -20,6 +20,9 @@ var max_players := 14
 func _ready():
 	for i in max_players:
 		var player = AudioStreamPlayer.new()
+		# The scene swap in SceneManager.go_to() pauses the whole tree; a pausable player
+		# would be cut off mid-sound for the duration of the fade out/in.
+		player.process_mode = Node.PROCESS_MODE_ALWAYS
 		add_child(player)
 		sfx_players.append(player)
 
