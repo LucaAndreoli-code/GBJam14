@@ -53,7 +53,7 @@ func play_music(sound: AudioStream, from_position: float = 0.0, force_restart: b
 		return
 
 	music_player.stream = sound
-	music_player.play(from_position)
+	music_player.play(maxf(0.0, from_position))
 
 
 func stop_music():

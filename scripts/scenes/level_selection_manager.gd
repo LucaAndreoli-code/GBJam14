@@ -26,7 +26,7 @@ func _ready() -> void:
 	SceneManager.get_main_scene().toggle_bottom_bar(false)
 
 	AudioManager.stop_music()
-	AudioManager.play_music(AudioManager.level_selection_theme, -7.0)
+	AudioManager.play_music(AudioManager.level_selection_theme, 0.0)
 
 	_refresh_ui()
 
