@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://kj1hhhpyte6p"]
+
+[ext_resource type="Script" uid="uid://b5p2fkbwbopyt" path="res://entities/dungeon/text_note/text_note_interactable.gd" id="1_aoh6e"]
+[ext_resource type="Texture2D" uid="uid://dwiqvtga76kut" path="res://assets/sprites/text_note.png" id="1_td4ee"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0sovi"]
+size = Vector2(9, 9)
+
+[node name="TextNoteInteractable" type="Area2D" unique_id=1256495011]
+script = ExtResource("1_aoh6e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=398831612]
+position = Vector2(-0.5, 3.5)
+shape = SubResource("RectangleShape2D_0sovi")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1522066861]
+texture = ExtResource("1_td4ee")

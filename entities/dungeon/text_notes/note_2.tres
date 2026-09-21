@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TextNoteInfo" format=3 uid="uid://bwlvxnmlwvlhx"]
+
+[ext_resource type="Script" uid="uid://cqvc87ux42c8t" path="res://entities/dungeon/text_note/text_note_info.gd" id="1_tc2g4"]
+
+[resource]
+script = ExtResource("1_tc2g4")
+id = 2
+lines = ["You pick up a note from the floor. It looks very old and worn.
+The title reads: \"Notice of Purchase\".
+You keep reading...", "Thank you for purchasing from the Babylon Commercial Guild.
+The item you have purchased is a Bayenwood Tree.", "By purchasing this item, the Guild cannot be held accountable for any damages that are incurred through care of this item.", "As always, thank you for choosing the Babylon Commercial Guild."]
+metadata/_custom_type_script = "uid://cqvc87ux42c8t"
