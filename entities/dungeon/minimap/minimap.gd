@@ -28,11 +28,13 @@ func _init(level: TileMapLayer, player: PlayerDungeonController) -> void:
 	_player = player
 
 func _ready() -> void:
+	SignalBus.torch_refill.connect(_on_torch_refill)
 	var minimap_data := GameState.get_minimap()
 	if minimap_data.empty:
 		_build_data_layer()
 	else:
 		_data = minimap_data
+		_refresh_torches()
 
 func _build_data_layer() -> void:
 	var right_count := {}
@@ -61,10 +63,19 @@ func _build_data_layer() -> void:
 		elif r > 0: _data.rooms[room] |= MinimapUtils.Link.DOOR_RIGHT
 		if d > ROOM_TILES.x / 2.0: _data.rooms[room] |= MinimapUtils.Link.OPEN_DOWN
 		elif d > 0: _data.rooms[room] |= MinimapUtils.Link.DOOR_DOWN
-	for torch in get_tree().get_nodes_in_group(Groups.LEVEL_TORCHES):
-		var rr := MinimapUtils.get_room_of(_level, torch.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
-		_data.torches[rr] = true
+	_refresh_torches()
 	GameState.set_minimap(_data)
+
+func _refresh_torches() -> void:
+	_data.torches.clear()
+	for torch in get_tree().get_nodes_in_group(Groups.LEVEL_TORCHES):
+		if torch.is_queued_for_deletion() or not torch.is_pickable:
+			continue
+		var room := MinimapUtils.get_room_of(_level, torch.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
+		_data.torches[room] = true
+
+func _on_torch_refill(_source: Node2D) -> void:
+	_refresh_torches.call_deferred()
 
 func _process(_delta: float) -> void:
 	var current_room := MinimapUtils.get_room_of(_level, _player.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
