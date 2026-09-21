@@ -17,7 +17,7 @@ env:
   GODOT_VERSION: '4.7'
   GODOT_RELEASE: stable
   PROJECT_NAME: GBJAM14
-  ITCH_TARGET: m4niek/gbjam14
+  ITCH_TARGET: m4niek/dign-crawl
 
 jobs:
   release:
