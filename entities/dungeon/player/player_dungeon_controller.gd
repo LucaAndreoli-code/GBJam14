@@ -146,6 +146,9 @@ func add_key() -> void:
 	var lines: PackedStringArray = ["Got a key!"]
 	SignalBus.dialogue_requested.emit(lines)
 
+func read_note(lines: PackedStringArray) -> void:
+	SignalBus.dialogue_requested.emit(lines)
+
 func _on_input_enabled(is_enabled: bool) -> void:
 	_is_input_enabled = is_enabled
 	_can_move = _is_input_enabled

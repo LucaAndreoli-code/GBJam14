@@ -26,6 +26,7 @@ var _dug_interactables: Dictionary[String, Dictionary] = {}
 var _taken_torches: Dictionary[String, Dictionary] = {}
 var _taken_keys: Dictionary[String, Dictionary] = {}
 var _opened_doors: Dictionary[String, Dictionary] = {}
+var _taken_notes: Dictionary[String, bool] = {}
 
 var _seen_scene_intros: Dictionary[String, bool] = {}
 var _seen_session_intros: Dictionary[String, bool] = {}
@@ -213,6 +214,14 @@ func add_opened_door(level_key: String, cell: Vector2i) -> void:
 ## The cells a level has to re-open on load, see DungeonManager._reapply_opened_doors().
 func get_opened_doors(level_key: String) -> Array:
 	return _opened_doors.get(level_key, {}).keys()
+
+func is_note_taken(level_key: String, note_id: int) -> bool:
+	var key := "%s_%d" % [level_key, note_id]
+	return _taken_notes.get(key, false)
+
+func add_taken_note(level_key: String, note_id: int) -> void:
+	var key := "%s_%d" % [level_key, note_id]
+	_taken_notes[key] = true
 
 func _has_level_cell(store: Dictionary, level_key: String, cell: Vector2i) -> bool:
 	var cells: Dictionary = store.get(level_key, {})

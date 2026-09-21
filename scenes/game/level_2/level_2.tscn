@@ -23,6 +23,8 @@
 [ext_resource type="Script" uid="uid://nw3qtks4jhds" path="res://scripts/core/exit_area_manager.gd" id="20_m8ocw"]
 [ext_resource type="PackedScene" uid="uid://bapyqpwaah2kx" path="res://entities/dungeon/torch/torch_interactable.tscn" id="21_8y11q"]
 [ext_resource type="PackedScene" uid="uid://mou8qfukr7v4" path="res://entities/dungeon/dig/dig_interactable.tscn" id="22_yl7hy"]
+[ext_resource type="PackedScene" uid="uid://kj1hhhpyte6p" path="res://entities/dungeon/text_note/text_note_interactable.tscn" id="24_sq58g"]
+[ext_resource type="Resource" uid="uid://bi2oy84gnmklo" path="res://entities/dungeon/text_notes/note_1.tres" id="25_yv3bd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3gmm6"]
 texture = ExtResource("2_lc0ce")
@@ -245,3 +247,9 @@ tilemap = NodePath("../../DungeonTilemap")
 position = Vector2(232, 664)
 scene_root = NodePath("../..")
 tilemap = NodePath("../../DungeonTilemap")
+
+[node name="Notes" type="Node2D" parent="." unique_id=162962946]
+
+[node name="Note1" parent="Notes" unique_id=1256495011 instance=ExtResource("24_sq58g")]
+position = Vector2(331, 34)
+note = ExtResource("25_yv3bd")

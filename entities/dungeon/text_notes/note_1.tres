@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TextNoteInfo" format=3 uid="uid://bi2oy84gnmklo"]
+
+[ext_resource type="Script" uid="uid://cqvc87ux42c8t" path="res://entities/dungeon/text_note/text_note_info.gd" id="1_tcroa"]
+
+[resource]
+script = ExtResource("1_tcroa")
+id = 1
+lines = ["You pick up a note from the floor. It looks very old and worn.
+The title reads: \"Elegant Letter\".
+You keep reading...", "My darling Luthen, how long has it been?
+I was delighted at your proposal for the royal garden.
+I agree that it is beginning to look rather drab,
+and requires some renovation.", "I shall speak with father to see if I can persuade him to agree to it.
+Please don't be a stranger,
+Olivia"]
+metadata/_custom_type_script = "uid://cqvc87ux42c8t"
