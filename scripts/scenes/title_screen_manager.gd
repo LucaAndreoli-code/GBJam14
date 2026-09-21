@@ -20,6 +20,7 @@ func _ready() -> void:
 	if GameState.is_just_started():
 		GameState.set_just_started(false)
 		_splash_screen_anim.play("default")
+		AudioManager.play_sfx(AudioManager.startup_sound, -4.0)
 		_splash_screen_anim.animation_finished.connect(_on_splash_screen_finished)
 	else:
 		_on_splash_screen_finished()

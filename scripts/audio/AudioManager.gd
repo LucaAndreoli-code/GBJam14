@@ -17,8 +17,9 @@ var unlock_door_sound: AudioStream = preload("res://assets/audio/SFX/UnlockDoor.
 var text_sound: AudioStream = preload("res://assets/audio/SFX/Text.wav")
 var ui_move_sound: AudioStream = preload("res://assets/audio/SFX/UI_Move.wav")
 var ui_select_sound: AudioStream = preload("res://assets/audio/SFX/UI_Select.wav")
+var startup_sound: AudioStream = preload("res://assets/audio/SFX/Startup.mp3")
 var sfx_players: Array[AudioStreamPlayer] = []
-var max_players := 18
+var max_players := 19
 
 var music_player: AudioStreamPlayer
 
