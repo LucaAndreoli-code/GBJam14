@@ -71,8 +71,8 @@ func _refresh_torches() -> void:
 	for torch in get_tree().get_nodes_in_group(Groups.LEVEL_TORCHES):
 		if torch.is_queued_for_deletion() or not torch.is_pickable:
 			continue
-		var rr := MinimapUtils.get_room_of(_level, torch.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
-		_data.torches[rr] = true
+		var room := MinimapUtils.get_room_of(_level, torch.global_position, ROOM_ORIGIN, GAP_TILES, ROOM_PERIOD)
+		_data.torches[room] = true
 
 func _on_torch_refill(_source: Node2D) -> void:
 	_refresh_torches.call_deferred()
